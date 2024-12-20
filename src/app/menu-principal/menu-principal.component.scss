@@ -1,0 +1,34 @@
+ion-content{
+  --background: linear-gradient(#000000, #3533CD);
+}
+
+ion-card{
+  background: transparent;
+  border: 2px white;
+  border-radius: 26px;
+  box-shadow: none;
+}
+
+ion-button {
+  --border-color: white;
+  --color: white;
+}
+ion-subtitle{
+  color: white;
+  font-family: "arial", sans-serif;
+}
+
+#paginaPrincipalTitleBackground
+{
+  --background: transparent;
+}
+
+#paginaPrincipal{
+  margin-bottom: 5%;
+  border: 2px white;
+  border-radius: 26px;
+}
+
+#title{
+  font-size: 160%;
+}

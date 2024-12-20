@@ -1,0 +1,99 @@
+ion-content{
+  --background: linear-gradient(#000000, #3533CD);
+}
+
+ion-content {
+  font-family: Arial, sans-serif;
+  padding: 16px;
+  color: white;
+}
+
+#info{
+  margin-top: 7%;
+  margin-bottom: 5%
+
+}
+
+#height{
+  margin-left: 5%;
+}
+
+#percentage{
+  margin-left: -5%;
+}
+
+.titles-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+#title {
+  margin-left: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.subtitle{
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  white-space: nowrap;
+  margin-right: 3%;
+}
+
+ion-card {
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 26px;
+  padding: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+ion-card-subtitle {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  flex: 1;
+}
+
+ion-card div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+
+button {
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 26px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#buttons{
+  margin-left: 2%;
+  margin-right: 2%;
+}

@@ -1,0 +1,52 @@
+<ion-content>
+  <ion-img src="assets/customer-list-customer-image.png" id="user-image"></ion-img>
+  <ion-card-subtitle id="username">{{customerName}}</ion-card-subtitle>
+  <div id="next-workout">
+    <ion-card class="workout">
+      <ion-card-subtitle class="workout-list-title">Próximo Treino</ion-card-subtitle>
+      <ion-card class="workout-node">
+        <ion-card-subtitle class="workout-node-name">{{nextWorkout}}</ion-card-subtitle>
+      </ion-card>
+    </ion-card>
+  </div>
+  <div id="last-workouts">
+    <ion-card class="workout">
+      <ion-card-subtitle class="workout-list-title">Últimos treinos realizados</ion-card-subtitle>
+      <ion-card class="workout-node">
+        <ion-card-subtitle class="workout-node-name">{{lastWorkout1}}</ion-card-subtitle>
+      </ion-card>
+      <ion-card class="workout-node">
+        <ion-card-subtitle class="workout-node-name">{{lastWorkout2}}</ion-card-subtitle>
+      </ion-card>
+      <ion-card class="workout-node">
+        <ion-card-subtitle class="workout-node-name">{{lastWorkout3}}</ion-card-subtitle>
+      </ion-card>
+    </ion-card>
+  </div>
+  <div class="row-buttons">
+    <ion-card class="text-button" (click)="goToCustomerProgramBluePrint()">
+      <ion-card-content class="text-button-text">
+        Programa de treino
+      </ion-card-content>
+    </ion-card>
+    <button ion-button fill="clear" class="icon-button" (click)="goToCustomerReport(this.customerId)">
+      <ion-img src="assets/fita-metrica.png" class="icon"></ion-img>
+    </button>
+    <button ion-button fill="clear" class="icon-button" (click)="goToCustomerInfo(this.customerId)">
+      <ion-img src="assets/info.png" class="icon"></ion-img>
+    </button>
+  </div>
+  <div class="row-buttons">
+    <ion-card class="text-button" (click)="goToCustomerSchedule()">
+      <ion-card-content class="text-button-text">
+        Horário
+      </ion-card-content>
+    </ion-card>
+    <button ion-button fill="clear" class="icon-button" (click)="showDeleteCustomer()">
+      <ion-img src="assets/lata-de-lixo.png" class="icon"></ion-img>
+    </button>
+    <button ion-button fill="clear" class="icon-button" (click)="goToEditCustomer(this.customerId)">
+      <ion-img src="assets/lapis.png" class="icon" id="pencil"></ion-img>
+    </button>
+  </div>
+</ion-content>
