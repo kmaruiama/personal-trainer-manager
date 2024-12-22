@@ -68,7 +68,7 @@ export const routes: Routes = [
   },
 
   {
-    path:'customer/report/chart',
-    loadComponent: ()=> import('./customer/profile/customer-profile/report/customer-report/mass-chart/mass-chart/mass-chart.component').then((m)=>m.MassChartComponent)
+    path:'customer/report/history',
+    loadComponent: ()=> import('./customer/profile/customer-profile/report/customer-report/history/weight-input-history/weight-input-history.component').then((m)=>m.WeightInputHistoryComponent)
   }
 ];

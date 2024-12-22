@@ -43,7 +43,6 @@ export class CustomerReportComponent implements OnInit {
           },
         });
     } else {
-      console.error('No auth token found');
       alert('Autenticação necessária para acessar as informações.');
     }
   }
@@ -53,11 +52,11 @@ export class CustomerReportComponent implements OnInit {
   }
 
   goToMassChart(customerId: number) {
-    this.router.navigate(['/customer/report/chart'], { state: { id: customerId } });
+
   }
 
   goToAllInputs(customerId: number){
-
+    this.router.navigate(['/customer/report/history'], { state: { id: customerId } });
   }
 
 }

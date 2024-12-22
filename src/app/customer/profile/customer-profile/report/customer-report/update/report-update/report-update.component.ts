@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { IonTitle, IonContent, IonInput, IonCard, IonRadioGroup, IonItem, IonRadio, IonLabel, IonButton } from "@ionic/angular/standalone";
+import { HttpClient } from '@angular/common/http';
+import { IonTitle, IonContent, IonInput, IonCard, IonRadioGroup, IonItem, IonRadio, IonLabel } from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-report-update',
@@ -12,7 +13,6 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    HttpClientModule,
     IonLabel,
     IonRadio,
     IonItem,
@@ -29,7 +29,7 @@ export class ReportUpdateComponent implements OnInit
   formGroup: FormGroup;
   customerId: number = 0;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router:Router) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private router:Router, private alertController: AlertController) {
     this.formGroup = this.fb.group({
       peso: ['', [Validators.required, Validators.min(0)]],
       percentualGordura: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
@@ -68,16 +68,14 @@ export class ReportUpdateComponent implements OnInit
         this.http.post('http://localhost:8080/api/weight/new', payload, { headers })
           .subscribe({
             next: (response) => {
-              console.log('Response:', response);
-              alert('Dados enviados com sucesso!');
+              this.showSuccessAlert("Sucesso!");
             },
             error: (error) => {
-              console.error('Error:', error);
-              alert('Erro ao enviar os dados. Tente novamente.');
+              this.showErrorAlert("Erro ao inserir nova informação.");
             }
           });
       } else {
-        alert('Token de autorização não encontrado!');
+        this.showErrorAlert("Erro de autenticação.")
       }
     }
   }
@@ -86,5 +84,25 @@ export class ReportUpdateComponent implements OnInit
   ngOnInit(){
     const navigation = this.router.getCurrentNavigation();
     this.customerId = navigation?.extras.state?.['id'] || null;
+  }
+
+  async showErrorAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Erro',
+      message: message,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
+  }
+
+  async showSuccessAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Sucesso!',
+      message: message,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
   }
 }

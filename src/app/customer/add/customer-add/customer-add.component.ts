@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map, throwError } from 'rxjs';
 import { IonContent, IonButton, IonLabel, IonItem, IonInput, IonRadio, IonRadioGroup, IonTitle } from '@ionic/angular/standalone';
 
@@ -20,7 +20,6 @@ import { IonContent, IonButton, IonLabel, IonItem, IonInput, IonRadio, IonRadioG
     IonTitle,
     IonRadioGroup,
     ReactiveFormsModule,
-    HttpClientModule,
   ],
 })
 export class CustomerAddComponent {
