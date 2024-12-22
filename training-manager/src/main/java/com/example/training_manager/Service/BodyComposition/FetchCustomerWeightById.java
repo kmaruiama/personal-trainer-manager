@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -41,9 +42,10 @@ public class FetchCustomerWeightById {
             weightDto.setHeight(weightEntityList.get(i).getHeight());
             weightDto.setBodyFatPercentage(weightEntityList.get(i).getBodyFatPercentage());
             weightDto.setDate(weightEntityList.get(i).getDate());
+            weightDto.setId(weightEntityList.get(i).getId());
             weightDtoList.add(weightDto);
         }
-        weightDtoList.sort((dto1, dto2) -> dto1.getDate().compareTo(dto2.getDate()));
+        weightDtoList.sort(Comparator.comparing(WeightDto::getDate));
         return weightDtoList;
     }
 }

@@ -74,13 +74,15 @@ public class WeightController {
     }
 
     @PatchMapping("/edit")
-    public ResponseEntity<String> editWeight(@RequestBody WeightEditDto weightEditDto,
-                                             @RequestHeader("Authorization")String authHeader){
-        try{
+    public ResponseEntity<Map<String, String>> editWeight(@RequestBody WeightEditDto weightEditDto,
+                                                          @RequestHeader("Authorization") String authHeader) {
+        try {
             weightEditService.execute(weightEditDto, authHeader);
-            return ResponseEntity.status(HttpStatus.OK).body("Informações corporais editadas com sucesso.");
-        }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao editar informações corporais: " + e);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Informações corporais editadas com sucesso."));
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erro ao editar informações corporais: " + e.getMessage()));
         }
     }
 

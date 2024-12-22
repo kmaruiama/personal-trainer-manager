@@ -7,6 +7,7 @@ import java.util.Date;
 @Data
 public class WeightDto {
     private Long customerId;
+    private Long id;
     private Date date;
     private float bodyFatPercentage;
     private float weight;

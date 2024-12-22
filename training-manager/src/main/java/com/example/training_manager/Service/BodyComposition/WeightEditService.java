@@ -16,9 +16,12 @@ public class WeightEditService {
     ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
 
     @Autowired
-    WeightEditService(WeightRepository weightRepository){
+    WeightEditService(WeightRepository weightRepository,
+                      ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer){
         this.weightRepository = weightRepository;
+        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
     }
+
     public void execute(WeightEditDto weightEditDto, String authHeader) throws Exception{
         WeightEntity weightEntity = null;
         Optional<WeightEntity> weightEntityOptional = weightRepository.findById(weightEditDto.getWeightId());
@@ -28,7 +31,8 @@ public class WeightEditService {
         if (weightEntity == null){
             throw new Exception("Não foi possível encontrar o registro");
         }
-        if (validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader),weightEntity.getCustomerEntity().getId())){
+
+        if (!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), weightEntity.getCustomerEntity().getId())){
             throw new Exception("O treinador não possui permissão para este cliente.");
         }
         weightEntity.setWeight(weightEditDto.getWeight());
