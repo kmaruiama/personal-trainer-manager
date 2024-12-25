@@ -70,5 +70,10 @@ export const routes: Routes = [
   {
     path:'customer/report/history',
     loadComponent: ()=> import('./customer/profile/customer-profile/report/customer-report/history/weight-input-history/weight-input-history.component').then((m)=>m.WeightInputHistoryComponent)
+  },
+
+  {
+    path: 'customer/report/chart',
+    loadComponent: ()=> import('./customer/profile/customer-profile/report/customer-report/chart/report-chart/report-chart.component').then((m)=>m.ReportChartComponent)
   }
 ];

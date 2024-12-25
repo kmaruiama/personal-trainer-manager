@@ -70,7 +70,7 @@ export class CustomerProfileComponent implements OnInit {
             this.lastWorkout3 = data[3];
           },
           (error) => {
-            console.error('Error fetching schedule profile:', error);
+            this.router.navigate(['/customer/']);
           }
         );
       }
@@ -112,13 +112,23 @@ export class CustomerProfileComponent implements OnInit {
       })
       .subscribe(
         (response) => {
-          console.log('Customer deleted successfully:', response);
           this.router.navigate(['/customer']);
         },
         (error) => {
-          console.error('Error deleting customer:', error);
+          this.showErrorAlert("Erro ao deletar o cliente");
         }
       );
   }
+
+  async showErrorAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Erro',
+      message: message,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
+  }
+
 
 }

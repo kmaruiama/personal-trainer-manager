@@ -52,7 +52,7 @@ export class CustomerReportComponent implements OnInit {
   }
 
   goToMassChart(customerId: number) {
-
+    this.router.navigate(['/customer/report/chart'], { state: { id: customerId}});
   }
 
   goToAllInputs(customerId: number){
