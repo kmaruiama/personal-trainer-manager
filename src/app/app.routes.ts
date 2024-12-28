@@ -42,6 +42,10 @@ export const routes: Routes = [
     loadComponent: () => import('./customer/profile/customer-profile/customer-profile.component').then((m) => m.CustomerProfileComponent)
   },
 
+  { path: 'customer/blueprint',
+    loadComponent: () => import('./customer/profile/customer-profile/blueprint/customer-blueprint/customer-blueprint.component').then((m)=>m.CustomerBlueprintComponent)
+  },
+
   {
     path: 'customer/edit',
     loadComponent: ()=> import('./customer/profile/customer-profile/edit/customer-edit/edit-customer.component').then((m)=>m.EditCustomerComponent)

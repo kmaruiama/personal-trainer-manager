@@ -33,15 +33,16 @@ export class CustomerProfileComponent implements OnInit {
     this.showConfirmationDeleteAlert();
   }
 
-  goToCustomerProgramBluePrint(){
-
+  goToCustomerProgramBluePrint(customerId: number){
+    this.router.navigate(['/customer/blueprint'],{
+      state: { id: customerId },
+    });
   }
 
   goToCustomerReport(customerId: number){
     this.router.navigate(['/customer/report'],{
       state: { id: customerId },
-    }
-    )
+    });
   }
 
   goToCustomerInfo(customerId: number){
