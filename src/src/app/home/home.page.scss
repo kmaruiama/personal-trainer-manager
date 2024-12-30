@@ -1,0 +1,94 @@
+ion-content{
+  --background: linear-gradient(#000000, #3533CD);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#dumbell {
+  margin-left: 4%;
+  width: 20%;
+  height: auto;
+}
+
+#coachpal {
+  position: static;
+  text-align: left;
+  margin-left:3%;
+  font-size: 230%;
+  font-family: "arial", sans-serif;
+  font-weight: bold;
+}
+
+
+#title{
+  position:static;
+  text-align: center;
+  margin-top: 10%;
+  margin-right: 8%;
+  margin-left:8%;
+  font-size:180%;
+  font-family: "arial", sans-serif;
+  font-weight: bold;
+}
+
+#description{
+  position:static;
+  text-align: center;
+  margin-top: 10%;
+  margin-right: 8%;
+  margin-left:8%;
+  font-size:100%;
+  font-family: "arial", sans-serif;
+  font-weight: bold;
+}
+.container2
+{
+  display: flex;
+  justify-content: center;
+}
+#weightlifter{
+  margin-top: 8%;
+  width: 70%;
+  height: auto;
+}
+
+.container3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+#login, #register {
+
+  border: 2px solid white;
+  border-radius: 24px;
+  background-color: transparent;
+  padding: 5px 10px;
+  font-size: 180%;
+  font-family: "Arial", sans-serif;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: center;
+  text-transform: none;
+}
+
+#register {
+  margin-top: 5%;
+}
+
+#logar:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+
+

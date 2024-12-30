@@ -1,0 +1,75 @@
+ion-content{
+  --background: linear-gradient(#000000, #3533CD);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50%;
+}
+
+#dumbell {
+  width: 25%;
+  height: auto;
+}
+
+#coachpal {
+  position: static;
+  text-align: center;
+  margin-left:3%;
+  font-size: 288%;
+  font-family: "arial", sans-serif;
+  font-weight: bold;
+}
+
+ion-item {
+  --background: transparent;
+  --border-radius: 24px;
+  --border-color: white;
+  --border-width: 2px;
+  --box-shadow: none;
+  margin-bottom: 5%;
+}
+
+ion-label {
+  color: white;
+}
+
+ion-input {
+  --background: transparent;
+  --border-radius: 24px;
+  --border-color: white;
+  --border-width: 2px;
+  --box-shadow: none;
+  color: white;
+}
+
+ion-input::part(input) {
+  color: white;
+}
+
+#title{
+  font-size:180%;
+  margin-bottom: 6%;
+}
+
+#login{
+  margin-top: 5%;
+  border: 2px solid white;
+  border-radius: 24px;
+  background-color: transparent;
+  padding: 2% 5%;
+  font-size: 180%;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: center;
+  text-transform: none;
+}
+
+#login:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
