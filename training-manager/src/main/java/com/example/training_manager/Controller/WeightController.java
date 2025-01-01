@@ -80,7 +80,6 @@ public class WeightController {
             weightEditService.execute(weightEditDto, authHeader);
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Informações corporais editadas com sucesso."));
         } catch (Exception e) {
-            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Erro ao editar informações corporais: " + e.getMessage()));
         }

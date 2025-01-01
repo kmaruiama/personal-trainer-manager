@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/workout")
+@CrossOrigin(origins = "http://localhost:8100")
 public class WorkoutController {
     private final AddProgramService addProgramService;
     private final EditProgramService editProgramService;
@@ -44,6 +45,7 @@ public class WorkoutController {
             editProgramService.execute(programBlueprintGetDto, authHeader);
             return ResponseEntity.status(HttpStatus.OK).body("Programa de treinos editado com sucesso");
         } catch (Exception e){
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao editar programa de treinos: "+ e.getMessage());
         }
     }

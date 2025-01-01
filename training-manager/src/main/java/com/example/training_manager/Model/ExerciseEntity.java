@@ -21,6 +21,6 @@ public class ExerciseEntity {
     @JoinColumn(name = "workout_id")
     private WorkoutEntity workoutEntity;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "exerciseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SetEntity> setEntity = new ArrayList<>();
 }
