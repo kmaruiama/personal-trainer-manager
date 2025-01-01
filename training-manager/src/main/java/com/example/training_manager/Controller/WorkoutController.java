@@ -56,7 +56,6 @@ public class WorkoutController {
         try{
             return ResponseEntity.ok(fetchProgramBlueprintByCustomerId.execute(id, authHeader));
         }catch (Exception e){
-            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

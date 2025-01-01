@@ -49,27 +49,24 @@ public class EditProgramService {
         }
         ProgramEntity programEntity = programBlueprintEntityOptional.get();
         programEntity.setName(programBlueprintGetDto.getName());
-
-        editWorkouts(programBlueprintGetDto);
+        for (int i = 0 ; i<programBlueprintGetDto.getWorkoutGetDtoList().size(); i++){
+            WorkoutGetDto workoutGetDto = programBlueprintGetDto.getWorkoutGetDtoList().get(i);
+            editWorkouts(workoutGetDto);
+        }
     }
 
-    //modificar esse metodo depois pra nao iterar sobre o for do programa mas tratar cada treino de
-    //forma individual, e jogar o laço pro execute()
-
-    private void editWorkouts(ProgramBlueprintGetDto programBlueprintGetDto) throws Exception {
-        for (WorkoutGetDto workoutGetDto : programBlueprintGetDto.getWorkoutGetDtoList()) {
-            Optional<WorkoutEntity> workoutBlueprintEntityOptional = workoutRepository.findById(workoutGetDto.getWorkoutId());
-            if (workoutBlueprintEntityOptional.isEmpty()) {
-                throw new Exception("Erro ao encontrar treino do programa");
-            }
-            WorkoutEntity workoutEntity = workoutBlueprintEntityOptional.get();
-            if (workoutGetDto.isDeleteFlag()) {
-                workoutRepository.delete(workoutEntity);
-            } else {
-                workoutEntity.setName(workoutGetDto.getName());
-                editExercises(workoutGetDto, workoutEntity.getCustomerEntity());
-                workoutRepository.save(workoutEntity);
-            }
+    public void editWorkouts(WorkoutGetDto workoutGetDto) throws Exception {
+        Optional<WorkoutEntity> workoutBlueprintEntityOptional = workoutRepository.findById(workoutGetDto.getWorkoutId());
+        if (workoutBlueprintEntityOptional.isEmpty()) {
+            throw new Exception("Erro ao encontrar treino do programa");
+        }
+        WorkoutEntity workoutEntity = workoutBlueprintEntityOptional.get();
+        if (workoutGetDto.isDeleteFlag()) {
+            workoutRepository.delete(workoutEntity);
+        } else {
+            workoutEntity.setName(workoutGetDto.getName());
+            editExercises(workoutGetDto, workoutEntity.getCustomerEntity());
+            workoutRepository.save(workoutEntity);
         }
     }
 
@@ -79,8 +76,8 @@ public class EditProgramService {
             if (exerciseBlueprintEntityOptional.isEmpty()) {
                 throw new Exception("Erro ao encontrar exercícios do treino");
             }
-            ExerciseEntity exerciseEntity = exerciseBlueprintEntityOptional.get();
 
+            ExerciseEntity exerciseEntity = exerciseBlueprintEntityOptional.get();
             if (exerciseGetDto.isDeleteFlag()) {
                 exerciseRepository.delete(exerciseEntity);
             } else {
