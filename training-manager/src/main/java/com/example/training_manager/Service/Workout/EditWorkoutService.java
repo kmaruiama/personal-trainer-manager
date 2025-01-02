@@ -1,7 +1,6 @@
 package com.example.training_manager.Service.Workout;
 
 import com.example.training_manager.Dto.Workout.ExerciseGetDto;
-import com.example.training_manager.Dto.Workout.ProgramBlueprintGetDto;
 import com.example.training_manager.Dto.Workout.SetGetDto;
 import com.example.training_manager.Dto.Workout.WorkoutGetDto;
 import com.example.training_manager.Model.*;
@@ -16,59 +15,44 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class EditProgramService {
+public class EditWorkoutService {
 
-    private final ProgramRepository programRepository;
     private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
     private final ExerciseRepository exerciseRepository;
     private final WorkoutRepository workoutRepository;
     private final SetRepository setRepository;
 
     @Autowired
-    public EditProgramService(ProgramRepository programRepository,
+    public EditWorkoutService(ProgramRepository programRepository,
                               ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
                               ExerciseRepository exerciseRepository,
                               WorkoutRepository workoutRepository,
                               SetRepository setRepository) {
-        this.programRepository = programRepository;
         this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
         this.exerciseRepository = exerciseRepository;
         this.workoutRepository = workoutRepository;
         this.setRepository = setRepository;
     }
 
-    public void execute(ProgramBlueprintGetDto programBlueprintGetDto, String authHeader) throws Exception {
-        if (!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader),
-                programRepository.returnCustomerIdByProgramBlueprintId(programBlueprintGetDto.getId()))) {
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
-
-        Optional<ProgramEntity> programBlueprintEntityOptional = programRepository.findById(programBlueprintGetDto.getId());
-        if (programBlueprintEntityOptional.isEmpty()) {
-            throw new Exception("Erro ao encontrar programa de treinos");
-        }
-        ProgramEntity programEntity = programBlueprintEntityOptional.get();
-        programEntity.setName(programBlueprintGetDto.getName());
-        for (int i = 0 ; i<programBlueprintGetDto.getWorkoutGetDtoList().size(); i++){
-            WorkoutGetDto workoutGetDto = programBlueprintGetDto.getWorkoutGetDtoList().get(i);
-            editWorkouts(workoutGetDto);
-        }
-    }
-
-    public void editWorkouts(WorkoutGetDto workoutGetDto) throws Exception {
+    public void execute(WorkoutGetDto workoutGetDto, String authHeader) throws Exception {
+        //inverti a ordem de checagem de exceções
+        //puxando o customerEntity atraves do workoutEntity ao inves de apenas o id pois vou reutilizar ele depois,
+        //economizando consultas no banco de dados
         Optional<WorkoutEntity> workoutBlueprintEntityOptional = workoutRepository.findById(workoutGetDto.getWorkoutId());
         if (workoutBlueprintEntityOptional.isEmpty()) {
             throw new Exception("Erro ao encontrar treino do programa");
         }
         WorkoutEntity workoutEntity = workoutBlueprintEntityOptional.get();
-        if (workoutGetDto.isDeleteFlag()) {
-            workoutRepository.delete(workoutEntity);
-        } else {
-            workoutEntity.setName(workoutGetDto.getName());
-            editExercises(workoutGetDto, workoutEntity.getCustomerEntity());
-            workoutRepository.save(workoutEntity);
+
+        if (!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), workoutEntity.getCustomerEntity().getId())) {
+            throw new Exception("O treinador não possui permissão para este cliente.");
         }
+
+        workoutEntity.setName(workoutGetDto.getName());
+        editExercises(workoutGetDto, workoutEntity.getCustomerEntity());
+        workoutRepository.save(workoutEntity);
     }
+    //daqui pra baixo nao refatorado
 
     private void editExercises(WorkoutGetDto workoutGetDto, CustomerEntity customerEntity) throws Exception {
         for (ExerciseGetDto exerciseGetDto : workoutGetDto.getExerciseGetDtoList()) {
@@ -78,6 +62,7 @@ public class EditProgramService {
             }
 
             ExerciseEntity exerciseEntity = exerciseBlueprintEntityOptional.get();
+
             if (exerciseGetDto.isDeleteFlag()) {
                 exerciseRepository.delete(exerciseEntity);
             } else {

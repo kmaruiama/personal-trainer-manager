@@ -3,7 +3,7 @@ package com.example.training_manager.Controller;
 import com.example.training_manager.Dto.Workout.ProgramDto;
 import com.example.training_manager.Dto.Workout.ProgramBlueprintGetDto;
 import com.example.training_manager.Service.Workout.AddProgramService;
-import com.example.training_manager.Service.Workout.EditProgramService;
+import com.example.training_manager.Service.Workout.EditWorkoutService;
 import com.example.training_manager.Service.Workout.FetchProgramBlueprintByCustomerId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:8100")
 public class WorkoutController {
     private final AddProgramService addProgramService;
-    private final EditProgramService editProgramService;
+    private final EditWorkoutService editWorkoutService;
     private final FetchProgramBlueprintByCustomerId fetchProgramBlueprintByCustomerId;
 
     @Autowired
     public WorkoutController(AddProgramService addProgramService,
-                             EditProgramService editProgramService,
+                             EditWorkoutService editWorkoutService,
                              FetchProgramBlueprintByCustomerId fetchProgramBlueprintByCustomerId) {
         this.addProgramService = addProgramService;
-        this.editProgramService = editProgramService;
+        this.editWorkoutService = editWorkoutService;
         this.fetchProgramBlueprintByCustomerId = fetchProgramBlueprintByCustomerId;
     }
 
@@ -39,13 +39,12 @@ public class WorkoutController {
     }
 
     @PatchMapping
-    public ResponseEntity<String> editProgramBlueprint(@RequestBody ProgramBlueprintGetDto programBlueprintGetDto,
+    public ResponseEntity<String> editWorkoutBlueprint(@RequestBody ProgramBlueprintGetDto programBlueprintGetDto,
                                                        @RequestHeader("Authorization") String authHeader){
         try {
-            editProgramService.execute(programBlueprintGetDto, authHeader);
+            editWorkoutService.execute(programBlueprintGetDto, authHeader);
             return ResponseEntity.status(HttpStatus.OK).body("Programa de treinos editado com sucesso");
         } catch (Exception e){
-            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao editar programa de treinos: "+ e.getMessage());
         }
     }

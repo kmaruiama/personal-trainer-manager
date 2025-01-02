@@ -8,5 +8,4 @@ import java.util.List;
 public class ProgramBlueprintGetDto {
     private Long id;
     private String name;
-    private List<WorkoutGetDto> workoutGetDtoList;
 }
