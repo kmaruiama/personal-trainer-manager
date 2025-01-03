@@ -22,9 +22,10 @@ public class WorkoutEntity {
     @JoinColumn(name = "cliente_id")
     private CustomerEntity customerEntity;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE)
-    private List<ExerciseEntity> exerciseBlueprintEntities = new ArrayList<>();
+    @OneToMany(mappedBy = "workoutEntity", cascade = CascadeType.MERGE)
+    private List<ExerciseEntity> exerciseEntityList = new ArrayList<>();
 
+    //???????????
     @OneToMany(mappedBy = "id", cascade = CascadeType.REMOVE)
     private List<ScheduleEntity> schedule = new ArrayList<>();
 

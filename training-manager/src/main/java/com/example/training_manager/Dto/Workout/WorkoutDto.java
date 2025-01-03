@@ -6,6 +6,8 @@ import java.util.List;
 
 @Data
 public class WorkoutDto {
+    private Long programId;
+    private Long id;
     private String name;
     private Long customerId;
     private List<ExerciseDto> exercises;

@@ -16,7 +16,7 @@ public class SetEntity {
 
     private float weight;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_id")
     private ExerciseEntity exerciseEntity;
 

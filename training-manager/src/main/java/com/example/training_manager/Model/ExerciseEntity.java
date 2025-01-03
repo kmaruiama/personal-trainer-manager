@@ -17,7 +17,7 @@ public class ExerciseEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workout_id")
     private WorkoutEntity workoutEntity;
 
