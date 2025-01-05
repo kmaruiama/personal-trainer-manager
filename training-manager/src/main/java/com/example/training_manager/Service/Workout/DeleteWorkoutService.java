@@ -64,7 +64,7 @@ public class DeleteWorkoutService {
         }
     }
 
-    private  void deleteWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
+    private void deleteWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
         if (checkWorkoutOwner(deleteWorkoutDto)){
             workoutRepository.delete(this.workoutEntity);
         }
@@ -112,7 +112,8 @@ public class DeleteWorkoutService {
         else {
             throw new Exception("Erro ao encontrar exercício");
         }
-        return this.workoutEntity.getId() == this.exerciseEntity.getWorkoutEntity().getId();
+        return checkWorkoutOwner(deleteWorkoutDto)
+                && this.workoutEntity.getId() == this.exerciseEntity.getWorkoutEntity().getId();
     }
 
     private boolean checkSetsExercise(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
@@ -130,8 +131,12 @@ public class DeleteWorkoutService {
         else {
             throw new Exception("Erro ao encontrar série");
         }
-        return this.exerciseEntity.getId() == this.setEntity.getExerciseEntity().getId();
+
+        return checkWorkoutOwner(deleteWorkoutDto)
+                && checkExercisesWorkout(deleteWorkoutDto)
+                && this.exerciseEntity.getId() == this.setEntity.getExerciseEntity().getId();
     }
 }
 
 //preciso aprender generals pra deixar o codigo menos verboso
+//é necessário fazer essas verificacoes em cascata pra garantir a autorizacao no delete dos dados
