@@ -72,6 +72,12 @@ public class EditWorkoutService {
         else {
             throw new Exception("Erro ao encontrar treino");
         }
+
+        //verificação de segurança
+        if (this.customerEntity.getId() != workoutEntity.getCustomerEntity().getId()){
+            throw new Exception("Esse cliente não possui permissão para este treino");
+        }
+
         workoutEntity.setName(workoutDto.getName());
 
         //salvando
@@ -99,6 +105,10 @@ public class EditWorkoutService {
                 } else {
                     throw new Exception("Erro ao encontrar exercício");
                 }
+                //verificação de segurança
+                if (workoutEntity.getId() != exerciseEntity.getWorkoutEntity().getId()){
+                    throw new Exception("Esse cliente não possui permissão para este exercício");
+                }
                 exerciseEntity.setName(exerciseDtoList.get(i).getName());
                 exerciseRepository.save(exerciseEntity);
                 //indo para as folhas
@@ -123,9 +133,12 @@ public class EditWorkoutService {
                 if (setEntityOptional.isPresent()){
                     setEntity = setEntityOptional.get();
                 }
-                //se não achar, joga exception
                 else {
                     throw new Exception("Erro ao editar série");
+                }
+                //verificacao de segurança
+                if (exerciseEntity.getId() != setEntity.getExerciseEntity().getId()){
+                    throw new Exception("Esse cliente não possui permissão para esta série");
                 }
                 setEntity.setWeight(setDtoList.get(i).getWeight());
                 setEntity.setRepetitions(setDtoList.get(i).getRepetitions());
