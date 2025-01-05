@@ -23,7 +23,7 @@ public class DeleteWorkoutService {
     private final SetRepository setRepository;
     private final CustomerRepository customerRepository;
 
-    private CustomerEntity customerEntity;  //como sao multiplos usos, nao vou instanciar em um metodo apenas
+    private CustomerEntity customerEntity;
     private WorkoutEntity workoutEntity;
     private ExerciseEntity exerciseEntity;
     private SetEntity setEntity;
@@ -32,7 +32,7 @@ public class DeleteWorkoutService {
     DeleteWorkoutService(ValidateToken validateToken,
                          WorkoutRepository workoutRepository,
                          ExerciseRepository exerciseRepository,
-                         SetRepository setRepository, CustomerRepository customerRepository){
+                         SetRepository setRepository, CustomerRepository customerRepository) {
         this.validateToken = validateToken;
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
@@ -40,103 +40,92 @@ public class DeleteWorkoutService {
         this.customerRepository = customerRepository;
     }
 
-    public void execute(DeleteWorkoutDto deleteWorkoutDto, String authHeader) throws Exception{
-        Optional<CustomerEntity> customerEntityOptional = customerRepository.findById(deleteWorkoutDto.getCustomerId());
-        if (customerEntityOptional.isPresent()){
-            this.customerEntity = customerEntityOptional.get();
-        }
-        else {
-            throw new Exception("Erro ao encontrar cliente na database");
-        }
-        validateToken.execute(this.customerEntity.getId(), authHeader);
-        redirectToTreeLevel(deleteWorkoutDto);
-    }
-    private void redirectToTreeLevel(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
-        switch (deleteWorkoutDto.getTreeDeletionLevel()){
-            case 1: deleteWorkout(deleteWorkoutDto);
-            break;
-
-            case 2: deleteExercise(deleteWorkoutDto);
-            break;
-
-            case 3: deleteSet(deleteWorkoutDto);
-            break;
-        }
-    }
-
-    private void deleteWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
-        if (checkWorkoutOwner(deleteWorkoutDto)){
-            workoutRepository.delete(this.workoutEntity);
-        }
-    }
-
-    private void deleteExercise(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
-        if (checkExercisesWorkout(deleteWorkoutDto)){
-            exerciseRepository.delete(this.exerciseEntity);
+    public void execute (DeleteWorkoutDto deleteWorkoutDto, String authHeader) throws Exception{
+        validateToken.execute(deleteWorkoutDto.getCustomerId(), authHeader);
+        switch (deleteWorkoutDto.getTreeDeletionLevel()) {
+            case 1 -> deleteWorkout(deleteWorkoutDto);
+            case 2 -> deleteExercise(deleteWorkoutDto);
+            case 3 -> deleteSet(deleteWorkoutDto);
+            default -> throw new IllegalArgumentException("Nível inválido");
         }
     }
 
     private void deleteSet(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
-        if(checkSetsExercise(deleteWorkoutDto)){
+        initializeCustomer(deleteWorkoutDto);
+        initializeWorkout(deleteWorkoutDto);
+        initializeExercise(deleteWorkoutDto);
+        initializeSet(deleteWorkoutDto);
+        if(checkSetDeleteCondition()){
             setRepository.delete(this.setEntity);
         }
     }
 
-    //os seguintes metodos necessarios servem para evitar que um treinador apenas com a autenticacao do ownership
-    //do cliente consiga deletar qualquer coisa no banco de dados
-
-    private boolean checkWorkoutOwner(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
-        Optional<WorkoutEntity> workoutEntityOptional = workoutRepository.findById(deleteWorkoutDto.getWorkoutId());
-        if (workoutEntityOptional.isPresent()){
-            this.workoutEntity = workoutEntityOptional.get();
+    private void deleteExercise(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
+        initializeCustomer(deleteWorkoutDto);
+        initializeWorkout(deleteWorkoutDto);
+        initializeExercise(deleteWorkoutDto);
+        if(checkExerciseDeleteCondition()){
+            exerciseRepository.delete(this.exerciseEntity);
         }
-        else {
-            throw new Exception("Erro ao encontrar treino");
-        }
-
-        return this.customerEntity.getId() == this.workoutEntity.getCustomerEntity().getId();
     }
 
-    private boolean checkExercisesWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
-        Optional<WorkoutEntity> workoutEntityOptional = workoutRepository.findById(deleteWorkoutDto.getWorkoutId());
-        if (workoutEntityOptional.isPresent()){
-            this.workoutEntity = workoutEntityOptional.get();
+    private void deleteWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
+        initializeCustomer(deleteWorkoutDto);
+        initializeWorkout(deleteWorkoutDto);
+        if(checkWorkoutDeleteCondition()){
+            workoutRepository.delete(this.workoutEntity);
         }
-        else {
-            throw new Exception("Erro ao encontrar treino");
-        }
-        Optional<ExerciseEntity> exerciseEntityOptional = exerciseRepository.findById(deleteWorkoutDto.getExerciseId());
-        if (exerciseEntityOptional.isPresent()){
-            this.exerciseEntity = exerciseEntityOptional.get();
-        }
-        else {
-            throw new Exception("Erro ao encontrar exercício");
-        }
-        return checkWorkoutOwner(deleteWorkoutDto)
-                && this.workoutEntity.getId() == this.exerciseEntity.getWorkoutEntity().getId();
     }
 
-    private boolean checkSetsExercise(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
-        Optional<ExerciseEntity> exerciseEntityOptional = exerciseRepository.findById(deleteWorkoutDto.getExerciseId());
-        if (exerciseEntityOptional.isPresent()){
-            this.exerciseEntity = exerciseEntityOptional.get();
+    private void initializeCustomer(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
+        Optional<CustomerEntity> customerEntityOptional = customerRepository.findById(deleteWorkoutDto.getCustomerId());
+        if (customerEntityOptional.isPresent()) {
+            this.customerEntity = customerEntityOptional.get();
+        } else {
+            throw new Exception("Erro ao encontrar cliente na base de dados");
         }
-        else {
+    }
+
+    private void initializeWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
+        Optional<WorkoutEntity> workoutEntityOptional = workoutRepository.findById(deleteWorkoutDto.getWorkoutId());
+        if (workoutEntityOptional.isPresent()) {
+            this.workoutEntity = workoutEntityOptional.get();
+        } else {
+            throw new Exception("Erro ao encontrar treino");
+        }
+    }
+
+    private void initializeExercise(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
+        Optional<ExerciseEntity> exerciseEntityOptional = exerciseRepository.findById(deleteWorkoutDto.getExerciseId());
+        if (exerciseEntityOptional.isPresent()) {
+            this.exerciseEntity = exerciseEntityOptional.get();
+        } else {
             throw new Exception("Erro ao encontrar exercício");
         }
+    }
+
+    private void initializeSet(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
         Optional<SetEntity> setEntityOptional = setRepository.findById(deleteWorkoutDto.getSetId());
-        if (setEntityOptional.isPresent()){
+        if (setEntityOptional.isPresent()) {
             this.setEntity = setEntityOptional.get();
-        }
-        else {
+        } else {
             throw new Exception("Erro ao encontrar série");
         }
-
-        return checkWorkoutOwner(deleteWorkoutDto)
-                && checkExercisesWorkout(deleteWorkoutDto)
-                && this.exerciseEntity.getId() == this.setEntity.getExerciseEntity().getId();
     }
-}
 
-//preciso aprender generals pra deixar o codigo menos verboso
-//é necessário fazer essas verificacoes em cascata pra garantir a autorizacao no delete dos dados
+    private boolean checkWorkoutDeleteCondition (){
+        return this.workoutEntity.getCustomerEntity().getId() == this.customerEntity.getId();
+    }
+
+    private boolean checkExerciseDeleteCondition (){
+        return this.exerciseEntity.getWorkoutEntity().getId() == this.workoutEntity.getId()
+                && checkWorkoutDeleteCondition();
+    }
+
+    private boolean checkSetDeleteCondition (){
+        return this.setEntity.getExerciseEntity().getId() == this.exerciseEntity.getId()
+                && checkExerciseDeleteCondition()
+                && checkWorkoutDeleteCondition();
+    }
+
+}
