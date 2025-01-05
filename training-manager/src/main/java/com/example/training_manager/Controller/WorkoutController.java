@@ -2,6 +2,7 @@ package com.example.training_manager.Controller;
 
 import com.example.training_manager.Dto.Workout.WorkoutDto;
 import com.example.training_manager.Service.Workout.AddWorkoutService;
+import com.example.training_manager.Service.Workout.EditWorkoutService;
 import com.example.training_manager.Service.Workout.GetWorkoutService;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,15 @@ public class WorkoutController {
 
     private final AddWorkoutService addWorkoutService;
     private final GetWorkoutService getWorkoutService;
+    private final EditWorkoutService editWorkoutService;
+
     @Autowired
     WorkoutController (AddWorkoutService addWorkoutService,
-                       GetWorkoutService getWorkoutService){
+                       GetWorkoutService getWorkoutService,
+                       EditWorkoutService editWorkoutService){
         this.addWorkoutService = addWorkoutService;
         this.getWorkoutService = getWorkoutService;
+        this.editWorkoutService = editWorkoutService;
     }
 
     @PostMapping
@@ -44,6 +49,19 @@ public class WorkoutController {
             return ResponseEntity.ok(getWorkoutService.execute(id, authHeader));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PatchMapping
+    ResponseEntity<Map<String, String>> editWorkout(@RequestBody WorkoutDto workoutDto,
+                                                   @RequestHeader("Authorization") String authHeader){
+        try {
+            editWorkoutService.execute(workoutDto, authHeader);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("success", "Treino editado com sucesso"));
+        } catch (Exception e){
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erro ao editar treino"));
         }
     }
 }

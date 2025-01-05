@@ -78,9 +78,7 @@ public class AddWorkoutService{
         addExercise(workoutDto.getExercises(), workoutEntity);
     }
 
-    private void addExercise(List<ExerciseDto> exerciseDtoList, WorkoutEntity workoutEntity){
-        List<ExerciseEntity> exerciseEntityList = new ArrayList<>();
-
+    protected void addExercise(List<ExerciseDto> exerciseDtoList, WorkoutEntity workoutEntity){
         for (int i = 0; i<exerciseDtoList.size(); i++) {
             ExerciseEntity exerciseEntity = new ExerciseEntity();
             exerciseEntity.setWorkoutEntity(workoutEntity);
@@ -91,7 +89,7 @@ public class AddWorkoutService{
         }
     }
 
-    private void addSet(List<SetDto> setDtoList, ExerciseEntity exerciseEntity, CustomerEntity customerEntity){
+    protected void addSet(List<SetDto> setDtoList, ExerciseEntity exerciseEntity, CustomerEntity customerEntity){
         for (int i = 0; i<setDtoList.size(); i++){
             SetEntity setEntity = new SetEntity();
             setEntity.setExerciseEntity(exerciseEntity);
