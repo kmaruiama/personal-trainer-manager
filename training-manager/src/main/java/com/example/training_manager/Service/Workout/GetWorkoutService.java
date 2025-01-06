@@ -52,10 +52,11 @@ public class GetWorkoutService {
         return transformWorkoutEntityIntoWorkoutDto(workoutEntity);
     }
 
-    private WorkoutDto transformWorkoutEntityIntoWorkoutDto(WorkoutEntity workoutEntity){
+    protected WorkoutDto transformWorkoutEntityIntoWorkoutDto(WorkoutEntity workoutEntity){
         WorkoutDto workoutDto = new WorkoutDto();
         workoutDto.setId(workoutEntity.getId());
         workoutDto.setName(workoutEntity.getName());
+        workoutDto.setCustomerId(workoutDto.getCustomerId());
         workoutDto.setProgramId(workoutEntity.getProgramEntity().getId());
         workoutDto.setExercises(transformExerciseEntityIntoWorkoutDto(workoutEntity.getExerciseEntityList()));
         return workoutDto;

@@ -22,14 +22,14 @@ public class WorkoutEntity {
     @JoinColumn(name = "cliente_id")
     private CustomerEntity customerEntity;
 
-    @OneToMany(mappedBy = "workoutEntity", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "workoutEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExerciseEntity> exerciseEntityList = new ArrayList<>();
 
     //???????????
     @OneToMany(mappedBy = "id", cascade = CascadeType.REMOVE)
     private List<ScheduleEntity> schedule = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "program_id")
     private ProgramEntity programEntity;
 }

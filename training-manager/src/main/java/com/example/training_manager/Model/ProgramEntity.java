@@ -14,7 +14,7 @@ public class ProgramEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "programEntity", cascade = CascadeType.REMOVE)
     private List<WorkoutEntity> workouts;
 
     @ManyToOne(fetch = FetchType.LAZY)

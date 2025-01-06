@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//provavelmente tem um jeito mais performatico de fazer isso passando especificamente quais
+//partes foram editadas, mas ¯\_(ツ)_/¯ preciso terminar esse projeto rapido
 @Service
 public class EditWorkoutService {
     private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
