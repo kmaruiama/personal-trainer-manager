@@ -86,7 +86,7 @@ public class EditWorkoutService {
         workoutRepository.save(workoutEntity);
 
         //saindo da raiz da arvore
-        editExercise(workoutDto.getExercises(), workoutEntity);
+        editExercise(workoutDto.getExerciseDtoList(), workoutEntity);
     }
 
     private void editExercise(List<ExerciseDto> exerciseDtoList, WorkoutEntity workoutEntity) throws Exception{

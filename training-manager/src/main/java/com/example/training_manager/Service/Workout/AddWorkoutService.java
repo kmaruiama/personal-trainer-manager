@@ -75,7 +75,7 @@ public class AddWorkoutService{
         workoutRepository.save(workoutEntity);
 
         //saindo da raiz da arvore
-        addExercise(workoutDto.getExercises(), workoutEntity);
+        addExercise(workoutDto.getExerciseDtoList(), workoutEntity);
     }
 
     protected void addExercise(List<ExerciseDto> exerciseDtoList, WorkoutEntity workoutEntity){

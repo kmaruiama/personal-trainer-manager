@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonContent, IonTitle, IonInput, IonItem, IonLabel, IonButton } from "@ionic/angular/standalone";
+import { IonContent, IonTitle, IonInput, IonItem, IonLabel, IonButton, IonCard, IonImg } from "@ionic/angular/standalone";
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,10 +9,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './customer-blueprint.component.html',
   styleUrls: ['./customer-blueprint.component.scss'],
   standalone: true,
-  imports: [IonButton, IonLabel, IonTitle, IonContent, CommonModule]
+  imports: [IonImg, IonCard, IonLabel, IonTitle, IonContent, CommonModule]
 })
 export class CustomerBlueprintComponent implements OnInit {
-  private customerId: number = 0;
+  customerId: number = 0;
   private customerName: string = "";
   protected nomeDoPrograma: string = "";
   protected workouts: Workout[] = [];
@@ -36,32 +36,43 @@ export class CustomerBlueprintComponent implements OnInit {
   }
 
   getCurrentProgramBlueprint(customerId: number, authToken: string) {
-    const url = `http://localhost:8080/api/workout`;
+    const url = `http://localhost:8080/api/workout/program`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${authToken}`);
     return this.http.get<ProgramDto>(url, { headers, params: { id: customerId.toString() } });
   }
 
   convertServerResponseIntoProgramData(data: ProgramDto) {
     this.nomeDoPrograma = data.name;
-    this.workouts = data.workoutGetDtoList.map((workout) => ({
+    this.workouts = data.workoutDtoList.map((workout) => ({
+      id: workout.id,
       workoutName: workout.name,
-      exercises: workout.exerciseGetDtoList
-        .filter((exercise) => exercise.setGetDtoList.length > 0)
+      exercises: workout.exerciseDtoList
+        .filter((exercise) => exercise.setDtoList.length > 0)
         .map((exercise) => ({
           name: exercise.name,
-          sets: exercise.setGetDtoList.length,
-          reps: exercise.setGetDtoList[0]?.repetitions || 0
+          sets: exercise.setDtoList.length,
+          reps: exercise.setDtoList[0]?.repetitions || 0
         })),
-      deleteFlag: workout.deleteFlag
     }));
     console.log(this.workouts);
+  }
+
+  goToAddNewWorkoutBlueprint(customerId : number){
+    this.router.navigate(['customer/blueprint/add']);
+  }
+  goToEditWorkout(workoutId : number){
+    console.log(workoutId);
+   // this.router.navigate(['customer/blueprint/edit']);
+  }
+  deleteWorkoutBlueprint(){
+
   }
 }
 
 type Workout = {
+  id: number;
   workoutName: string;
   exercises: Exercise[];
-  deleteFlag: boolean;
 };
 
 type Exercise = {
@@ -74,17 +85,14 @@ type Exercise = {
 //preciso aprender a manipular json de forma mais eficiente, que coisa feia
 interface ProgramDto {
   name: string;
-  workoutGetDtoList: {
+  workoutDtoList: {
+    id: number;
     name: string;
-    exerciseGetDtoList: {
+    exerciseDtoList: {
       name: string;
-      setGetDtoList: {
+      setDtoList: {
         repetitions: number;
       }[];
     }[];
-    deleteFlag: boolean;
   }[];
 }
-
-//basicamente tem 2 coisas rolando aqui, a resposta do servidor com os nomes dos dtos e a a conversao deles
-//pra workouts[] & exercises[]

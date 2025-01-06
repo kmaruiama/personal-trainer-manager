@@ -58,7 +58,7 @@ public class GetWorkoutService {
         workoutDto.setName(workoutEntity.getName());
         workoutDto.setCustomerId(workoutDto.getCustomerId());
         workoutDto.setProgramId(workoutEntity.getProgramEntity().getId());
-        workoutDto.setExercises(transformExerciseEntityIntoWorkoutDto(workoutEntity.getExerciseEntityList()));
+        workoutDto.setExerciseDtoList(transformExerciseEntityIntoWorkoutDto(workoutEntity.getExerciseEntityList()));
         return workoutDto;
     }
 

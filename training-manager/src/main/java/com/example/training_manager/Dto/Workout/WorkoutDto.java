@@ -10,5 +10,5 @@ public class WorkoutDto {
     private Long id;
     private String name;
     private Long customerId;
-    private List<ExerciseDto> exercises;
+    private List<ExerciseDto> exerciseDtoList;
 }

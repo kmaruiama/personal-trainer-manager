@@ -46,6 +46,15 @@ export const routes: Routes = [
     loadComponent: () => import('./customer/profile/customer-profile/blueprint/customer-blueprint/customer-blueprint.component').then((m)=>m.CustomerBlueprintComponent)
   },
 
+  { path: 'customer/blueprint/add',
+    loadComponent: () => import('./customer/profile/customer-profile/blueprint/customer-blueprint/add/add-workout-blueprint/add-workout-blueprint.component').then((m)=>m.AddWorkoutBlueprintComponent)
+  },
+
+  {
+    path: 'customer/blueprint/edit',
+    loadComponent: () => import('./customer/profile/customer-profile/blueprint/customer-blueprint/edit/edit-workout-blueprint/edit-workout-blueprint.component').then((m)=>m.EditWorkoutBlueprintComponent)
+  },
+
   {
     path: 'customer/edit',
     loadComponent: ()=> import('./customer/profile/customer-profile/edit/customer-edit/edit-customer.component').then((m)=>m.EditCustomerComponent)

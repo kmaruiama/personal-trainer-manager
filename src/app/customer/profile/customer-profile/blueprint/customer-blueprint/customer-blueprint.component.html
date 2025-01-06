@@ -1,16 +1,25 @@
 <ion-content>
-  <ion-title>{{ nomeDoPrograma }}</ion-title>
-  <div *ngFor="let workout of workouts" class="workoutContainer">
-    <ion-label class="workoutTitle">{{ workout.workoutName }}</ion-label>
-    <div class="headerRow">
-      <ion-label class="columnHeader">Exercício</ion-label>
-      <ion-label class="columnHeader">Séries</ion-label>
-      <ion-label class="columnHeader">Repetições</ion-label>
-    </div>
-    <div *ngFor="let exercise of workout.exercises" class="exerciseRow">
-      <ion-label>{{ exercise.name }}</ion-label>
-      <ion-label>{{ exercise.sets }}</ion-label>
-      <ion-label>{{ exercise.reps }}</ion-label>
-    </div>
+  <div class="programHeader">
+    <ion-title>{{ nomeDoPrograma }}</ion-title>
+    <ion-img src="./assets/mais.png" id="mais" (click)="goToAddNewWorkoutBlueprint(this.customerId)"></ion-img>
   </div>
+  <ion-card>
+    <div *ngFor="let workout of workouts" class="workoutContainer">
+      <div id="workoutHeader">
+        <ion-label class="workoutTitle">{{ workout.workoutName }}</ion-label>
+        <ion-img src="./assets/lata-de-lixo.png" id="lata" (click)="deleteWorkoutBlueprint()"></ion-img>
+        <ion-img src="./assets/lapis.png" id="lapis" (click)="goToEditWorkout(workout.id)"></ion-img>
+      </div>
+      <div class="headerRow">
+        <ion-label class="columnHeader">Exercício</ion-label>
+        <ion-label class="columnHeader">Séries</ion-label>
+        <ion-label class="columnHeader">Repetições</ion-label>
+      </div>
+      <div *ngFor="let exercise of workout.exercises" class="exerciseRow">
+        <ion-label>{{ exercise.name }}</ion-label>
+        <ion-label>{{ exercise.sets }}</ion-label>
+        <ion-label>{{ exercise.reps }}</ion-label>
+      </div>
+    </div>
+  </ion-card>
 </ion-content>
