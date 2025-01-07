@@ -60,9 +60,10 @@ export class CustomerBlueprintComponent implements OnInit {
   goToAddNewWorkoutBlueprint(customerId : number){
     this.router.navigate(['customer/blueprint/add']);
   }
-  goToEditWorkout(workoutId : number){
-    console.log(workoutId);
-   // this.router.navigate(['customer/blueprint/edit']);
+  goToEditWorkout(workout : Workout){
+   this.router.navigate(['customer/blueprint/edit'],{
+    state: { workout: workout },
+  });
   }
   deleteWorkoutBlueprint(){
 
