@@ -44,24 +44,25 @@ export class CustomerBlueprintComponent implements OnInit {
   convertServerResponseIntoProgramData(data: ProgramDto) {
     this.nomeDoPrograma = data.name;
     this.workouts = data.workoutDtoList.map((workout) => ({
+      customerId: this.customerId,
       id: workout.id,
       workoutName: workout.name,
       exercises: workout.exerciseDtoList
         .filter((exercise) => exercise.setDtoList.length > 0)
         .map((exercise) => ({
+          id: exercise.id,
           name: exercise.name,
           sets: exercise.setDtoList.length,
           reps: exercise.setDtoList[0]?.repetitions || 0
         })),
     }));
-    console.log(this.workouts);
   }
 
   goToAddNewWorkoutBlueprint(customerId : number){
     this.router.navigate(['customer/blueprint/add']);
   }
   goToEditWorkout(workout : Workout){
-   this.router.navigate(['customer/blueprint/edit'],{
+    this.router.navigate(['customer/blueprint/edit'],{
     state: { workout: workout },
   });
   }
@@ -71,12 +72,14 @@ export class CustomerBlueprintComponent implements OnInit {
 }
 
 type Workout = {
+  customerId: number;
   id: number;
   workoutName: string;
   exercises: Exercise[];
 };
 
 type Exercise = {
+  id: number;
   name: string;
   sets: number;
   reps: number;
@@ -87,9 +90,11 @@ type Exercise = {
 interface ProgramDto {
   name: string;
   workoutDtoList: {
+    customerId: number;
     id: number;
     name: string;
     exerciseDtoList: {
+      id: number;
       name: string;
       setDtoList: {
         repetitions: number;

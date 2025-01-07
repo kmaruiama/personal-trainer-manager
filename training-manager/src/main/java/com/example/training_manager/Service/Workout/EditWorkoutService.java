@@ -62,7 +62,7 @@ public class EditWorkoutService {
         else {
             throw new Exception("Erro ao encontrar cliente");
         }
-    };
+    }
 
     private void editWorkout(WorkoutDto workoutDto) throws Exception{
         WorkoutEntity workoutEntity;

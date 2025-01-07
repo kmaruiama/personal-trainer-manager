@@ -104,11 +104,10 @@ export class EditCustomerComponent implements OnInit {
         );
     }
   else {
-    console.log("Form is invalid. Checking errors...");
     Object.keys(this.form.controls).forEach((controlName) => {
       const control = this.form.get(controlName);
       if (control?.invalid) {
-        console.log(`${controlName} is invalid:`, control.errors);
+        console.log(`${controlName} é inválido:`, control.errors);
       }
     });
   }
