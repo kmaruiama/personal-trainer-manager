@@ -1,7 +1,7 @@
 <ion-content>
   <div class="programHeader">
     <ion-title>{{ nomeDoPrograma }}</ion-title>
-    <ion-img src="./assets/mais.png" id="mais" (click)="goToAddNewWorkoutBlueprint(this.customerId)"></ion-img>
+    <ion-img src="./assets/mais.png" id="mais" (click)="goToAddNewWorkoutBlueprint(this.customerId, this.programId)"></ion-img>
   </div>
   <ion-card>
     <div *ngFor="let workout of workouts" class="workoutContainer">

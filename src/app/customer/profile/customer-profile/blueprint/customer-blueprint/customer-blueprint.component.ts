@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CustomerBlueprintComponent implements OnInit {
   customerId: number = 0;
+  programId: number = 0;
   private customerName: string = "";
   protected nomeDoPrograma: string = "";
   protected workouts: Workout[] = [];
@@ -42,8 +43,10 @@ export class CustomerBlueprintComponent implements OnInit {
   }
 
   convertServerResponseIntoProgramData(data: ProgramDto) {
+    this.programId = data.id;
     this.nomeDoPrograma = data.name;
     this.workouts = data.workoutDtoList.map((workout) => ({
+      programId: data.programId,
       customerId: this.customerId,
       id: workout.id,
       workoutName: workout.name,
@@ -59,19 +62,29 @@ export class CustomerBlueprintComponent implements OnInit {
     }));
   }
 
-  goToAddNewWorkoutBlueprint(customerId : number){
-    this.router.navigate(['customer/blueprint/add']);
+  goToAddNewWorkoutBlueprint(customerId : number, programId: number){
+    this.router.navigate(['customer/blueprint/add'],
+      {
+        state: {
+          customerId: customerId,
+          programId: programId
+        }
+      }
+    );
   }
+
   goToEditWorkout(workout : Workout){
     this.router.navigate(['customer/blueprint/edit'],
-    {
-      state: { workout: workout },
-    });
+      {
+        state: { workout: workout }
+      }
+    );
   }
 
   deleteWorkoutBlueprint(){
 
   }
+
 }
 
 type Workout = {
@@ -79,6 +92,7 @@ type Workout = {
   id: number;
   workoutName: string;
   exercises: Exercise[];
+  programId: number;
 };
 
 type Exercise = {
@@ -92,6 +106,8 @@ type Exercise = {
 
 //preciso aprender a manipular json de forma mais eficiente, que coisa feia
 interface ProgramDto {
+  programId: number;
+  id: number;
   name: string;
   workoutDtoList: {
     customerId: number;

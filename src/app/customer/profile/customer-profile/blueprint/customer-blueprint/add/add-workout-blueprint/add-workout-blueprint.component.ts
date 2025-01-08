@@ -17,6 +17,7 @@ export class AddWorkoutBlueprintComponent implements OnInit {
   authToken: string = localStorage.getItem('authToken') || '';
 
   workout: Workout = {
+    programId: 0,
     customerId: 0,
     workoutName: "",
     exercises: [],
@@ -27,6 +28,7 @@ export class AddWorkoutBlueprintComponent implements OnInit {
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     this.workout.customerId = navigation?.extras.state?.['customerId'] || null;
+    this.workout.programId = navigation?.extras.state?.['programId'] || null;
   }
 
   addNewExercise() {
@@ -48,7 +50,7 @@ export class AddWorkoutBlueprintComponent implements OnInit {
 
   submitNewWorkout() {
     const payload = {
-      programId: null,
+      programId: this.workout.programId,
       id: null,
       name: this.workout.workoutName,
       customerId: this.workout.customerId,
@@ -73,22 +75,38 @@ export class AddWorkoutBlueprintComponent implements OnInit {
       breaker = true;
     }
 
+    if(this.workout.exercises.length === 0){
+      breaker = true;
+    }
+
     for (let i: number = 0; i < this.workout.exercises.length; i++){
       if (this.workout.exercises[i].name === "" || this.workout.exercises[i].sets === 0){
         breaker = true;
       }
     }
 
-    if(breaker){
 
+    if(breaker){
+      console.log("colocar aviso de treino inicializado de forma errada aqui");
     }
     else{
-
+      const headers = { Authorization: `Bearer ${this.authToken}` };
+      this.http
+        .post(`http://localhost:8080/api/workout`, payload, { headers })
+        .subscribe(
+          (response) => {
+            console.log('Treino adicionado com sucesso', response);
+          },
+          (error) => {
+            console.error('Erro ao adicionar novo treino', error);
+          }
+        );
     }
   }
 }
 
 type Workout = {
+  programId: number;
   customerId: number;
   workoutName: string;
   exercises: Exercise[];
