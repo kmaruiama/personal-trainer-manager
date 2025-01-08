@@ -1,0 +1,81 @@
+ion-content {
+  --background: linear-gradient(#000000, #3533CD);
+}
+
+ion-card {
+  border-radius: 26px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: white !important;
+  background-color: transparent;
+  color: white;
+  padding: 3%;
+}
+
+#mais{
+  width: 7%;
+  height: auto;
+}
+
+#bin{
+  width: 20%;
+  height: auto;
+}
+
+#repsAndBin{
+  display:flex;
+}
+
+.columnHeader {
+  font-size: 120%;
+  margin-bottom: 5%;
+}
+
+.headerRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.exerciseRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  text-align: center;
+  margin-bottom: 3%;
+}
+
+ion-button{
+  --background: transparent;
+  --color: white;
+  --border-with: 2px;
+  --border-color: white;
+  --border-radius: 26px;
+  --border-style:solid;
+}
+
+#workoutTitle{
+  margin-top: 2%;
+  margin-left: 5%;
+  font-size: 130%;
+}
+#button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.programHeader {
+  display: flex;
+  margin-right: 3%;
+}
+
+ion-title {
+  font-size: 150%;
+  font-weight: bold;
+  margin-top: 5%;
+  margin-bottom: 3%;
+}

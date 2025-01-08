@@ -1,3 +1,24 @@
-<p>
-  add-workout-blueprint works!
-</p>
+<ion-content>
+  <div class="programHeader">
+    <ion-input placeholder="Nome do treino" [(ngModel)]="workout.workoutName" id="workoutTitle" ></ion-input>
+    <ion-img src="./assets/mais.png" id="mais" (click)="addNewExercise()"></ion-img>
+  </div>
+  <ion-card>
+    <div class="headerRow">
+      <ion-label class="columnHeader">Exercício</ion-label>
+      <ion-label class="columnHeader">Séries</ion-label>
+      <ion-label class="columnHeader">Repetições</ion-label>
+    </div>
+    <div *ngFor="let exercise of workout.exercises" class="exerciseRow">
+      <ion-input placeholder="Nome do exercício" [(ngModel)]="exercise.name"></ion-input>
+      <ion-input type="number" placeholder="Séries" [(ngModel)]="exercise.sets"></ion-input>
+      <div id="repsAndBin">
+        <ion-input type="number" placeholder="Repetições" [(ngModel)]="exercise.reps"></ion-input>
+        <ion-img src="./assets/lata-de-lixo.png" id="bin" (click)="removeExercise(exercise)"></ion-img>
+      </div>
+    </div>
+  </ion-card>
+  <div id="button">
+    <ion-button (click)="submitNewWorkout()">Enviar novo treino</ion-button>
+  </div>
+</ion-content>
