@@ -8,14 +8,13 @@ import {
   IonLabel,
   IonContent,
   IonTitle,
-  IonInput,
-} from '@ionic/angular/standalone';
+  IonInput, IonButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-edit-workout-blueprint',
   templateUrl: './edit-workout-blueprint.component.html',
   styleUrls: ['./edit-workout-blueprint.component.scss'],
-  imports: [
+  imports: [IonButton,
     IonInput,
     IonTitle,
     IonContent,
@@ -51,6 +50,7 @@ export class EditWorkoutBlueprintComponent implements OnInit {
       name: 'Novo exercício',
       sets: 0,
       reps: 0,
+      setId: []
     };
     this.workout.exercises.push(exercise);
   }
@@ -93,6 +93,33 @@ export class EditWorkoutBlueprintComponent implements OnInit {
         }
       );
   }
+
+  submitEditedWorkout() {
+    const payload = {
+      programId: null,
+      id: this.workout.id,
+      name: this.workout.workoutName,
+      customerId: this.workout.customerId,
+      exerciseDtoList: this.workout.exercises.map((exercise) => ({
+        id: exercise.id,
+        name: exercise.name,
+        setDtoList: Array(exercise.sets) //declara um array de .set posicoes
+          .fill(null)
+          .map((_, index) => ({
+            /*para nao somar o numero de sets que ja existem na db com os do frontend, mapeio os ids da
+            tabela de sets do backend e jogo aqui, ou menos -1 caso adiciione mais do que existem lá*/
+            id: exercise.setId?.[index] ?? -1,
+            repetitions: exercise.reps,
+            //o peso nao importa no programa
+            weight: 0,
+          })),
+      })),
+    };
+
+    console.log(payload);
+    //criar o patch depois
+  }
+
 }
 
 type Workout = {
@@ -107,4 +134,5 @@ type Exercise = {
   name: string;
   sets: number;
   reps: number;
+  setId: number [];
 };

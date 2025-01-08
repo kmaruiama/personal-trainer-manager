@@ -48,6 +48,26 @@ ion-card {
   margin-bottom: 3%;
 }
 
+ion-button{
+  --background: transparent;
+  --color: white;
+  --border-with: 2px;
+  --border-color: white;
+  --border-radius: 26px;
+  --border-style:solid;
+}
+
+#workoutTitle{
+  margin-top: 2%;
+  margin-left: 5%;
+  font-size: 130%;
+}
+#button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .programHeader {
   display: flex;
   margin-right: 3%;

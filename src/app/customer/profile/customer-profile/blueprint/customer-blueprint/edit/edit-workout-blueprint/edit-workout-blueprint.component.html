@@ -1,11 +1,9 @@
 <ion-content>
   <div class="programHeader">
-    <ion-title>{{ workout.workoutName }}</ion-title>
+    <ion-input value={{workout.workoutName}} id="workoutTitle"></ion-input>
     <ion-img src="./assets/mais.png" id="mais" (click)="addNewExercise()"></ion-img>
   </div>
   <ion-card>
-      <div id="workoutHeader">
-      </div>
       <div class="headerRow">
         <ion-label class="columnHeader">Exercício</ion-label>
         <ion-label class="columnHeader">Séries</ion-label>
@@ -19,6 +17,8 @@
           <ion-img src="./assets/lata-de-lixo.png" id="bin" (click)="removeExercise(exercise)"></ion-img>
         </div>
       </div>
-
   </ion-card>
+  <div id="button">
+    <ion-button (click)="submitEditedWorkout()">Enviar edição</ion-button>
+  </div>
 </ion-content>

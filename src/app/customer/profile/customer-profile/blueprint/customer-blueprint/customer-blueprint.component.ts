@@ -53,7 +53,8 @@ export class CustomerBlueprintComponent implements OnInit {
           id: exercise.id,
           name: exercise.name,
           sets: exercise.setDtoList.length,
-          reps: exercise.setDtoList[0]?.repetitions || 0
+          reps: exercise.setDtoList[0]?.repetitions || 0,
+          setId: exercise.setDtoList.map((set) => set.id)
         })),
     }));
   }
@@ -83,6 +84,7 @@ type Exercise = {
   name: string;
   sets: number;
   reps: number;
+  setId: number [];
 };
 
 
@@ -98,6 +100,7 @@ interface ProgramDto {
       name: string;
       setDtoList: {
         repetitions: number;
+        id: number;
       }[];
     }[];
   }[];
