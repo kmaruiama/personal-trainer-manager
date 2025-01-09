@@ -10,7 +10,7 @@
       <ion-label class="columnHeader">Repetições</ion-label>
     </div>
     <div *ngFor="let exercise of workout.exercises" class="exerciseRow">
-      <ion-input [(ngModel)]="exercise.name"></ion-input>
+      <ion-input [(ngModel)]="exercise.name" placeholder="Novo exercício"></ion-input>
       <ion-input type="number" [(ngModel)]="exercise.sets"></ion-input>
       <div id="repsAndBin">
         <ion-input type="number" [(ngModel)]="exercise.reps"></ion-input>

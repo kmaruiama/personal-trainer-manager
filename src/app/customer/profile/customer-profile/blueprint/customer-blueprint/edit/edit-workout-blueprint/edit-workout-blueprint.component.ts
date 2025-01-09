@@ -49,7 +49,7 @@ export class EditWorkoutBlueprintComponent implements OnInit {
   addNewExercise() {
     const exercise: Exercise = {
       id: -1,
-      name: 'Novo exercício',
+      name: '',
       sets: 0,
       reps: 0,
       setId: []

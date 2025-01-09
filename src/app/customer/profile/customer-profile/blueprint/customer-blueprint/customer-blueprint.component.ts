@@ -84,18 +84,25 @@ export class CustomerBlueprintComponent implements OnInit {
   }
 
   deleteWorkoutBlueprint(workout: Workout){
-    const headers = { Authorization: `Bearer ${this.authToken}` };
-    this.http
-      .delete(`http://localhost:8080/api/workout`, {
+    const payload = {
+      customerId: workout.customerId,
+      workoutId: workout.id,
+      exerciseId: null,
+      setId: null,
+      treeDeletionLevel: 1,
+    };
 
-        headers,
-      })
+    const headers = { Authorization: `Bearer ${this.authToken}` };
+
+    this.http
+      .delete(`http://localhost:8080/api/workout/blueprint`, { headers, body: payload,})
       .subscribe(
         (response) => {
-
+          console.log('Workout deleted successfully', response);
         },
         (error) => {
-          this.showErrorAlert("Erro ao deletar o cliente");
+          this.showErrorAlert("Erro ao deletar o treino");
+          console.error('Error deleting workout:', error);
         }
       );
   }
@@ -120,7 +127,13 @@ export class CustomerBlueprintComponent implements OnInit {
     await alert.present();
   }
 
-
+  async showErrorAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Erro',
+      message: message,
+      buttons: ['OK'],
+    });
+  }
 }
 
 type Workout = {
