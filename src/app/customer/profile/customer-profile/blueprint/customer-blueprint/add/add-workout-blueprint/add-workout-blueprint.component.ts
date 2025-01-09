@@ -66,8 +66,6 @@ export class AddWorkoutBlueprintComponent implements OnInit {
           })),
       })),
     };
-
-    //escrever as checagens de campo
     console.log(payload);
 
     let breaker: boolean = false;
@@ -84,7 +82,6 @@ export class AddWorkoutBlueprintComponent implements OnInit {
         breaker = true;
       }
     }
-
 
     if(breaker){
       console.log("colocar aviso de treino inicializado de forma errada aqui");

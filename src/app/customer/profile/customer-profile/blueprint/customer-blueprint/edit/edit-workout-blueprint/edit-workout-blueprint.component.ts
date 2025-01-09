@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   IonImg,
@@ -22,6 +23,7 @@ import {
     IonCard,
     IonImg,
     CommonModule,
+    FormsModule
   ],
   standalone: true,
 })
@@ -117,7 +119,38 @@ export class EditWorkoutBlueprintComponent implements OnInit {
     };
 
     console.log(payload);
-    //criar o patch depois
+
+    let breaker: boolean = false;
+    if (this.workout.workoutName === ""){
+      breaker = true;
+    }
+
+    if(this.workout.exercises.length === 0){
+      breaker = true;
+    }
+
+    for (let i: number = 0; i < this.workout.exercises.length; i++){
+      if (this.workout.exercises[i].name === "" || this.workout.exercises[i].sets === 0){
+        breaker = true;
+      }
+    }
+
+    if(breaker){
+      console.log("colocar aviso de treino inicializado de forma errada aqui");
+    }
+    else{
+      const headers = { Authorization: `Bearer ${this.authToken}` };
+      this.http
+        .patch(`http://localhost:8080/api/workout`, payload, { headers })
+        .subscribe(
+          (response) => {
+            console.log('Treino editado com sucesso', response);
+          },
+          (error) => {
+            console.error('Erro ao editar novo treino', error);
+          }
+        );
+    }
   }
 
 }

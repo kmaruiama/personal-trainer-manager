@@ -3,11 +3,11 @@
     <ion-title>{{ nomeDoPrograma }}</ion-title>
     <ion-img src="./assets/mais.png" id="mais" (click)="goToAddNewWorkoutBlueprint(this.customerId, this.programId)"></ion-img>
   </div>
-  <ion-card>
     <div *ngFor="let workout of workouts" class="workoutContainer">
+      <ion-card>
       <div id="workoutHeader">
         <ion-label class="workoutTitle">{{ workout.workoutName }}</ion-label>
-        <ion-img src="./assets/lata-de-lixo.png" id="lata" (click)="deleteWorkoutBlueprint()"></ion-img>
+        <ion-img src="./assets/lata-de-lixo.png" id="lata" (click)="showConfirmationDeleteAlert(workout)"></ion-img>
         <ion-img src="./assets/lapis.png" id="lapis" (click)="goToEditWorkout(workout)"></ion-img>
       </div>
       <div class="headerRow">
@@ -20,6 +20,6 @@
         <ion-label>{{ exercise.sets }}</ion-label>
         <ion-label>{{ exercise.reps }}</ion-label>
       </div>
+    </ion-card>
     </div>
-  </ion-card>
 </ion-content>

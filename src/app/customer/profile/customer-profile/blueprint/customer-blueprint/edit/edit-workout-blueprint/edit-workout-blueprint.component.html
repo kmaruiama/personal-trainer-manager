@@ -1,22 +1,22 @@
 <ion-content>
   <div class="programHeader">
-    <ion-input value={{workout.workoutName}} id="workoutTitle"></ion-input>
+    <ion-input [(ngModel)]="workout.workoutName" id="workoutTitle"></ion-input>
     <ion-img src="./assets/mais.png" id="mais" (click)="addNewExercise()"></ion-img>
   </div>
   <ion-card>
-      <div class="headerRow">
-        <ion-label class="columnHeader">Exercício</ion-label>
-        <ion-label class="columnHeader">Séries</ion-label>
-        <ion-label class="columnHeader">Repetições</ion-label>
+    <div class="headerRow">
+      <ion-label class="columnHeader">Exercício</ion-label>
+      <ion-label class="columnHeader">Séries</ion-label>
+      <ion-label class="columnHeader">Repetições</ion-label>
+    </div>
+    <div *ngFor="let exercise of workout.exercises" class="exerciseRow">
+      <ion-input [(ngModel)]="exercise.name"></ion-input>
+      <ion-input type="number" [(ngModel)]="exercise.sets"></ion-input>
+      <div id="repsAndBin">
+        <ion-input type="number" [(ngModel)]="exercise.reps"></ion-input>
+        <ion-img src="./assets/lata-de-lixo.png" id="bin" (click)="removeExercise(exercise)"></ion-img>
       </div>
-      <div *ngFor="let exercise of workout.exercises" class="exerciseRow">
-        <ion-input value={{exercise.name}}></ion-input>
-        <ion-input value={{exercise.sets}}></ion-input>
-        <div id ="repsAndBin">
-          <ion-input value={{exercise.reps}}></ion-input>
-          <ion-img src="./assets/lata-de-lixo.png" id="bin" (click)="removeExercise(exercise)"></ion-img>
-        </div>
-      </div>
+    </div>
   </ion-card>
   <div id="button">
     <ion-button (click)="submitEditedWorkout()">Enviar edição</ion-button>

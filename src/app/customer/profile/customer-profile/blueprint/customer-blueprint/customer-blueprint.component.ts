@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent, IonTitle, IonInput, IonItem, IonLabel, IonButton, IonCard, IonImg } from "@ionic/angular/standalone";
 import { CommonModule } from '@angular/common';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-customer-blueprint',
@@ -17,18 +18,19 @@ export class CustomerBlueprintComponent implements OnInit {
   private customerName: string = "";
   protected nomeDoPrograma: string = "";
   protected workouts: Workout[] = [];
+  private authToken: string | null= "";
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient, private alertController: AlertController) {}
 
   ngOnInit() {
+    this.authToken = localStorage.getItem('authToken');
     const navigation = this.router.getCurrentNavigation();
     this.customerId = navigation?.extras.state?.['id'] || null;
     this.customerName = navigation?.extras.state?.['name'] || null;
 
     if (this.customerId) {
-      const authToken = localStorage.getItem('authToken');
-      if (authToken) {
-        this.getCurrentProgramBlueprint(this.customerId, authToken).subscribe(
+      if (this.authToken) {
+        this.getCurrentProgramBlueprint(this.customerId, this.authToken).subscribe(
           (data) => this.convertServerResponseIntoProgramData(data),
           () => this.router.navigate(['/customer/profile'])
         );
@@ -81,9 +83,43 @@ export class CustomerBlueprintComponent implements OnInit {
     );
   }
 
-  deleteWorkoutBlueprint(){
+  deleteWorkoutBlueprint(workout: Workout){
+    const headers = { Authorization: `Bearer ${this.authToken}` };
+    this.http
+      .delete(`http://localhost:8080/api/workout`, {
 
+        headers,
+      })
+      .subscribe(
+        (response) => {
+
+        },
+        (error) => {
+          this.showErrorAlert("Erro ao deletar o cliente");
+        }
+      );
   }
+
+  async showConfirmationDeleteAlert(workout : Workout) {
+    const alert = await this.alertController.create({
+      header: 'DELETAR TREINO',
+      message: 'VOCÊ TEM CERTEZA? TODAS AS INFORMAÇÕES RELACIONADAS SERÃO EXCLUÍDAS.',
+      buttons: [
+        {
+          text: 'CANCELAR',
+          role: 'cancel',
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.deleteWorkoutBlueprint(workout);
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
 
 }
 
