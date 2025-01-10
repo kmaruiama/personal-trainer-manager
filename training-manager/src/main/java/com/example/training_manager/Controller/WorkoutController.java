@@ -69,6 +69,7 @@ public class WorkoutController {
         try {
             return ResponseEntity.ok(getWorkoutService.execute(id, authHeader));
         } catch (Exception e){
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -90,6 +91,7 @@ public class WorkoutController {
             editWorkoutService.execute(workoutDto, authHeader);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("success", "Treino editado com sucesso"));
         } catch (Exception e){
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Erro ao editar treino"));
         }
@@ -108,6 +110,7 @@ public class WorkoutController {
                         .body(Map.of("error", "Árvore inválida"));
             };
         } catch (Exception e){
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Erro ao deletar"));
         }

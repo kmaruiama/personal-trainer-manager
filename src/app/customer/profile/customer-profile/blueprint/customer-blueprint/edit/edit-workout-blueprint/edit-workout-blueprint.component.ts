@@ -9,13 +9,16 @@ import {
   IonLabel,
   IonContent,
   IonTitle,
-  IonInput, IonButton } from '@ionic/angular/standalone';
+  IonInput,
+  IonButton,
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-edit-workout-blueprint',
   templateUrl: './edit-workout-blueprint.component.html',
   styleUrls: ['./edit-workout-blueprint.component.scss'],
-  imports: [IonButton,
+  imports: [
+    IonButton,
     IonInput,
     IonTitle,
     IonContent,
@@ -23,7 +26,7 @@ import {
     IonCard,
     IonImg,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   standalone: true,
 })
@@ -42,8 +45,49 @@ export class EditWorkoutBlueprintComponent implements OnInit {
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
-    const navigation = this.router.getCurrentNavigation();
-    this.workout = navigation?.extras.state?.['workout'] || null;
+    //meio bobinho fazer isso mas economiza uma consulta no banco de dados
+    const workoutId = localStorage.getItem('workoutIdReloadParameter');
+
+    if (workoutId === null) {
+      const navigation = this.router.getCurrentNavigation();
+      this.workout = navigation?.extras.state?.['workout'] || null;
+    } else {
+      this.fetchWorkoutFromDatabase(workoutId);
+    }
+  }
+
+  fetchWorkoutFromDatabase(id: string) {
+    const headers = { Authorization: `Bearer ${this.authToken}` };
+    this.http
+      .get<WorkoutDto>(`http://localhost:8080/api/workout`, {
+        headers,
+        params: { id: id },
+      })
+      .subscribe(
+        (workoutDto) => {
+          console.log(workoutDto);
+          localStorage.removeItem('workoutIdReloadParameter');
+          this.convertServerResponseIntoProgramData(workoutDto);
+        },
+        (error) => {
+          console.error('Error connecting to the database:', error);
+        }
+      );
+  }
+
+  convertServerResponseIntoProgramData(workoutDto: WorkoutDto) {
+    this.workout.workoutName = workoutDto.name;
+    this.workout.customerId = workoutDto.customerId;
+    this.workout.id = workoutDto.id;
+    this.workout.exercises = workoutDto.exerciseDtoList
+      .filter((exercise) => exercise.setDtoList.length > 0)
+      .map((exercise) => ({
+        id: exercise.id,
+        name: exercise.name,
+        sets: exercise.setDtoList.length,
+        reps: exercise.setDtoList[0]?.repetitions || 0,
+        setId: exercise.setDtoList.map((set) => set.id),
+      }));
   }
 
   addNewExercise() {
@@ -52,7 +96,7 @@ export class EditWorkoutBlueprintComponent implements OnInit {
       name: '',
       sets: 0,
       reps: 0,
-      setId: []
+      setId: [],
     };
     this.workout.exercises.push(exercise);
   }
@@ -60,6 +104,7 @@ export class EditWorkoutBlueprintComponent implements OnInit {
   removeExercise(exercise: Exercise) {
     const index = this.workout.exercises.indexOf(exercise);
     if (exercise.id !== -1) {
+      this.workout.exercises.splice(index, 1);
       this.deleteExerciseFromDatabase(exercise.id);
     }
     if (index >= 0) {
@@ -67,7 +112,7 @@ export class EditWorkoutBlueprintComponent implements OnInit {
     }
   }
 
-  deleteExerciseFromDatabase(id : number) {
+  deleteExerciseFromDatabase(id: number) {
     const payload = {
       customerId: this.workout.customerId,
       workoutId: this.workout.id,
@@ -89,6 +134,11 @@ export class EditWorkoutBlueprintComponent implements OnInit {
       .subscribe(
         (response) => {
           console.log('Sucesso ao deletar exercício do programa:', response);
+          localStorage.setItem(
+            'workoutIdReloadParameter',
+            this.workout.id.toString()
+          );
+          location.reload();
         },
         (error) => {
           console.error('Erro ao deletar exercício do programa:', error);
@@ -118,33 +168,37 @@ export class EditWorkoutBlueprintComponent implements OnInit {
       })),
     };
 
-    console.log(payload);
-
     let breaker: boolean = false;
-    if (this.workout.workoutName === ""){
+    if (this.workout.workoutName === '') {
       breaker = true;
     }
 
-    if(this.workout.exercises.length === 0){
+    if (this.workout.exercises.length === 0) {
       breaker = true;
     }
 
-    for (let i: number = 0; i < this.workout.exercises.length; i++){
-      if (this.workout.exercises[i].name === "" || this.workout.exercises[i].sets === 0){
+    for (let i: number = 0; i < this.workout.exercises.length; i++) {
+      if (
+        this.workout.exercises[i].name === '' ||
+        this.workout.exercises[i].sets === 0
+      ) {
         breaker = true;
       }
     }
 
-    if(breaker){
-      console.log("colocar aviso de treino inicializado de forma errada aqui");
-    }
-    else{
+    if (breaker) {
+      console.log('colocar aviso de treino inicializado de forma errada aqui');
+    } else {
       const headers = { Authorization: `Bearer ${this.authToken}` };
       this.http
         .patch(`http://localhost:8080/api/workout`, payload, { headers })
         .subscribe(
           (response) => {
-            console.log('Treino editado com sucesso', response);
+            localStorage.setItem(
+              'workoutIdReloadParameter',
+              this.workout.id.toString()
+            );
+            location.reload();
           },
           (error) => {
             console.error('Erro ao editar novo treino', error);
@@ -153,6 +207,7 @@ export class EditWorkoutBlueprintComponent implements OnInit {
     }
   }
 
+  //criar os inicializadores dos treinos
 }
 
 type Workout = {
@@ -167,5 +222,19 @@ type Exercise = {
   name: string;
   sets: number;
   reps: number;
-  setId: number [];
+  setId: number[];
+};
+
+type WorkoutDto = {
+  customerId: number;
+  id: number;
+  name: string;
+  exerciseDtoList: {
+    id: number;
+    name: string;
+    setDtoList: {
+      repetitions: number;
+      id: number;
+    }[];
+  }[];
 };
