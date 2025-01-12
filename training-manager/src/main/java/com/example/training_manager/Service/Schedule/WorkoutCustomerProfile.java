@@ -20,6 +20,11 @@ será atendido e outra entidade deve guardar a ordem de treinos sendo ignorante 
 fazer isso usando o ProgramBlueprintEntity mas o prazo de entrega do trabalho acabou.
 */
 
+
+/*vou implementar a ideia de seguir com a ordem de treinos dando a opcao de pular, mas vou manter a agenda, me
+parece a forma mais inteligente de implementar considerando uma situação real*/
+
+/*também acho que vou trocar date por calendar na V2.0 desse app, já que date é legado*/
 @Service
 public class WorkoutCustomerProfile {
     FetchScheduleByTrainer fetchScheduleByTrainer;

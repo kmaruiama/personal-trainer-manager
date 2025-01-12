@@ -1,7 +1,13 @@
 <ion-content>
-  <div>
-    <app-shared-schedule-nodes>
-
+  <div *ngFor="let schedule of schedules">
+    <app-shared-schedule-nodes
+      [customerName]="schedule.customerName"
+      [scheduleHour]="schedule.scheduleHour"
+      [workoutName]="schedule.workoutName">
     </app-shared-schedule-nodes>
+  </div>
+  <div>
+    <ion-button>Adicionar novo horário</ion-button>
+    <ion-button>Salvar alterações</ion-button>
   </div>
 </ion-content>

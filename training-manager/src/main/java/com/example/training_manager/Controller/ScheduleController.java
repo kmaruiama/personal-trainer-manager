@@ -21,17 +21,21 @@ public class ScheduleController {
     private final ScheduleEditService scheduleEditService;
     private final ScheduleDeleteService scheduleDeleteService;
     private final WorkoutCustomerProfile workoutCustomerProfile;
+    private final FetchScheduleByCustomer fetchScheduleByCustomer;
 
     @Autowired
     public ScheduleController(AddScheduleService addScheduleService,
                               FetchScheduleByTrainer fetchScheduleByTrainer,
                               ScheduleEditService editScheduleService,
-                              ScheduleDeleteService scheduleDeleteService, WorkoutCustomerProfile workoutCustomerProfile){
+                              ScheduleDeleteService scheduleDeleteService,
+                              WorkoutCustomerProfile workoutCustomerProfile,
+                              FetchScheduleByCustomer fetchScheduleByCustomer){
         this.addScheduleService = addScheduleService;
         this.fetchScheduleByTrainer = fetchScheduleByTrainer;
         this.scheduleEditService = editScheduleService;
         this.scheduleDeleteService = scheduleDeleteService;
         this.workoutCustomerProfile = workoutCustomerProfile;
+        this.fetchScheduleByCustomer = fetchScheduleByCustomer;
     }
 
     @GetMapping("/list")
@@ -86,6 +90,17 @@ public class ScheduleController {
             return ResponseEntity.status(HttpStatus.OK).body("Horário deletado com sucesso");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao excluir horário: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/customer")
+    public ResponseEntity<List<ScheduleGetDto>> getCompleteScheduleFromSingleCustomer(@RequestParam Long id,
+                                                                                      @RequestHeader("Authorization")String authHeader)
+    {
+        try{
+            return ResponseEntity.ok(fetchScheduleByCustomer.execute(id, authHeader));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }
