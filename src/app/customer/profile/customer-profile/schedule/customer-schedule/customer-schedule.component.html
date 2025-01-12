@@ -2,12 +2,12 @@
   <div *ngFor="let schedule of schedules">
     <app-shared-schedule-nodes
       [customerName]="schedule.customerName"
-      [scheduleHour]="schedule.scheduleHour"
+      [scheduleHour]="schedule.scheduleHourStart"
       [workoutName]="schedule.workoutName">
     </app-shared-schedule-nodes>
   </div>
   <div>
-    <ion-button>Adicionar novo horário</ion-button>
-    <ion-button>Salvar alterações</ion-button>
+    <ion-button (click)="addNewSchedule()">Adicionar novo horário</ion-button>
+    <ion-button (click)="deleteSchedule()">Salvar alterações</ion-button>
   </div>
 </ion-content>

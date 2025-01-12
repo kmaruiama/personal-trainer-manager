@@ -16,9 +16,12 @@ public class FetchScheduleByCustomer {
     ScheduleRepository scheduleRepository;
 
     @Autowired
-    FetchScheduleByCustomer(ValidateToken validateToken){
+    FetchScheduleByCustomer(ValidateToken validateToken,
+                            ScheduleRepository scheduleRepository){
         this.validateToken = validateToken;
+        this.scheduleRepository = scheduleRepository;
     }
+
     public List<ScheduleGetDto> execute(Long customerId, String authHeader) throws Exception{
         validateToken.execute(customerId, authHeader);
         List<ScheduleEntity> scheduleEntityList = scheduleRepository.findScheduleEntitiesByCustomerEntityId(customerId);
@@ -27,6 +30,7 @@ public class FetchScheduleByCustomer {
         }
         return convertToDto(scheduleEntityList);
     }
+
     private List<ScheduleGetDto> convertToDto(List <ScheduleEntity> scheduleEntityList){
         List <ScheduleGetDto> scheduleGetDtoList = new ArrayList<>();
         for (int i = 0; i<scheduleEntityList.size(); i++){

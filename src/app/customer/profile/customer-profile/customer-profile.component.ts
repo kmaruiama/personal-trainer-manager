@@ -51,8 +51,10 @@ export class CustomerProfileComponent implements OnInit {
     });
   }
 
-  goToCustomerSchedule(){
-
+  goToCustomerSchedule(customerId: number){
+    this.router.navigate(['/customer/schedule'], {
+      state: { id: customerId },
+    });
   }
 
   ngOnInit() {
