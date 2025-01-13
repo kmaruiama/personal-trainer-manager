@@ -24,7 +24,7 @@ export class CustomerProfileComponent implements OnInit {
 
   goToEditCustomer(customerId: number) {
     this.router.navigate(['/customer/edit'], {
-      state: { id: customerId },
+      state: { id: customerId }
     });
   }
 

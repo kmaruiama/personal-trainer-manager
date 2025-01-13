@@ -69,10 +69,17 @@ export const routes: Routes = [
     path: 'customer/info',
     loadComponent: ()=> import('./customer/profile/customer-profile/info/customer-info/customer-info.component').then((m)=>m.EditCustomerComponent)
   },
+
   {
     path: 'customer/schedule',
     loadComponent: ()=> import('./customer/profile/customer-profile/schedule/customer-schedule/customer-schedule.component').then((m)=>m.CustomerScheduleComponent)
   },
+
+  {
+    path: 'customer/schedule/add',
+    loadComponent: ()=> import('./customer/profile/customer-profile/schedule/customer-schedule/add/customer-schedule-add/customer-schedule-add.component').then((m)=>m.CustomerScheduleAddComponent)
+  },
+
   {
     path: 'customer/report',
     loadComponent: ()=> import('./customer/profile/customer-profile/report/customer-report/customer-report.component').then((m)=>m.CustomerReportComponent)

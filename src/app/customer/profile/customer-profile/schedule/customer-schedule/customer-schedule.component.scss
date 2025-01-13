@@ -1,3 +1,21 @@
-ion-content{
-  --background: linear-gradient(#000000, #3533CD);
+ion-content {
+  --background: linear-gradient(#000000, #3533cd);
+}
+
+ion-button {
+  --background: transparent;
+  --color: white;
+  --border-with: 2px;
+  --border-color: white;
+  --border-radius: 26px;
+  --border-style: solid;
+}
+
+
+#buttons{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 10%;
+  margin-right: 10%
 }

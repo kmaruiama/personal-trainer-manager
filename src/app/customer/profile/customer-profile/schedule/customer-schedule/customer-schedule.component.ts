@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { IonContent, IonButton } from "@ionic/angular/standalone";
+import { IonContent, IonButton, IonImg } from "@ionic/angular/standalone";
 import { SharedScheduleNodesComponent } from "../../../../../schedule-nodes/shared-schedule-nodes.component";
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -9,13 +9,13 @@ import { Router } from '@angular/router';
   selector: 'app-customer-schedule',
   templateUrl: './customer-schedule.component.html',
   styleUrls: ['./customer-schedule.component.scss'],
-  imports: [IonButton, IonContent, SharedScheduleNodesComponent, CommonModule],
+  imports: [IonImg, IonButton, IonContent, SharedScheduleNodesComponent, CommonModule],
   standalone: true
 })
 export class CustomerScheduleComponent  implements OnInit {
   authToken: string = localStorage.getItem('authToken') || '';
 
-  private customerId: number = 0;
+  protected customerId: number = 0;
   protected schedules: Schedule[] = [];
   constructor(private router: Router, private http: HttpClient) { }
 
@@ -68,8 +68,10 @@ export class CustomerScheduleComponent  implements OnInit {
     return date.getDay();
   }
 
-  addNewSchedule(){
-
+  addNewSchedule(customerId: number){
+    this.router.navigate(['/customer/schedule/add'], {
+      state : { customerId : customerId }
+    });
   }
 
   deleteSchedule(){

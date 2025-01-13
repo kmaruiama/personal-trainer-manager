@@ -6,8 +6,8 @@
       [workoutName]="schedule.workoutName">
     </app-shared-schedule-nodes>
   </div>
-  <div>
-    <ion-button (click)="addNewSchedule()">Adicionar novo horário</ion-button>
+  <div id="buttons">
+    <ion-button (click)="addNewSchedule(this.customerId)">Adicionar novo horário</ion-button>
     <ion-button (click)="deleteSchedule()">Salvar alterações</ion-button>
   </div>
 </ion-content>
