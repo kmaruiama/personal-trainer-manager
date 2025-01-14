@@ -54,8 +54,9 @@ public class AddScheduleService {
         setCustomer(scheduleEntity, scheduleDto);
         setWorkoutBlueprint(scheduleEntity, scheduleDto);
         setTrainer(scheduleEntity, authHeader);
-        scheduleEntity.setDateStart(scheduleDto.getDateStart());
-        scheduleEntity.setDateEnd(scheduleDto.getDateEnd());
+        scheduleEntity.setDayOfTheWeek(scheduleDto.getDayOfTheWeek());
+        scheduleEntity.setHourStart(scheduleDto.getHourStart());
+        scheduleEntity.setHourEnd(scheduleDto.getHourEnd());
         scheduleRepository.save(scheduleEntity);
     }
 

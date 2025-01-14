@@ -2,8 +2,7 @@ package com.example.training_manager.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.Date;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -24,10 +23,10 @@ public class ScheduleEntity {
     @JoinColumn(name = "workout_id")
     private WorkoutEntity workoutEntity;
 
-    @Column
-    private Date dateStart;
+    private int dayOfTheWeek;
 
-    @Column
-    private Date dateEnd;
+    private LocalTime hourStart;
+
+    private LocalTime hourEnd;
 
 }

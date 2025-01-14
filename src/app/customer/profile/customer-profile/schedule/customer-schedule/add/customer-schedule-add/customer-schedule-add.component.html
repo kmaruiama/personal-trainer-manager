@@ -1,3 +1,36 @@
-<p>
-  customer-schedule-add works!
-</p>
+<ion-content>
+  <form [formGroup]="form" (ngSubmit)="testForm()">
+
+  <ion-radio-group formControlName="dayOfTheWeek">
+    <ion-item>
+      <ion-label>Segunda-feira</ion-label>
+      <ion-radio slot="start" value=1></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Terça-feira</ion-label>
+      <ion-radio slot="start" value=2></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Quarta-feira</ion-label>
+      <ion-radio slot="start" value=3></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Quinta-feira</ion-label>
+      <ion-radio slot="start" value=4></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Sexta-feira</ion-label>
+      <ion-radio slot="start" value=5></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Sábado</ion-label>
+      <ion-radio slot="start" value=6></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Domingo</ion-label>
+      <ion-radio slot="start" value=7></ion-radio>
+    </ion-item>
+  </ion-radio-group>
+  <ion-button id="register" type="submit" expand="block" fill="clear">Enviar</ion-button>
+  </form>
+</ion-content>

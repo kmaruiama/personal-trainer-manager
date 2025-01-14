@@ -35,8 +35,9 @@ public class FetchScheduleByTrainer {
         List<ScheduleGetDto> list = new ArrayList<>();
         for (int i = 0; i < scheduleEntities.size(); i++) {
             ScheduleGetDto scheduleGetDto = new ScheduleGetDto();
-            scheduleGetDto.setDateStart(scheduleEntities.get(i).getDateStart());
-            scheduleGetDto.setDateEnd(scheduleEntities.get(i).getDateEnd());
+            scheduleGetDto.setDayOfTheWeek(scheduleEntities.get(i).getDayOfTheWeek());
+            scheduleGetDto.setHourStart(scheduleEntities.get(i).getHourStart());
+            scheduleGetDto.setHourEnd(scheduleEntities.get(i).getHourEnd());
             scheduleGetDto.setCustomerName(scheduleEntities.get(i).getCustomerEntity().getNome());
             scheduleGetDto.setCustomerId(scheduleEntities.get(i).getCustomerEntity().getId());
             scheduleGetDto.setWorkoutName(scheduleEntities.get(i).getWorkoutEntity().getName());

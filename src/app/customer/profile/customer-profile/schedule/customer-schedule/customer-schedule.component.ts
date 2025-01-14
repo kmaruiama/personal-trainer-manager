@@ -49,23 +49,11 @@ export class CustomerScheduleComponent  implements OnInit {
       scheduleId: schedule.scheduleId,
       customerName: schedule.customerName,
       //converter isso em horário normal
-      scheduleHourStart: this.formatServerHours(schedule.dateStart),
-      scheduleHourEnd: this.formatServerHours(schedule.dateEnd),
-      dayOfTheWeek: this.formatServerWeek(schedule.dateStart),
+      scheduleHourStart: schedule.hourStart,
+      scheduleHourEnd: schedule.hourEnd,
+      dayOfTheWeek: schedule.dayOfTheWeek,
       deleteflag: false
     }))
-  }
-
-  formatServerHours(rawDate: string): string {
-    const date = new Date(rawDate);
-    const hour = date.getHours().toString().padStart(2, '0');
-    const minute = date.getMinutes().toString().padStart(2, '0');
-    return `${hour}:${minute}`;
-  }
-
-  formatServerWeek(rawDate: string): number {
-    const date = new Date(rawDate);
-    return date.getDay();
   }
 
   addNewSchedule(customerId: number){
@@ -96,8 +84,9 @@ type Schedule  = {
 interface ScheduleGetDto {
   workoutName: string,
   customerName: string,
-  dateStart: string,
-  dateEnd: string,
+  hourStart: string,
+  hourEnd: string,
+  dayOfTheWeek: number,
   scheduleId: number,
   customerId: number
 }

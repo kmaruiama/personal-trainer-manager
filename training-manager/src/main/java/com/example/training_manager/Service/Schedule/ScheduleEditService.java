@@ -26,8 +26,9 @@ public class ScheduleEditService {
 
     public void execute(String authHeader, ScheduleGetDto scheduleGetDto) throws Exception {
         ScheduleDto scheduleDto = new ScheduleDto();
-        scheduleDto.setDateStart(scheduleGetDto.getDateStart());
-        scheduleDto.setDateEnd(scheduleGetDto.getDateEnd());
+        scheduleDto.setHourStart(scheduleGetDto.getHourStart());
+        scheduleDto.setHourEnd(scheduleGetDto.getHourEnd());
+        scheduleDto.setDayOfTheWeek(scheduleGetDto.getDayOfTheWeek());
 
         if (!checkCurrentSchedule.execute(scheduleDto, authHeader)) {
             throw new Exception("O horário conflita com outro existente.");
@@ -41,8 +42,10 @@ public class ScheduleEditService {
         Optional<ScheduleEntity> scheduleEntityOptional = scheduleRepository.findById(scheduleGetDto.getScheduleId());
         if (scheduleEntityOptional.isPresent()) {
             ScheduleEntity scheduleEntity = scheduleEntityOptional.get();
-            scheduleEntity.setDateStart(scheduleGetDto.getDateStart());
-            scheduleEntity.setDateEnd(scheduleGetDto.getDateEnd());
+            scheduleEntity.setDayOfTheWeek(scheduleGetDto.getDayOfTheWeek());
+            scheduleEntity.setHourEnd(scheduleGetDto.getHourStart());
+            scheduleEntity.setHourEnd(scheduleGetDto.getHourEnd());
+            //botar o treino tb dps de testar o refactoring
             scheduleRepository.save(scheduleEntity);
         } else {
             throw new Exception("Erro inesperado");

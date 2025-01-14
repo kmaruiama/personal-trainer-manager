@@ -25,6 +25,8 @@ fazer isso usando o ProgramBlueprintEntity mas o prazo de entrega do trabalho ac
 parece a forma mais inteligente de implementar considerando uma situação real*/
 
 /*também acho que vou trocar date por calendar na V2.0 desse app, já que date é legado*/
+
+/*pq eu tinha escrito esse serviço de forma tao complicada sem motivo???*/
 @Service
 public class WorkoutCustomerProfile {
     FetchScheduleByTrainer fetchScheduleByTrainer;
@@ -41,26 +43,26 @@ public class WorkoutCustomerProfile {
     }
 
     public List<String> execute(String authHeader, Long id) throws Exception{
+        //vai na pagina do cliente
         List<String> workoutNames = new ArrayList<>();
+        //pega toda a agenda do treinador
         List<ScheduleGetDto> scheduleGetDtoList = fetchScheduleByTrainer.execute(authHeader);
         String customerName = customerRepository.findCustomerNameById(id);
+        //filtra só os compromissos do cliente
         List<ScheduleGetDto> scheduleGetDtoListFilteredByCustomer = scheduleGetDtoList.stream()
                 .filter(schedule -> customerName.equals(schedule.getCustomerName()))
                 .toList();
+        //joga no primeiro node da lista o treino de hoje, se houver
         workoutNames.add(getNextWorkoutBasedInTheDayOfTheWeek(scheduleGetDtoListFilteredByCustomer));
+        //joga os últimos três treinos realizados, se aconteceram
         getLastThreeWorkoutsIfTheyExist(id, workoutNames);
         return workoutNames;
     }
 
     private String getNextWorkoutBasedInTheDayOfTheWeek(List<ScheduleGetDto> scheduleGetDtoListFilteredByCustomer){
         DayOfWeek today = LocalDate.now().getDayOfWeek();
-
         for (ScheduleGetDto schedule : scheduleGetDtoListFilteredByCustomer) {
-            DayOfWeek workoutDay = schedule.getDateStart().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate()
-                    .getDayOfWeek();
-            if (workoutDay.equals(today)) {
+            if (schedule.getDayOfTheWeek() == today.getValue()) {
                 return schedule.getWorkoutName();
             }
         }
@@ -69,26 +71,19 @@ public class WorkoutCustomerProfile {
 
     private void getLastThreeWorkoutsIfTheyExist(Long id, List<String> workoutNames) {
         List<WorkoutEntity> workoutEntityList = workoutRepository.returnWorkoutsDescendant(id);
+
         if (workoutEntityList == null || workoutEntityList.isEmpty()) {
             for (int i = 0; i < 3; i++) {
                 workoutNames.add("NULO");
             }
             return;
         }
-        int count = 0;
-        for (WorkoutEntity workout : workoutEntityList) {
-            if (count >= 3) break;
-            if (workout.getProgramEntity() == null || workout.getProgramEntity().isBlueprint()) {
+        for (int i = 0; i<3; i++) {
+            if (workoutEntityList.get(i).getProgramEntity() == null || workoutEntityList.get(i).getProgramEntity().isBlueprint()) {
                 workoutNames.add("NULO");
             } else {
-                workoutNames.add(workout.getName());
+                workoutNames.add(workoutEntityList.get(i).getName());
             }
-            count++;
-        }
-
-        while (count < 3) {
-            workoutNames.add("NULO");
-            count++;
         }
     }
 
