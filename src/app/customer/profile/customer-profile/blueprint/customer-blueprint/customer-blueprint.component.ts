@@ -98,11 +98,11 @@ export class CustomerBlueprintComponent implements OnInit {
       .delete(`http://localhost:8080/api/workout/blueprint`, { headers, body: payload,})
       .subscribe(
         (response) => {
-          console.log('Workout deleted successfully', response);
+          console.log('Treino deletado com sucesso', response);
         },
         (error) => {
           this.showErrorAlert("Erro ao deletar o treino");
-          console.error('Error deleting workout:', error);
+          console.error('Erro ao deletar o treino:', error);
         }
       );
   }
