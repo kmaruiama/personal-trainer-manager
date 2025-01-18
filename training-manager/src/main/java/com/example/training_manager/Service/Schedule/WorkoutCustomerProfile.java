@@ -78,11 +78,17 @@ public class WorkoutCustomerProfile {
             }
             return;
         }
-        for (int i = 0; i<3; i++) {
-            if (workoutEntityList.get(i).getProgramEntity() == null || workoutEntityList.get(i).getProgramEntity().isBlueprint()) {
+
+        for (int i = 0; i < 3; i++) {
+            //se nao houveram 3 treinos ainda, adicionar nulo 
+            if (i >= workoutEntityList.size()) {
                 workoutNames.add("NULO");
             } else {
-                workoutNames.add(workoutEntityList.get(i).getName());
+                if (workoutEntityList.get(i).getProgramEntity() == null || workoutEntityList.get(i).getProgramEntity().isBlueprint()) {
+                    workoutNames.add("NULO");
+                } else {
+                    workoutNames.add(workoutEntityList.get(i).getName());
+                }
             }
         }
     }

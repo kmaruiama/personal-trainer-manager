@@ -53,9 +53,11 @@ public class ScheduleController {
                                                     @RequestHeader("Authorization") String authHeader)
     {
         try {
+            System.out.println(scheduleDto);
             addScheduleService.execute(authHeader, scheduleDto);
             return ResponseEntity.status(HttpStatus.OK).body("Horário salvo com sucesso");
         } catch (Exception e){
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar horário na agenda: " + e.getMessage());
         }
     }
@@ -77,6 +79,7 @@ public class ScheduleController {
         try {
             return ResponseEntity.ok(workoutCustomerProfile.execute(authHeader, id));
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

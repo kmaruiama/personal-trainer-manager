@@ -54,6 +54,7 @@ export class CustomerScheduleComponent  implements OnInit {
       dayOfTheWeek: schedule.dayOfTheWeek,
       deleteflag: false
     }))
+    console.log(this.schedules);
   }
 
   addNewSchedule(customerId: number){

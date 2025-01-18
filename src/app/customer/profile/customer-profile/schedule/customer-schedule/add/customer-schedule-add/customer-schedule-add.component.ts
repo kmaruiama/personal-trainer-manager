@@ -16,7 +16,11 @@ import { AlertController } from '@ionic/angular';
   standalone: true
 })
 
-//nao vou usar o "time" do ion-datetime pq achei a interface feia
+// nao vou usar o "time" do ion-datetime pq achei a interface feia
+// a schedule só processa treinos feitos em um dia:
+// se a pessoa começou o treino 23:30 e finalizou as 00:30, um erro vai ser causado.
+// vou tratar disso na v2
+
 export class CustomerScheduleAddComponent implements OnInit{
   form: FormGroup;
   workouts: workout[] = [];
@@ -42,6 +46,12 @@ export class CustomerScheduleAddComponent implements OnInit{
     if(!this.validateHours(hourStart) && this.validateHours(hourEnd)){
       return;
     }
+    //ok, os horários são válidos, mas se o horario de inicio for
+    //7:00 e o horário de fim for 6:00 a schedule vai processar -1 horas de treino?
+    if(!this.validateTime(hourStart, hourEnd)){
+      return;
+    }
+
     if (this.customerId === 0){
       return;
     }
@@ -64,20 +74,23 @@ export class CustomerScheduleAddComponent implements OnInit{
       hourEnd: hourEnd
     }
 
+    console.log(payload);
+
     const headers = { Authorization: `Bearer ${this.authToken}` };
 
     this.http
-      .post(`http://localhost:8080/api/schedule/new`, { headers, body: payload,})
+      .post(`http://localhost:8080/api/schedule/new`, payload, {headers})
       .subscribe(
         (response) => {
           console.log('Agendamento realizado com sucesso', response);
         },
         (error) => {
-          this.showErrorAlert("Erro ao agendar o treino");
-          console.error('Erro ao deletar o treino:', error);
+          this.showErrorAlert("Erro ao inserir novo agendamento");
+          console.error('Erro ao inserir novo agendamento:', error);
         }
       );
   }
+
 //tive que improvisar isso pq nao tinha nenhuma biblioteca simples pra fazer a validacao de horario
   validateHours(time: string): boolean {
     if (time.length !== 5) {
@@ -99,6 +112,37 @@ export class CustomerScheduleAddComponent implements OnInit{
       return false;
     }
     if (minutesNumber < 0 || minutesNumber > 59) {
+      return false;
+    }
+
+    return true;
+  }
+
+  validateTime(hourStart: string, hourEnd: string) : boolean {
+    let hoursStart: string = hourStart.substring(0, 2);
+    let minutesStart: string = hourStart.substring(3, 5);
+
+    let hoursNumberStart: number = parseInt(hoursStart);
+    let minutesNumberStart: number = parseInt(minutesStart);
+
+    let hoursEnd: string = hourEnd.substring(0, 2);
+    let minutesEnd: string = hourEnd.substring(3, 5);
+
+    let hoursNumberEnd: number = parseInt(hoursEnd);
+    let minutesNumberEnd: number = parseInt(minutesEnd);
+
+    //da pra condensar tudo em um if só mas fica ruim pra outra pessoa ler, assim é mais rápido para entender a lógica
+    if (hoursNumberStart === hoursNumberEnd){
+      if (minutesNumberStart > minutesNumberEnd){
+        return false;
+      }
+    }
+
+    if (hoursNumberStart > hoursNumberEnd){
+      return false;
+    }
+
+    if (hoursNumberEnd === hoursNumberStart && minutesNumberEnd === hoursNumberStart){
       return false;
     }
 
