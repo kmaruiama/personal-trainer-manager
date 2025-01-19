@@ -1,13 +1,14 @@
 <ion-content>
-  <div *ngFor="let schedule of schedules">
+  <div *ngFor="let schedule of filteredSchedules(); trackBy: trackBySchedule">
     <app-shared-schedule-nodes
       [customerName]="schedule.customerName"
       [scheduleHour]="schedule.scheduleHourStart"
-      [workoutName]="schedule.workoutName">
+      [workoutName]="schedule.workoutName"
+      (deleteClicked)="deleteSchedule(schedule.scheduleId)">
     </app-shared-schedule-nodes>
   </div>
   <div id="buttons">
     <ion-button (click)="addNewSchedule(this.customerId)">Adicionar novo horário</ion-button>
-    <ion-button (click)="deleteSchedule()">Salvar alterações</ion-button>
+    <ion-button (click)="persistChanges()">Salvar alterações</ion-button>
   </div>
 </ion-content>

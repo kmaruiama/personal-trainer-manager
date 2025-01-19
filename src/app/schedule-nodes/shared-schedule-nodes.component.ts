@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, EventEmitter, Input, Output} from '@angular/core';
 import { IonCard, IonCardHeader, IonCardSubtitle, IonImg } from '@ionic/angular/standalone';
 
 @Component({
@@ -12,4 +12,11 @@ export class SharedScheduleNodesComponent{
   @Input() customerName!: string;
   @Input() workoutName!: string;
   @Input() scheduleHour!: string;
+
+  @Output() deleteClicked = new EventEmitter<void>();
+
+  deleteSchedule() {
+    console.log("click");
+    this.deleteClicked.emit();
+  }
 }

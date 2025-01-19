@@ -4,12 +4,13 @@ import { IonContent, IonButton, IonImg } from "@ionic/angular/standalone";
 import { SharedScheduleNodesComponent } from "../../../../../schedule-nodes/shared-schedule-nodes.component";
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-customer-schedule',
   templateUrl: './customer-schedule.component.html',
   styleUrls: ['./customer-schedule.component.scss'],
-  imports: [IonImg, IonButton, IonContent, SharedScheduleNodesComponent, CommonModule],
+  imports: [IonButton, IonContent, SharedScheduleNodesComponent, CommonModule],
   standalone: true
 })
 export class CustomerScheduleComponent  implements OnInit {
@@ -17,7 +18,7 @@ export class CustomerScheduleComponent  implements OnInit {
 
   protected customerId: number = 0;
   protected schedules: Schedule[] = [];
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private alertController: AlertController) { }
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
@@ -52,7 +53,7 @@ export class CustomerScheduleComponent  implements OnInit {
       scheduleHourStart: schedule.hourStart,
       scheduleHourEnd: schedule.hourEnd,
       dayOfTheWeek: schedule.dayOfTheWeek,
-      deleteflag: false
+      deleteFlag: false
     }))
     console.log(this.schedules);
   }
@@ -63,8 +64,43 @@ export class CustomerScheduleComponent  implements OnInit {
     });
   }
 
-  deleteSchedule(){
+  deleteSchedule(scheduleId: number){
+    const schedule : Schedule | undefined= this.schedules.find(s => s.scheduleId === scheduleId);
+    if (schedule){
+      schedule.deleteFlag = true;
 
+    }
+  }
+  filteredSchedules(): Schedule[]{
+    return this.schedules.filter(schedule=>!schedule.deleteFlag);
+  }
+
+  persistChanges(){
+    for(let i = 0; i<this.schedules.length; i++){
+      if(this.schedules[i].deleteFlag === true){
+        this.deleteScheduleNode(this.schedules[i].scheduleId);
+      }
+    }
+  }
+
+  deleteScheduleNode(id: number){
+    const headers = { Authorization: `Bearer ${this.authToken}` };
+    this.http
+      .delete(`http://localhost:8080/api/schedule/delete?id=${id}`, {
+        headers,
+      }).subscribe(
+        (response) => {
+          console.log(`sucesso ao deletar agendamento com id ${id}`)
+        },
+        (error) => {
+          console.error(`erro ao deletar agendamento com id ${id}`);
+        }
+      );
+
+  }
+
+  trackBySchedule(index: number, schedule: Schedule): number {
+    return schedule.scheduleId;
   }
 }
 
@@ -76,7 +112,7 @@ type Schedule  = {
   scheduleId: number,
   dayOfTheWeek: number,
   customerId: number,
-  deleteflag: boolean
+  deleteFlag: boolean
   //boa sacada deixar o deleteflag só no frontend, depois é só iterar através do array de
   //schedules e ir deletando. Fazer isso no programa de treino tb ao inves de reiniciar a pagina
   //e mandar a requisicao toda hora!!!
