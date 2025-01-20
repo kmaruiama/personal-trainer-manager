@@ -1,5 +1,5 @@
 <ion-content>
-  <div *ngFor="let schedule of filteredSchedules(); trackBy: trackBySchedule">
+  <div *ngFor="let schedule of filteredSchedules()">
     <app-shared-schedule-nodes
       [customerName]="schedule.customerName"
       [scheduleHour]="schedule.scheduleHourStart"

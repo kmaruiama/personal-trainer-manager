@@ -43,7 +43,7 @@ export class CustomerScheduleAddComponent implements OnInit{
     const hourEnd = this.form.get('hourEnd')?.value;
     const workoutId = this.form.get('workoutId')?.value;
     const dayOfTheWeek = this.form.get('dayOfTheWeek')?.value;
-    if(!this.validateHours(hourStart) && this.validateHours(hourEnd)){
+    if(!this.validateHours(hourStart) || !this.validateHours(hourEnd)){
       return;
     }
     //ok, os horários são válidos, mas se o horario de inicio for

@@ -16,7 +16,6 @@ export class SharedScheduleNodesComponent{
   @Output() deleteClicked = new EventEmitter<void>();
 
   deleteSchedule() {
-    console.log("click");
     this.deleteClicked.emit();
   }
 }

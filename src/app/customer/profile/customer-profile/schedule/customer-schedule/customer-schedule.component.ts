@@ -24,7 +24,7 @@ export class CustomerScheduleComponent  implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     this.customerId = navigation?.extras.state?.['id'] || null;
 
-    if (this.customerId != 0) {
+    if (this.customerId !== null) {
       this.fetchCustomerSchedule(this.customerId, this.authToken)?.subscribe(
         (data)=> this.convertServerResponse(data),
         (error) => {
@@ -50,14 +50,17 @@ export class CustomerScheduleComponent  implements OnInit {
       scheduleId: schedule.scheduleId,
       customerName: schedule.customerName,
       //converter isso em horário normal
-      scheduleHourStart: schedule.hourStart,
-      scheduleHourEnd: schedule.hourEnd,
+      scheduleHourStart: this.trimSeconds(schedule.hourStart),
+      scheduleHourEnd: this.trimSeconds(schedule.hourEnd),
       dayOfTheWeek: schedule.dayOfTheWeek,
       deleteFlag: false
     }))
     console.log(this.schedules);
   }
 
+  trimSeconds(hours: string){
+    return hours.substring(0, 5);
+  }
   addNewSchedule(customerId: number){
     this.router.navigate(['/customer/schedule/add'], {
       state : { customerId : customerId }
@@ -97,10 +100,6 @@ export class CustomerScheduleComponent  implements OnInit {
         }
       );
 
-  }
-
-  trackBySchedule(index: number, schedule: Schedule): number {
-    return schedule.scheduleId;
   }
 }
 
