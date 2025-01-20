@@ -4,6 +4,7 @@
       [customerName]="schedule.customerName"
       [scheduleHour]="schedule.scheduleHourStart"
       [workoutName]="schedule.workoutName"
+      [weekDay]="returnDayOfTheWeek(schedule.dayOfTheWeek)"
       (deleteClicked)="deleteSchedule(schedule.scheduleId)">
     </app-shared-schedule-nodes>
   </div>

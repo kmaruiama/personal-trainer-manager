@@ -21,6 +21,7 @@ export class MenuPrincipalComponent implements OnInit {
   }
 
   goToScheduleMenu() {
+    this.router.navigate(['schedule']);
   }
   goToPaymentMenu() {
   }

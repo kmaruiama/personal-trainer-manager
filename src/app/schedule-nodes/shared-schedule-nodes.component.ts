@@ -12,6 +12,7 @@ export class SharedScheduleNodesComponent{
   @Input() customerName!: string;
   @Input() workoutName!: string;
   @Input() scheduleHour!: string;
+  @Input() weekDay!: string;
 
   @Output() deleteClicked = new EventEmitter<void>();
 

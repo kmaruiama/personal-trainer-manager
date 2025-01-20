@@ -13,6 +13,11 @@ import { AlertController } from '@ionic/angular';
   imports: [IonButton, IonContent, SharedScheduleNodesComponent, CommonModule],
   standalone: true
 })
+
+//Sim isso é uma cópia do schedule normal apenas adicionando a função de botar novos agendamentos
+//Pensei em transformar toda a página em um componente padrão e só importar aqui, mas ia ficar muito
+//confuso e como só são dois usos em toda UI deixa WET mesmo
+
 export class CustomerScheduleComponent  implements OnInit {
   authToken: string = localStorage.getItem('authToken') || '';
 
@@ -49,13 +54,17 @@ export class CustomerScheduleComponent  implements OnInit {
       workoutName: schedule.workoutName,
       scheduleId: schedule.scheduleId,
       customerName: schedule.customerName,
-      //converter isso em horário normal
       scheduleHourStart: this.trimSeconds(schedule.hourStart),
       scheduleHourEnd: this.trimSeconds(schedule.hourEnd),
       dayOfTheWeek: schedule.dayOfTheWeek,
       deleteFlag: false
     }))
-    console.log(this.schedules);
+    this.schedules.sort((a, b) => a.dayOfTheWeek - b.dayOfTheWeek);
+  }
+
+  returnDayOfTheWeek(index: number){
+    const semana : string [] = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+    return semana[index];
   }
 
   trimSeconds(hours: string){
