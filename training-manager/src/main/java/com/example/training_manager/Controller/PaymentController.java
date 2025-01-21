@@ -2,34 +2,36 @@ package com.example.training_manager.Controller;
 
 import com.example.training_manager.Dto.Payment.PaymentDto;
 import com.example.training_manager.Dto.Payment.PaymentGetDto;
-import com.example.training_manager.Service.Payment.AddPaymentService;
-import com.example.training_manager.Service.Payment.FetchPaymentByCustomer;
-import com.example.training_manager.Service.Payment.FetchPaymentsByTrainer;
-import com.example.training_manager.Service.Payment.PaymentEditService;
+import com.example.training_manager.Service.Payment.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/payment/")
+@CrossOrigin(origins = "http://localhost:8100")
 public class PaymentController {
     private final AddPaymentService addPaymentService;
     private final FetchPaymentByCustomer fetchPaymentByCustomer;
     private final FetchPaymentsByTrainer fetchPaymentByTrainer;
     private final PaymentEditService paymentEditService;
+    private final SumAllEstimatedRevenueFromThisMonthService sumAllEstimatedRevenueFromThisMonthService;
 
     @Autowired
     PaymentController(AddPaymentService addPaymentService,
                       FetchPaymentByCustomer fetchPaymentByCustomer,
                       FetchPaymentsByTrainer fetchPaymentByTrainer,
-                      PaymentEditService paymentEditService){
+                      PaymentEditService paymentEditService,
+                      SumAllEstimatedRevenueFromThisMonthService sumAllEstimatedRevenueFromThisMonthService){
         this.addPaymentService = addPaymentService;
         this.fetchPaymentByCustomer = fetchPaymentByCustomer;
         this.fetchPaymentByTrainer = fetchPaymentByTrainer;
         this.paymentEditService = paymentEditService;
+        this.sumAllEstimatedRevenueFromThisMonthService = sumAllEstimatedRevenueFromThisMonthService;
     }
 
     @PostMapping("/new")
@@ -74,6 +76,18 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.OK).body("pagamento editado com sucesso!");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("erro ao editar informações de pagamento: "+ e);
+        }
+    }
+
+    @GetMapping("/monthlyRevenue")
+    //https://dzone.com/articles/never-use-float-and-double-for-monetary-calculatio apareentemente preciso trocar todos
+    //os campos no banco por bigdecimal
+    public ResponseEntity<Float> getMonthlyRevenue(@RequestHeader("Authorization") String authHeader){
+        try{
+            Float monthlyRevenue = sumAllEstimatedRevenueFromThisMonthService.execute(authHeader);
+            return ResponseEntity.ok(monthlyRevenue);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

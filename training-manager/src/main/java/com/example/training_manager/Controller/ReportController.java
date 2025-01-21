@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/reports")
+@CrossOrigin(origins = "http://localhost:8100")
 public class ReportController {
 
     private final FetchTonAllExerciseTonsByCustomerId fetchTonAllExerciseTonsByCustomerid;
