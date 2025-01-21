@@ -28,6 +28,11 @@ export const routes: Routes = [
   },
 
   {
+    path: 'finances',
+    loadComponent: ()=> import('./finances/finances/finances.component').then((m)=> m.FinancesComponent)
+  },
+
+  {
     path: 'schedule',
     loadComponent: () => import('./schedule/schedule.component').then((m) => m.ScheduleComponent)
   },

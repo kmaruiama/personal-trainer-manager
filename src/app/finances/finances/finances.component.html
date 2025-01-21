@@ -1,0 +1,20 @@
+<ion-content>
+  <ion-title>
+    Financeiro
+  </ion-title>
+  <ion-card-subtitle>
+    Faturamento estimado do mês
+  </ion-card-subtitle>
+  <ion-card>
+    <ion-card-subtitle>
+      {{monthlyEstimatedRevenue}}
+    </ion-card-subtitle>
+  </ion-card>
+  <div *ngFor="let payment of payments">
+  <app-payment-nodes
+    [customerName]="payment.customerName"
+    [dueDate]="dueDateConverter(payment.dueDate)"
+    [price]="payment.price">
+  </app-payment-nodes>
+  </div>
+</ion-content>

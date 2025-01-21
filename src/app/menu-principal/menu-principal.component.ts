@@ -23,7 +23,8 @@ export class MenuPrincipalComponent implements OnInit {
   goToScheduleMenu() {
     this.router.navigate(['schedule']);
   }
-  goToPaymentMenu() {
+  goToFinancesMenu() {
+    this.router.navigate(['finances']);
   }
   goToWorkoutMenu() {
   }
