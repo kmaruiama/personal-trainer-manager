@@ -1,0 +1,28 @@
+todo 
+
+{
++++
+down ver postgres pra v 9.5
+down ver java pra v11
+pra versionar a db com o flyway
+++
+botar os roles corretamente, e adicionar a autorização dos roles no controller
+criar validação dos dados antes de salvar na db no backend também
++
+finanças trocar float por bigdecimal
+categorias fixas usar enum
+implementar serializable nas entidades
+implementar o @transactional nos serviços
+}
+
+{
++++
+criar ui desktop 
+
+++
+criar pipes de filtragem por dia e horário nas agendas
+dividir por dias na semana as schedules do cliente
+
++
+trocar os png por svg
+}
