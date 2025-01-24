@@ -1,5 +1,6 @@
 package com.example.training_manager.Model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,10 +23,12 @@ public class PaymentEntity {
     private String modalidade;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private CustomerEntity customerEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private TrainerEntity trainerEntity;
+
+    private boolean payed;
 }

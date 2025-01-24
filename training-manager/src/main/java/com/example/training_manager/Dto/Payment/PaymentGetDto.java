@@ -9,5 +9,5 @@ public class PaymentGetDto {
     private Date dueDate;
     private String paymentType;
     private String customerName;
-
+    boolean payed;
 }

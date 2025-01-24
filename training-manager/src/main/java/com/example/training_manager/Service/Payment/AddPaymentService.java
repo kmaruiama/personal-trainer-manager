@@ -10,20 +10,26 @@ import com.example.training_manager.Repository.TrainerRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
 public class AddPaymentService {
-
     private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
     private final PaymentRepository paymentRepository;
     private final CustomerRepository customerRepository;
     private final TrainerRepository trainerRepository;
 
+    private final AddFuturePaymentIfTheClientAlreadyPayed addFuturePaymentIfTheClientAlreadyPayed;
+
     @Autowired
     AddPaymentService(ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
+                      @Lazy AddFuturePaymentIfTheClientAlreadyPayed addFuturePaymentIfTheClientAlreadyPayed,
                       PaymentRepository paymentRepository,
                       CustomerRepository customerRepository,
                       TrainerRepository trainerRepository) {
@@ -31,6 +37,7 @@ public class AddPaymentService {
         this.paymentRepository = paymentRepository;
         this.customerRepository = customerRepository;
         this.trainerRepository = trainerRepository;
+        this.addFuturePaymentIfTheClientAlreadyPayed = addFuturePaymentIfTheClientAlreadyPayed;
     }
 
     public void execute(String authHeader, PaymentDto paymentDto) throws Exception {
@@ -44,7 +51,11 @@ public class AddPaymentService {
         paymentEntity.setModalidade(paymentDto.getModalidade());
         paymentEntity.setPreco(paymentDto.getPreco());
         paymentEntity.setDataVencimento(paymentDto.getDataVencimento());
+        paymentEntity.setPayed(paymentDto.isPayed());
         paymentRepository.save(paymentEntity);
+        if(paymentDto.isPayed()) {
+            addFuturePaymentIfTheClientAlreadyPayed.execute(paymentDto, authHeader);
+        }
     }
 
     private void setCustomer(PaymentEntity paymentEntity, PaymentDto paymentDto) {

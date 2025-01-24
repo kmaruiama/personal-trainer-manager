@@ -8,4 +8,5 @@ public class PaymentDto {
     private float preco;
     private String modalidade;
     private Long customerId;
+    private boolean payed;
 }

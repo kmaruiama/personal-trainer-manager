@@ -36,6 +36,7 @@ public class FetchPaymentsByTrainer {
             paymentGetDto.setPrice(paymentEntityList.get(i).getPreco());
             paymentGetDto.setDueDate(paymentEntityList.get(i).getDataVencimento());
             paymentGetDto.setPaymentId(paymentEntityList.get(i).getId());
+            paymentGetDto.setPayed(paymentEntityList.get(i).isPayed());
             paymentGetDtoList.add(paymentGetDto);
         }
     }

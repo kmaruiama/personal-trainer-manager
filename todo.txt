@@ -13,6 +13,7 @@ finanças trocar float por bigdecimal
 categorias fixas usar enum
 implementar serializable nas entidades
 implementar o @transactional nos serviços
+trocar a modalidade dos pagamentos de string para enum
 }
 
 {
