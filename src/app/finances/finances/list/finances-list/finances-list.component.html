@@ -1,0 +1,40 @@
+<ion-content>
+
+  <ion-menu content-id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Filtros financeiros</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-radio-group formControlName="typeOfPayment">
+        <ion-item>
+          <ion-label>lmdfkcmldmcfk</ion-label>
+          <ion-radio slot="start" value="Mensal"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>testeeeeee</ion-label>
+          <ion-radio slot="start" value="Semanal"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>cdmdomdoc</ion-label>
+          <ion-radio slot="start" value="Único"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-content>
+  </ion-menu>
+
+  <ion-content id="main-content">
+    <ion-menu-toggle>
+      <ion-button>Filtros de pesquisa</ion-button>
+    </ion-menu-toggle>
+    <div *ngFor="let payment of payments">
+      <app-payment-nodes
+        [customerName]="payment.customerName"
+        [dueDate]="dueDateConverter(payment.dueDate)"
+        [price]="payment.price"
+        [isPayed]="payment.payed">
+      </app-payment-nodes>
+    </div>
+  </ion-content>
+</ion-content>

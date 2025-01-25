@@ -1,0 +1,63 @@
+ion-content{
+  --background: linear-gradient(#000000, #3533CD);
+}
+
+ion-title{
+  color: white;
+  font-size: 140%;
+  margin-top: 4%;
+}
+
+ion-card-subtitle{
+  color: white;
+  font-size: 100%;
+  margin-top: 1%;
+  margin-left: 3%;
+}
+
+ion-card{
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 26px;
+  border-color: white;
+  background-color: transparent;
+  padding: 2%
+}
+
+ion-button{
+  --color: white;
+  --font-family: Arial, Arial, Helvetica, sans-serif;
+  --background: transparent;
+  --border-style: solid;
+  --border-width: 2px;
+  --border-color:white;
+  --border-radius: 26px;
+}
+
+#revenue{
+  font-size: 120%;
+}
+
+#revenueTitle{
+  flex: 2;
+}
+
+#revenueValue{
+  flex: 1;
+}
+
+#revenueSlot{
+  display:flex;
+  align-items: center;
+  margin-left: 1%;
+  margin-right: 1%
+}
+
+#buttons{
+  margin-top: 3%;
+  display: flex;
+  flex-direction: column;
+  margin-left:20%;
+  margin-right:20%;
+}
+
