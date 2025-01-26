@@ -1,5 +1,4 @@
 <ion-content>
-
   <ion-menu content-id="main-content">
     <ion-header>
       <ion-toolbar>
@@ -7,27 +6,38 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-radio-group formControlName="typeOfPayment">
+      <ion-title id="valores"> Mostrar apenas os valores: </ion-title>
+      <ion-list>
+        <!--tive que trocar o ionradio group por checkboxes pro unselect funcionar-->
         <ion-item>
-          <ion-label>lmdfkcmldmcfk</ion-label>
-          <ion-radio slot="start" value="Mensal"></ion-radio>
+          <ion-label>Pagos</ion-label>
+          <ion-checkbox slot="start" [checked]="balanceRegularity.payed" (ionChange)="checkBalanceRegularity('payed', $event.detail.checked)"></ion-checkbox>
         </ion-item>
         <ion-item>
-          <ion-label>testeeeeee</ion-label>
-          <ion-radio slot="start" value="Semanal"></ion-radio>
+          <ion-label>Vencidos</ion-label>
+          <ion-checkbox slot="start" [checked]="balanceRegularity.notPayed" (ionChange)="checkBalanceRegularity('notPayed', $event.detail.checked)"></ion-checkbox>
         </ion-item>
         <ion-item>
-          <ion-label>cdmdomdoc</ion-label>
-          <ion-radio slot="start" value="Único"></ion-radio>
+          <ion-label>Pendentes</ion-label>
+          <ion-checkbox slot="start" [checked]="balanceRegularity.toBePayed" (ionChange)="checkBalanceRegularity('toBePayed', $event.detail.checked)"></ion-checkbox>
         </ion-item>
-      </ion-radio-group>
+      </ion-list>
+
+      <ion-title id="ordenar">Ordenar por</ion-title>
+      <ion-list>
+        <ion-item>
+          <ion-label>Mais antigos</ion-label>
+          <ion-checkbox slot="start" [checked]="sortBy.oldest" (ionChange)="checkSortBy('oldest', $event.detail.checked)"></ion-checkbox>
+        </ion-item>
+        <ion-item>
+          <ion-label>Mais recentes</ion-label>
+          <ion-checkbox slot="start" [checked]="sortBy.newest" (ionChange)="checkSortBy('newest', $event.detail.checked)"></ion-checkbox>
+        </ion-item>
+      </ion-list>
     </ion-content>
   </ion-menu>
 
   <ion-content id="main-content">
-    <ion-menu-toggle>
-      <ion-button>Filtros de pesquisa</ion-button>
-    </ion-menu-toggle>
     <div *ngFor="let payment of payments">
       <app-payment-nodes
         [customerName]="payment.customerName"
@@ -36,5 +46,8 @@
         [isPayed]="payment.payed">
       </app-payment-nodes>
     </div>
+    <ion-menu-toggle>
+      <ion-button>Filtros de pesquisa</ion-button>
+    </ion-menu-toggle>
   </ion-content>
 </ion-content>

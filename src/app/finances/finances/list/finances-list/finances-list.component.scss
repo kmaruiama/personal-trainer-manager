@@ -1,3 +1,58 @@
-ion-content{
+ion-content {
   --background: linear-gradient(#000000, #3533CD);
+}
+
+/*pq pra trocar as cores de cada componente o css é TÃO inconsistente
+o que funciona em um não funciona em outro, uma notação é necesária em um mas não em outro*/
+ion-item, ion-list {
+  --background: transparent;
+  background-color: transparent;
+}
+
+ion-item{
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 26px;
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 3%;
+}
+
+
+ion-title {
+  --background: transparent;
+}
+
+ion-toolbar {
+  --background: transparent;
+}
+
+ion-button {
+  --color: white;
+  --font-family: Arial, Helvetica, sans-serif;
+  --background: transparent;
+  --border-style: solid;
+  --border-width: 2px;
+  --border-color: white;
+  --border-radius: 26px;
+  display: flex;
+  margin-right: 20%;
+  margin-left: 20%;
+}
+
+ion-checkbox{
+  --border-radius: 50%;
+  --checkbox-background-checked: white;
+  --checkbox-background: transparent;
+  --checkmark-color: white;
+  --border-color-checked: white;
+}
+
+
+ion-menu {
+  --background: linear-gradient(#000000, #3533CD);
+}
+
+#valores, #ordenar {
+  margin-top: 5%;
 }

@@ -23,6 +23,7 @@ criar ui desktop
 ++
 criar pipes de filtragem por dia e horário nas agendas
 dividir por dias na semana as schedules do cliente
+trocar os alertcontrollers feios pelo ion alert
 
 +
 trocar os png por svg

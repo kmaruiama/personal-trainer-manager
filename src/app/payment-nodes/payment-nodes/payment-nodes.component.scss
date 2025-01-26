@@ -1,7 +1,13 @@
 
 ion-card {
+  &.payed{
+    border: 2px solid green !important;
+  }
+  &.not-payed{
+    border: 2px solid red !important
+  }
+
   background: transparent !important;
-  border: 2px solid white !important;
   border-radius: 26px !important;
   box-shadow: none !important;
   padding: 2%;
