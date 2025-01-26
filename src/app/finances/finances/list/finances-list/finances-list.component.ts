@@ -13,7 +13,11 @@ import {
   IonItem,
   IonRadio,
   IonButton,
-  IonMenuToggle, IonList, IonCheckbox } from '@ionic/angular/standalone';
+  IonMenuToggle,
+  IonList,
+  IonCheckbox,
+  IonButtons,
+} from '@ionic/angular/standalone';
 import { PaymentNodesComponent } from 'src/app/payment-nodes/payment-nodes/payment-nodes.component';
 import { CommonModule } from '@angular/common';
 
@@ -22,25 +26,26 @@ import { CommonModule } from '@angular/common';
   templateUrl: './finances-list.component.html',
   styleUrls: ['./finances-list.component.scss'],
   standalone: true,
-  imports: [IonCheckbox, IonList, IonButton,
+  imports: [
+    IonCheckbox,
+    IonList,
+    IonButton,
     IonHeader,
     IonLabel,
-    IonRadioGroup,
     IonTitle,
     IonToolbar,
     IonContent,
     PaymentNodesComponent,
     CommonModule,
-    IonRadioGroup,
     IonMenu,
     IonItem,
-    IonRadio,
-    IonMenuToggle
+    IonMenuToggle,
   ],
 })
 export class FinancesListComponent implements OnInit {
   authToken: string = localStorage.getItem('authToken') || '';
   payments: PaymentGetDto[] = [];
+  paymentsData: PaymentGetDto[] = [];
 
   balanceRegularity = {
     payed: false,
@@ -50,8 +55,8 @@ export class FinancesListComponent implements OnInit {
 
   sortBy = {
     oldest: false,
-    newest: false
-  }
+    newest: false,
+  };
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -60,6 +65,7 @@ export class FinancesListComponent implements OnInit {
       this.fetchTrainerPayments(this.authToken)?.subscribe(
         (data) => {
           this.payments = data;
+          this.paymentsData= data;
         },
         (error) => {
           console.log('deu ruim');
@@ -87,11 +93,14 @@ export class FinancesListComponent implements OnInit {
     return `${day}/${month}/${year}`;
   }
 
-  checkBalanceRegularity(option: 'payed' | 'notPayed' | 'toBePayed', isChecked: boolean) {
+  checkBalanceRegularity(
+    option: 'payed' | 'notPayed' | 'toBePayed',
+    isChecked: boolean
+  ) {
     this.balanceRegularity[option] = isChecked;
     console.log('Balance Regularity:', this.balanceRegularity);
+    this.filterBalance();
   }
-
 
   checkSortBy(option: 'oldest' | 'newest', isChecked: boolean) {
     if (option === 'oldest') {
@@ -107,11 +116,39 @@ export class FinancesListComponent implements OnInit {
     if (option === 'newest' && isChecked) {
       this.sortBy.oldest = false;
     }
-
-    console.log(this.sortBy);
+    this.filterSort();
   }
 
+  filterSort() {
+    if (this.sortBy.oldest) {
+      this.payments.sort(
+        (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+      );
+    } else if (this.sortBy.newest) {
+      this.payments.sort(
+        (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
+      );
+    }
+  }
 
+  filterBalance() {
+    if (!this.balanceRegularity.payed && !this.balanceRegularity.notPayed && !this.balanceRegularity.toBePayed) {
+      this.payments = Array.from(this.paymentsData);
+    } else {
+      this.payments = this.paymentsData.filter((payment) => {
+        if (this.balanceRegularity.payed && payment.payed) {
+          return true;
+        }
+        if (this.balanceRegularity.notPayed && !payment.payed) {
+          return true;
+        }
+        if (this.balanceRegularity.toBePayed && payment.payed === false) {
+          return true;
+        }
+        return false;
+      });
+    }
+  }
 }
 
 interface PaymentGetDto {
