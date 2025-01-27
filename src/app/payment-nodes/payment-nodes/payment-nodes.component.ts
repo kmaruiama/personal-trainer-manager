@@ -13,6 +13,6 @@ export class PaymentNodesComponent{
   @Input() customerName!: string;
   @Input() dueDate!: string;
   @Input() price!: number;
-  @Input() isPayed! : boolean;
+  @Input() isPayed! : string;
   constructor() { }
 }

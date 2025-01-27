@@ -19,7 +19,6 @@ import { Router } from '@angular/router';
     IonContent,
     IonTitle,
     IonCardSubtitle,
-    PaymentNodesComponent,
     CommonModule,
   ],
   standalone: true,
@@ -62,13 +61,4 @@ export class FinancesComponent implements OnInit {
     this.router.navigate(['finances/list'])
   }
 
-}
-
-interface PaymentGetDto {
-  paymentId: number;
-  price: number;
-  dueDate: string;
-  paymentType: string;
-  customerName: string;
-  payed: boolean
 }

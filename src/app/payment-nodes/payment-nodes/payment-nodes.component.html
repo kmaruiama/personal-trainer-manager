@@ -1,5 +1,11 @@
-<ion-card [ngClass]="{'payed': isPayed, 'not-payed': !isPayed}">
-  <ion-card-subtitle>{{customerName}}</ion-card-subtitle>
-  <ion-card-subtitle>Data de vencimento: {{dueDate}}</ion-card-subtitle>
-  <ion-card-subtitle>R$ {{price}}</ion-card-subtitle>
+<ion-card
+  [ngClass]="{
+    'payed': isPayed === 'payed',
+    'not-payed': isPayed === 'notPayed',
+    'overdue': isPayed === 'overdue'
+  }"
+>
+  <ion-card-subtitle>{{ customerName }}</ion-card-subtitle>
+  <ion-card-subtitle>Data de vencimento: {{ dueDate }}</ion-card-subtitle>
+  <ion-card-subtitle>R$ {{ price }}</ion-card-subtitle>
 </ion-card>

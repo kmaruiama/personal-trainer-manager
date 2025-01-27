@@ -65,12 +65,26 @@ export class FinancesListComponent implements OnInit {
       this.fetchTrainerPayments(this.authToken)?.subscribe(
         (data) => {
           this.payments = data;
-          this.paymentsData= data;
+          this.paymentsData = data;
+          this.checkOverdue(this.payments);
+          this.checkOverdue(this.paymentsData);
         },
         (error) => {
           console.log('deu ruim');
         }
       );
+    }
+  }
+
+  checkOverdue(payments: PaymentGetDto[]) {
+    const currentDate = new Date();
+    for (let i = 0; i < payments.length; i++) {
+      const dueDate = new Date(payments[i].dueDate);
+      if (dueDate < currentDate && !payments[i].payed) {
+        payments[i].overdue = true;
+      } else {
+        payments[i].overdue = false;
+      }
     }
   }
 
@@ -96,9 +110,8 @@ export class FinancesListComponent implements OnInit {
   checkBalanceRegularity(
     option: 'payed' | 'notPayed' | 'toBePayed',
     isChecked: boolean
-  ) {
+  ){
     this.balanceRegularity[option] = isChecked;
-    console.log('Balance Regularity:', this.balanceRegularity);
     this.filterBalance();
   }
 
@@ -119,6 +132,22 @@ export class FinancesListComponent implements OnInit {
     this.filterSort();
   }
 
+  checkStatus (payment : PaymentGetDto) : string{
+    let paymentStatus : string = '';
+    if (payment.payed === true){
+      paymentStatus = 'payed';
+    }
+    if (payment.overdue === true){
+      paymentStatus = 'overdue';
+    }
+    //redundante mas ta aqui pra acelerar o entendimento
+    if (payment.overdue === false && payment.payed === false)
+    {
+      paymentStatus = 'notPayed';
+    }
+    return paymentStatus;
+  }
+
   filterSort() {
     if (this.sortBy.oldest) {
       this.payments.sort(
@@ -132,17 +161,28 @@ export class FinancesListComponent implements OnInit {
   }
 
   filterBalance() {
-    if (!this.balanceRegularity.payed && !this.balanceRegularity.notPayed && !this.balanceRegularity.toBePayed) {
-      this.payments = Array.from(this.paymentsData);
+    if (
+      //nenhum filtro foi clicado
+      !this.balanceRegularity.payed &&
+      !this.balanceRegularity.notPayed &&
+      !this.balanceRegularity.toBePayed
+    ) {
+      this.payments = [...this.paymentsData];
     } else {
+      //algum filtro (ou multiplos) foram selecionados
       this.payments = this.paymentsData.filter((payment) => {
-        if (this.balanceRegularity.payed && payment.payed) {
+        const notPayed = !payment.payed;
+        const overdue = payment.overdue;
+        //foi pago
+        if (this.balanceRegularity.payed === true && payment.payed === true){
+          return true
+        }
+        //está atrasado
+        if(this.balanceRegularity.notPayed === true && payment.overdue === true){
           return true;
         }
-        if (this.balanceRegularity.notPayed && !payment.payed) {
-          return true;
-        }
-        if (this.balanceRegularity.toBePayed && payment.payed === false) {
+        //nao foi pago mas nao ta atrasado
+        if(this.balanceRegularity.toBePayed === true && payment.payed === false && payment.overdue === false){
           return true;
         }
         return false;
@@ -158,4 +198,5 @@ interface PaymentGetDto {
   paymentType: string;
   customerName: string;
   payed: boolean;
+  overdue: boolean;
 }

@@ -43,7 +43,7 @@
         [customerName]="payment.customerName"
         [dueDate]="dueDateConverter(payment.dueDate)"
         [price]="payment.price"
-        [isPayed]="payment.payed">
+        [isPayed]="checkStatus(payment)">
       </app-payment-nodes>
     </div>
     <ion-menu-toggle>

@@ -4,18 +4,21 @@ ion-card {
     border: 2px solid green !important;
   }
   &.not-payed{
-    border: 2px solid red !important
+    border: 2px solid white!important;
+  }
+  &.overdue{
+    border: 2px solid red !important;
   }
 
-  background: transparent !important;
-  border-radius: 26px !important;
-  box-shadow: none !important;
+  background: transparent ;
+  border-radius: 26px ;
+  box-shadow: none;
   padding: 2%;
 }
 
 ion-card-subtitle {
-  color: white !important;
-  font-family: Arial, sans-serif !important;
-  font-size: 150% !important;
+  color: white ;
+  font-family: Arial, sans-serif;
+  font-size: 150%;
   margin-left: 4%;
 }
