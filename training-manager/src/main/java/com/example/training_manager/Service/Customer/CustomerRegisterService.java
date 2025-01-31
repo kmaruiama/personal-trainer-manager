@@ -2,12 +2,14 @@ package com.example.training_manager.Service.Customer;
 
 import com.example.training_manager.Dto.Customer.CustomerPricingRawDto;
 import com.example.training_manager.Dto.Payment.PaymentDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.CustomerEntity;
 import com.example.training_manager.Model.TrainerEntity;
 import com.example.training_manager.Repository.CustomerRepository;
 import com.example.training_manager.Repository.TrainerRepository;
 import com.example.training_manager.Service.Payment.AddPaymentService;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +36,10 @@ public class CustomerRegisterService {
         this.addPaymentService = addPaymentService;
     }
 
+    @Transactional
     public void execute(CustomerPricingRawDto customerPricingRawDto, String authHeader) throws Exception {
-        if (customerPricingRawDto.getCpf() == null || customerRepository.existsByCpf(customerPricingRawDto.getCpf())) {
-            throw new Exception("O cliente já foi cadastrado.");
-        }
-
-        if (customerPricingRawDto.getBirth() == null) {
-            throw new Exception("Data de nascimento não fornecida.");
+        if (customerRepository.existsByCpf(customerPricingRawDto.getCpf())) {
+            throw new CustomException.CpfAlreadyExistsException("O CPF já foi cadastrado.");
         }
 
         CustomerEntity customerEntity = new CustomerEntity();
@@ -53,17 +52,14 @@ public class CustomerRegisterService {
         customerEntity.setDataNascimento(date);
 
         customerEntity.setTrainerEntity(linkCustomerToTrainerAndReturnTrainerToBeLinked(authHeader, customerEntity));
-        customerRepository.save(customerEntity);
+        //desnecessario com o transactional
+        //customerRepository.save(customerEntity);
 
         PaymentDto paymentDto = new PaymentDto();
         paymentDto.setCustomerId(customerEntity.getId());
         paymentDto.setPreco(customerPricingRawDto.getPrice());
         paymentDto.setModalidade(customerPricingRawDto.getTypeOfPayment());
         setPaymentDate(paymentDto);
-
-        if (addPaymentService == null) {
-            throw new Exception("Serviço de pagamento não inicializado.");
-        }
 
         addPaymentService.execute(authHeader, paymentDto);
     }

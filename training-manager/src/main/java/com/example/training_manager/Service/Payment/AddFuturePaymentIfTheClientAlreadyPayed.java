@@ -28,7 +28,6 @@ public class AddFuturePaymentIfTheClientAlreadyPayed {
         if (paymentDto.getModalidade().equals("Único")){
             return;
         }
-        System.out.print(paymentDto.getCustomerId());
         validateToken.execute(paymentDto.getCustomerId(), authHeader);
         PaymentDto futurePaymentDto = new PaymentDto();
         futurePaymentDto.setDataVencimento(calculateFuturePaymentDate(paymentDto));

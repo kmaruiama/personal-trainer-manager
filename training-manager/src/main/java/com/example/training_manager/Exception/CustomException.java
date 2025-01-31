@@ -12,4 +12,10 @@ public class CustomException {
             super(message);
         }
     }
+
+    public static class UnauthorizedDataManipulation extends RuntimeException {
+        public UnauthorizedDataManipulation (String message) {
+            super(message);
+        }
+    }
 }

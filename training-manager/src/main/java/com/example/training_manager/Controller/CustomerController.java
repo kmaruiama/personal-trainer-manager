@@ -5,6 +5,7 @@ import com.example.training_manager.Dto.Customer.CustomerInfoDto;
 import com.example.training_manager.Dto.Customer.CustomerListGetDto;
 import com.example.training_manager.Dto.Customer.CustomerPricingRawDto;
 import com.example.training_manager.Service.Customer.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class CustomerController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Map<String, String>> addNewCustomer(@RequestBody CustomerPricingRawDto customerPricingRawDto,
+    public ResponseEntity<Map<String, String>> addNewCustomer(@Valid @RequestBody CustomerPricingRawDto customerPricingRawDto,
                                                               @RequestHeader("Authorization") String authHeader) {
         try {
             customerRegisterService.execute(customerPricingRawDto, authHeader);
