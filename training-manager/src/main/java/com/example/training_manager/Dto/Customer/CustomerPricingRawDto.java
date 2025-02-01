@@ -2,12 +2,10 @@ package com.example.training_manager.Dto.Customer;
 
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -28,12 +26,11 @@ public class CustomerPricingRawDto {
     private String address;
 
     @NotNull(message="A data de nascimento é obrigatória")
-    @NotBlank(message="A data de nascimento é obrigatória")
     @Past(message = "Data de nascimento inválida")
-    private String birth;
+    private LocalDate birth;
 
     @NotNull(message="O preço é obrigatório")
-    @NotBlank(message="O preço é obrigatório")
+    @Min(value = 0, message = "O preço deve ser maior que zero")
     private float price;
 
     @Pattern(regexp = "Mensal|Semanal|Único", message = "Modalidade de pagamento inválida")

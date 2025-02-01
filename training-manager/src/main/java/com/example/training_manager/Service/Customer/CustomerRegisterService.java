@@ -47,13 +47,14 @@ public class CustomerRegisterService {
         customerEntity.setCpf(customerPricingRawDto.getCpf());
         customerEntity.setEndereco(customerPricingRawDto.getAddress());
 
-        LocalDate localDate = LocalDate.parse(customerPricingRawDto.getBirth(), DateTimeFormatter.ISO_DATE);
+        LocalDate localDate = customerPricingRawDto.getBirth();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         customerEntity.setDataNascimento(date);
 
         customerEntity.setTrainerEntity(linkCustomerToTrainerAndReturnTrainerToBeLinked(authHeader, customerEntity));
-        //desnecessario com o transactional
-        //customerRepository.save(customerEntity);
+        //apesar da notacao do transactional, o save explicito é necessario do contrario o registro do pagamento
+        //nao funcionará
+        customerRepository.save(customerEntity);
 
         PaymentDto paymentDto = new PaymentDto();
         paymentDto.setCustomerId(customerEntity.getId());

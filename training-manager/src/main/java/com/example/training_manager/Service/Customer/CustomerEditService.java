@@ -4,7 +4,9 @@ import com.example.training_manager.Dto.Customer.CustomerInfoDto;
 import com.example.training_manager.Model.CustomerEntity;
 import com.example.training_manager.Repository.CustomerRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,27 +14,24 @@ import java.util.Optional;
 
 @Service
 public class CustomerEditService {
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
+    private final ValidateToken validateToken;
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerEditService(ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
+    public CustomerEditService(ValidateToken validateToken,
                                CustomerRepository customerRepository
     ) {
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+        this.validateToken = validateToken;
         this.customerRepository = customerRepository;
     }
 
-    public void execute(String authHeader, CustomerInfoDto customerInfoDto) throws Exception{
-        if (!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), customerInfoDto.getId()))
-        {
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
+    @Transactional
+    public void execute(String authHeader, CustomerInfoDto customerInfoDto){
+        validateToken.execute(customerInfoDto.getId(), authHeader);
         Optional<CustomerEntity> optionalCustomerEntity = customerRepository.findById(customerInfoDto.getId());
         if (optionalCustomerEntity.isPresent()) {
             CustomerEntity customerEntity = optionalCustomerEntity.get();
             checkingEditFields(customerInfoDto, customerEntity);
-            customerRepository.save(customerEntity);
         }
     }
 
