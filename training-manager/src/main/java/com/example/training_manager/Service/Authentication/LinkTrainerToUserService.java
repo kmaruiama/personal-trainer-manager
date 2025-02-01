@@ -33,7 +33,7 @@ public class LinkTrainerToUserService {
         Optional<UserEntity> userOptional = userRepository.findByUsername(registerDto.getUsername());
         if(userOptional.isPresent()) {
             UserEntity user = userOptional.get();
-            user.setTrainer(trainer);
+            user.setTrainerEntity(trainer);
             entityManager.persist(user);
             entityManager.flush();// entender depois pq o userrepo nao faz o update
         } else throw new Exception("Usuário não encontrado");

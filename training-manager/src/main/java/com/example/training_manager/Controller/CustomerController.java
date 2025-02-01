@@ -41,14 +41,10 @@ public class CustomerController {
     @PostMapping("/new")
     public ResponseEntity<Map<String, String>> addNewCustomer(@Valid @RequestBody CustomerPricingRawDto customerPricingRawDto,
                                                               @RequestHeader("Authorization") String authHeader) {
-        try {
             customerRegisterService.execute(customerPricingRawDto, authHeader);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Cliente criado com sucesso"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Erro durante o registro: " + e.getMessage()));
-        }
     }
+
 
     @GetMapping("/list")
     public ResponseEntity<List<CustomerListGetDto>> listAllTrainersCustomers (@RequestHeader("Authorization") String authHeader){

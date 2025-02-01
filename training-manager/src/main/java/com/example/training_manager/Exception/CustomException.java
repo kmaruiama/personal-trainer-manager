@@ -18,4 +18,22 @@ public class CustomException {
             super(message);
         }
     }
+
+    public static class TrainerNotFound extends RuntimeException{
+        public TrainerNotFound (String message){
+            super(message);
+        }
+    }
+
+    public static class CustomerNotFound extends RuntimeException{
+        public CustomerNotFound (String message){
+            super(message);
+        }
+    }
+
+    public static class InvalidHeader extends RuntimeException{
+        public InvalidHeader (String message){
+            super(message);
+        }
+    }
 }

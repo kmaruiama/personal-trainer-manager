@@ -29,6 +29,6 @@ public class UserEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "trainer_id", referencedColumnName = "id")
-    private TrainerEntity trainer;
+    private TrainerEntity trainerEntity;
 
 }

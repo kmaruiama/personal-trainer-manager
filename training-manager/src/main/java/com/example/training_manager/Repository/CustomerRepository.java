@@ -10,11 +10,14 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository <CustomerEntity, Long> {
     boolean existsByCpf(String cpf);
 
-    @Query("SELECT c FROM CustomerEntity c WHERE c.trainerEntity.id = :trainerId")
-    List<CustomerEntity> findCustomerNamesAndIdByTrainerId(@Param("trainerId") Long trainerId);
+    //porque eu decidi colocar essa implementacao aqui lmao
+    //@Query("SELECT c FROM CustomerEntity c WHERE c.trainerEntity.id = :trainerId")
+    //List<CustomerEntity> findCustomerEntitiesByTrainerId(@Param("trainerId") Long trainerId);
 
     @Query("SELECT c.nome FROM CustomerEntity c WHERE c.id = :id")
     String findCustomerNameById(@Param("id") Long id);
+
+
     @Query("SELECT CASE WHEN COUNT(c)>0 THEN TRUE ELSE FALSE END FROM CustomerEntity c WHERE c.trainerEntity.id = :trainerId AND c.id = :customerId")
     boolean existsByTrainerIdAndCustomerId(@Param("trainerId") Long trainerId, @Param("customerId") Long customerId);
 }

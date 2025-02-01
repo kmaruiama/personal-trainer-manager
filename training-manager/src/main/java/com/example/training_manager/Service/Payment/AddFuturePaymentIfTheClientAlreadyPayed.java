@@ -24,7 +24,7 @@ public class AddFuturePaymentIfTheClientAlreadyPayed {
         this.addPaymentService = addScheduleService;
     }
 
-    public void execute(PaymentDto paymentDto, String authHeader) throws Exception{
+    public void execute(PaymentDto paymentDto, String authHeader){
         if (paymentDto.getModalidade().equals("Único")){
             return;
         }
@@ -38,7 +38,7 @@ public class AddFuturePaymentIfTheClientAlreadyPayed {
         addPaymentService.execute(authHeader, futurePaymentDto);
     }
 
-    private Date calculateFuturePaymentDate(PaymentDto paymentDto) throws Exception{
+    private Date calculateFuturePaymentDate(PaymentDto paymentDto){
         LocalDate vencimento = paymentDto.getDataVencimento().toInstant()
                 .atZone(java.time.ZoneId.systemDefault())
                 .toLocalDate();
@@ -49,8 +49,6 @@ public class AddFuturePaymentIfTheClientAlreadyPayed {
             case "Mensal":
                 vencimento = vencimento.plus(1, ChronoUnit.MONTHS);
                 break;
-            default:
-                throw new Exception("Erro ao identificar modalidade de pagamento");
         }
         return Date.from(vencimento.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }

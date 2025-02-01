@@ -37,7 +37,7 @@ public class CustomerRegisterService {
     }
 
     @Transactional
-    public void execute(CustomerPricingRawDto customerPricingRawDto, String authHeader) throws Exception {
+    public void execute(CustomerPricingRawDto customerPricingRawDto, String authHeader){
         if (customerRepository.existsByCpf(customerPricingRawDto.getCpf())) {
             throw new CustomException.CpfAlreadyExistsException("O CPF já foi cadastrado.");
         }
@@ -65,7 +65,7 @@ public class CustomerRegisterService {
     }
 
 
-    private TrainerEntity linkCustomerToTrainerAndReturnTrainerToBeLinked(String authHeader, CustomerEntity customerEntity) throws Exception{
+    private TrainerEntity linkCustomerToTrainerAndReturnTrainerToBeLinked(String authHeader, CustomerEntity customerEntity){
         Long trainerId = ReturnTrainerIdFromJWT.execute(authHeader);
         Optional <TrainerEntity> trainerEntityOptional = trainerRepository.findById(trainerId);
         if (trainerEntityOptional.isPresent()){
@@ -74,7 +74,7 @@ public class CustomerRegisterService {
             return trainerEntity;
         }
         else {
-            throw new Exception("treinador com esse id não encontrado");
+            throw new CustomException.TrainerNotFound("Treinador com esse id não encontrado.");
         }
     }
     private void setPaymentDate(PaymentDto paymentDto){

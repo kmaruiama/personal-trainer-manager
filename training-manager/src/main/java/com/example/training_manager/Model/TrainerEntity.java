@@ -27,15 +27,15 @@ public class TrainerEntity {
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "trainerEntity", cascade = CascadeType.REMOVE)
     private List<CustomerEntity> customerEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "trainerEntity", cascade = CascadeType.REMOVE)
     private List<ScheduleEntity> schedule = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "trainerEntity", cascade = CascadeType.REMOVE)
     private List<PaymentEntity> paymentEntities = new ArrayList<>();
 
-    @OneToOne(mappedBy = "trainer")
+    @OneToOne(mappedBy = "trainerEntity")
     private UserEntity userEntity;
 }

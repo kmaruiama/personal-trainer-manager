@@ -1,5 +1,6 @@
 package com.example.training_manager.Service.Shared;
 
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Security.SecurityConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,9 +8,9 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 
 public class ReturnTrainerIdFromJWT {
-    public static long execute(String authHeader) throws Exception {
+    public static long execute(String authHeader){
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new Exception("Header inválido.");
+            throw new CustomException.InvalidHeader("Header da requisição é inválido");
         }
 
         String authHeaderChop = authHeader.substring(7);
