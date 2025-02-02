@@ -11,7 +11,7 @@ ion-card {
   }
 
   background: transparent ;
-  border-radius: 26px ;
+  border-radius: 26px;
   box-shadow: none;
   padding: 2%;
 }
@@ -21,4 +21,17 @@ ion-card-subtitle {
   font-family: Arial, sans-serif;
   font-size: 150%;
   margin-left: 4%;
+}
+
+ion-button{
+  --color: white;
+  --font-family: Arial, Arial, Helvetica, sans-serif;
+  --background: transparent;
+  --border-style: solid;
+  --border-width: 2px;
+  --border-color:white;
+  --border-radius: 26px;
+  display: flex;
+  margin-left: 14%;
+  margin-right: 14%;
 }

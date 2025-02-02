@@ -189,6 +189,11 @@ export class FinancesListComponent implements OnInit {
       });
     }
   }
+
+  //depois vou ter que organizar esses métodos, no projeto inteiro na real xD
+  confirmPayment(paymentId: number){
+
+  }
 }
 
 interface PaymentGetDto {

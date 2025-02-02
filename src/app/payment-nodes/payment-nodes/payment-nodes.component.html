@@ -1,11 +1,20 @@
 <ion-card
   [ngClass]="{
-    'payed': isPayed === 'payed',
+    payed: isPayed === 'payed',
     'not-payed': isPayed === 'notPayed',
-    'overdue': isPayed === 'overdue'
+    overdue: isPayed === 'overdue'
   }"
 >
   <ion-card-subtitle>{{ customerName }}</ion-card-subtitle>
   <ion-card-subtitle>Data de vencimento: {{ dueDate }}</ion-card-subtitle>
   <ion-card-subtitle>R$ {{ price }}</ion-card-subtitle>
 </ion-card>
+<ion-button
+  *ngIf="isPayed === 'notPayed' || isPayed === 'overdue'"
+  (click)="confirmPayment()"
+>
+  CONFIRMAR PAGAMENTO
+</ion-button>
+<ion-button (click)="editPayment()">
+  EDITAR INFORMAÇÕES
+</ion-button>

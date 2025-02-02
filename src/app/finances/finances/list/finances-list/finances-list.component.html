@@ -43,11 +43,12 @@
         [customerName]="payment.customerName"
         [dueDate]="dueDateConverter(payment.dueDate)"
         [price]="payment.price"
-        [isPayed]="checkStatus(payment)">
+        [isPayed]="checkStatus(payment)"
+        (confirmPaymentClicked)="confirmPayment(payment.paymentId)">
       </app-payment-nodes>
     </div>
     <ion-menu-toggle>
-      <ion-button>Filtros de pesquisa</ion-button>
+      <ion-button id="filterButton">Filtros de pesquisa</ion-button>
     </ion-menu-toggle>
   </ion-content>
 </ion-content>

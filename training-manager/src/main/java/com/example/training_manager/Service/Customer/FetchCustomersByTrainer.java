@@ -20,7 +20,7 @@ public class FetchCustomersByTrainer {
         this.trainerRepository = trainerRepository;
     }
 
-    public List<CustomerListGetDto> execute (String authHeader) throws Exception{
+    public List<CustomerListGetDto> execute (String authHeader){
         List<CustomerEntity> customerEntityList = trainerRepository.findByCustomerEntitiesByTrainerEntityId(ReturnTrainerIdFromJWT.execute(authHeader));
         List<CustomerListGetDto> customerListGetDtoList = new ArrayList<>();
         for(int i = 0;i<customerEntityList.size(); i++){

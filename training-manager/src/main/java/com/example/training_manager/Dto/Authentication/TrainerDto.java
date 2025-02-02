@@ -2,7 +2,7 @@ package com.example.training_manager.Dto.Authentication;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class TrainerDto {
@@ -10,5 +10,5 @@ public class TrainerDto {
     private String nome;
     private String endereco;
     private String cpf;
-    private Date nascimento;
+    private LocalDate nascimento;
 }

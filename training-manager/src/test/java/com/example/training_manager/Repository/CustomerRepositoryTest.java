@@ -10,6 +10,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -27,11 +28,12 @@ class CustomerRepositoryTest {
 
     @BeforeEach
     void setCharacters(){
+        LocalDate localDate = LocalDate.of(1000, 01, 01);
         TrainerEntity trainerEntity = new TrainerEntity();
         trainerEntity.setNome("Caio Otávio");
         trainerEntity.setCpf("123.456.789-00");
         trainerEntity.setEndereco("Roma, República Roma");
-        trainerEntity.setDataNascimento(new Date(1075075200000L));
+        trainerEntity.setDataNascimento(localDate);
         trainerRepository.save(trainerEntity);
 
         trainerId = trainerEntity.getId();
@@ -39,7 +41,7 @@ class CustomerRepositoryTest {
         CustomerEntity customerEntity1 = new CustomerEntity();
         customerEntity1.setNome("Alexandre O Grande");
         customerEntity1.setCpf("000.000.000-00");
-        customerEntity1.setDataNascimento(new Date(1075075200000L));
+        customerEntity1.setDataNascimento(localDate);
         customerEntity1.setEndereco("Pela, Macedônia");
         customerEntity1.setTrainerEntity(trainerEntity);
         customerRepository.save(customerEntity1);
@@ -63,14 +65,14 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void existsByTrainerIdAndCustomerIdTests (){
+    void testingExistsByTrainerIdAndCustomerIdInDifferentSituations (){
         Assertions.assertTrue(customerRepository.existsByTrainerIdAndCustomerId(trainerId, customerId1));
         Assertions.assertFalse(customerRepository.existsByTrainerIdAndCustomerId(3L, customerId1));
         Assertions.assertFalse(customerRepository.existsByTrainerIdAndCustomerId(trainerId, 3L));
     }
 
     @Test
-    void existsByCpfTests(){
+    void testingExistsByCpfInDifferentSituations(){
         Assertions.assertTrue(customerRepository.existsByCpf("000.000.000-00"));
         Assertions.assertFalse(customerRepository.existsByCpf("0001029222"));
     }

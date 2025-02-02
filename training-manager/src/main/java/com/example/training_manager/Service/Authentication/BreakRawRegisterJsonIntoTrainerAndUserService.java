@@ -6,6 +6,7 @@ import com.example.training_manager.Dto.Authentication.RegisterDto;
 import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Repository.TrainerRepository;
 import com.example.training_manager.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +32,13 @@ public class BreakRawRegisterJsonIntoTrainerAndUserService {
         this.userRepository = userRepository;
     }
 
-    public void execute(RegisterTrainerRawDto registerTrainerRawDto) throws Exception {
+    @Transactional
+    public void execute(RegisterTrainerRawDto registerTrainerRawDto){
         if (trainerRepository.existsByCpf(registerTrainerRawDto.getCpf())) {
             throw new CustomException.CpfAlreadyExistsException("Um treinador com este cpf já foi cadastrado em nossa plataforma");
         }
         if (userRepository.existsByUsername(registerTrainerRawDto.getUsername())) {
-            throw new Exception("O username já está sendo usado");
+            throw new CustomException.UsernameAlreadyExistsException("O username já está sendo usado");
         }
 
         RegisterDto registerDto = new RegisterDto();

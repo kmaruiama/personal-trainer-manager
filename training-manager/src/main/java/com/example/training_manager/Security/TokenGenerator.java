@@ -20,7 +20,6 @@ public class TokenGenerator {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        System.out.println(roles);
         String token = Jwts.builder()
                 .setSubject(username)
                 .claim("trainerId", trainerId)
@@ -62,8 +61,6 @@ public class TokenGenerator {
         } catch (JwtException e) {
             throw new AuthenticationCredentialsNotFoundException("Erro ao validar o token.");
         } catch (Exception e) {
-            System.out.println("Unexpected error during JWT validation: " + e.getMessage());
-            e.printStackTrace();
             throw new AuthenticationCredentialsNotFoundException("Erro inesperado.");
         }
     }

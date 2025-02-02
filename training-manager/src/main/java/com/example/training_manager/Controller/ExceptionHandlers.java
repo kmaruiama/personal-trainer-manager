@@ -59,12 +59,58 @@ public class ExceptionHandlers {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CustomException.InvalidHeader.class)
-    public Map<String, String> invalidHeaderExceptionHandler(CustomException.TrainerNotFound exception){
+    public Map<String, String> invalidHeaderExceptionHandler(CustomException.InvalidHeader exception){
         Map<String, String> errorList = new HashMap<>();
         errorList.put("error", exception.getMessage());
         errorList.put("errorCode", "INVALID_HEADER");
         return errorList;
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(CustomException.InvalidCredentials.class)
+    public Map<String, String> invalidCredentialsExceptionHandler(CustomException.InvalidCredentials exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "INVALID_CREDENTIALS");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CustomException.UnauthorizedDataManipulation.class)
+    public Map<String, String> unauthorizedDataManipulationExceptionHandler(CustomException.UnauthorizedDataManipulation exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "UNAUTHORIZED_DATA_MANIPULATION");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CustomException.UsernameAlreadyExistsException.class)
+    public Map<String, String> usernameAlreadyExistsExceptionHandler(CustomException.UsernameAlreadyExistsException exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "USERNAME_ALREADY_EXISTS");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(CustomException.RoleAttributionException.class)
+    public Map<String, String> roleAttributionExceptionHandler(CustomException.RoleAttributionException exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "ROLE_ATTRIBUTION_ERROR");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(CustomException.UserNotFoundException.class)
+    public Map<String, String> userNotFoundExceptionHandler(CustomException.RoleAttributionException exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "USER_NOT_FOUND");
+        return errorList;
+    }
+
 
 
 }

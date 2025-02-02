@@ -53,10 +53,6 @@ export class FinancesComponent implements OnInit {
     } else return null;
   }
 
-  goToEditPayments(){
-    this.router.navigate(['finances/edit']);
-  }
-
   goToClientList(){
     this.router.navigate(['finances/list'])
   }

@@ -62,6 +62,7 @@ public class CustomerController {
             return ResponseEntity.ok(searchCustomerDetails.execute(authHeader, id));
         } catch (Exception e){
             System.out.println(e);
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }

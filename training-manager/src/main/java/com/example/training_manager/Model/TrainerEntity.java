@@ -2,9 +2,8 @@ package com.example.training_manager.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,7 +24,7 @@ public class TrainerEntity {
 
     @Column(name= "nascimento", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
 
     @OneToMany(mappedBy = "trainerEntity", cascade = CascadeType.REMOVE)
     private List<CustomerEntity> customerEntities = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.example.training_manager.Service.Authentication;
 import com.example.training_manager.Dto.Authentication.AuthResponseDto;
 import com.example.training_manager.Dto.Authentication.LoginDto;
 import com.example.training_manager.Dto.Authentication.RegisterDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.RoleEntity;
 import com.example.training_manager.Model.UserEntity;
 import com.example.training_manager.Repository.RoleRepository;
@@ -41,9 +42,8 @@ public class AuthenticationService {
         this.tokenGenerator = tokenGenerator;
     }
 
-    public AuthResponseDto login(LoginDto loginDto) throws Exception{
+    public AuthResponseDto login(LoginDto loginDto){
         String token;
-        System.out.println(loginDto.getUsername());
         try {
             Optional<Long> trainerIdOptional = userRepository.findTrainerIdByUsername(loginDto.getUsername());
             String trainerId = trainerIdOptional.map(Object::toString).orElse(null);
@@ -53,19 +53,19 @@ public class AuthenticationService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = tokenGenerator.generator(trainerId, authentication);
         } catch (Exception e) {
-            throw new Exception("Senha e/ou usuário inválido");
+            throw new CustomException.InvalidCredentials("Usuário ou senha inválidos");
         }
         return new AuthResponseDto(token, loginDto.getUsername());
     }
 
-    public void register(RegisterDto registerDto) throws Exception{
+    public void register(RegisterDto registerDto){
 
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(registerDto.getUsername());
         userEntity.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         userEntity.setEmail(registerDto.getEmail());
         RoleEntity role = roleRepository.findByRole("ROLE_ADMIN")
-                .orElseThrow(() -> new Exception ("Erro ao atribuir role"));
+                .orElseThrow(() -> new CustomException.RoleAttributionException("Erro ao atribuir role"));
         userEntity.setRoles(Collections.singletonList(role));
         userRepository.save(userEntity);
     }

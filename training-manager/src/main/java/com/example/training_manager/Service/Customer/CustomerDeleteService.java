@@ -1,27 +1,23 @@
 package com.example.training_manager.Service.Customer;
 import com.example.training_manager.Repository.CustomerRepository;
-import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
-import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerDeleteService {
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
+    private final ValidateToken validateToken;
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerDeleteService(ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
+    public CustomerDeleteService(ValidateToken validateToken,
                                  CustomerRepository customerRepository) {
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+        this.validateToken = validateToken;
         this.customerRepository = customerRepository;
     }
 
-    public void execute (String authHeader, Long id)throws Exception{
-        if (!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), id))
-        {
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
+    public void execute (String authHeader, Long id){
+        validateToken.execute(id, authHeader);
         customerRepository.deleteById(id);
     }
 }

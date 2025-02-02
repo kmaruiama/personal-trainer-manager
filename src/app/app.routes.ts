@@ -33,11 +33,6 @@ export const routes: Routes = [
   },
 
   {
-    path: 'finances/edit',
-    loadComponent: ()=>import('./finances/finances/edit/finances-edit/finances-edit.component').then((m)=>m.FinancesEditComponent)
-  },
-
-  {
     path: 'finances/list',
     loadComponent: ()=>import('./finances/finances/list/finances-list/finances-list.component').then((m)=>m.FinancesListComponent)
   },

@@ -1,6 +1,7 @@
 package com.example.training_manager.Service.Authentication;
 
 import com.example.training_manager.Dto.Authentication.TrainerDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.TrainerEntity;
 import com.example.training_manager.Repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ public class TrainerRegisterService {
         this.trainerRepository = trainerRepository;
     }
 
-    public void register(TrainerDto trainerDto) throws Exception {
+    public void register(TrainerDto trainerDto){
         if (trainerRepository.existsByCpf(trainerDto.getCpf())) {
-            throw new Exception("O CPF já está cadastrado");
+                throw new CustomException.CpfAlreadyExistsException("O CPF já foi cadastrado");
         }
         TrainerEntity trainerEntity = new TrainerEntity();
         trainerEntity.setCpf(trainerDto.getCpf());

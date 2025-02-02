@@ -2,7 +2,7 @@ package com.example.training_manager.Dto.Authentication;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class RegisterTrainerRawDto {
@@ -13,5 +13,5 @@ public class RegisterTrainerRawDto {
     private String name;
     private String address;
     private String cpf;
-    private Date birth;
+    private LocalDate birth;
 }
