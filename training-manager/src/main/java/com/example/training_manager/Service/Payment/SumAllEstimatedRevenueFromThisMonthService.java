@@ -22,7 +22,7 @@ public class SumAllEstimatedRevenueFromThisMonthService {
         this.paymentRepository = paymentRepository;
     }
 
-    public Float execute(String authHeader) throws Exception {
+    public Float execute(String authHeader){
         Long trainerId = ReturnTrainerIdFromJWT.execute(authHeader);
         List<PaymentEntity> paymentEntityList = paymentRepository.findFuturePaymentEntitiesByCustomer(trainerId);
         filterThisMonthPaymentEntities(paymentEntityList);

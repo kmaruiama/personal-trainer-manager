@@ -1,5 +1,7 @@
 package com.example.training_manager.Exception;
 
+import org.hibernate.jdbc.Work;
+
 public class CustomException {
     public static class CpfAlreadyExistsException extends RuntimeException {
         public CpfAlreadyExistsException(String message) {
@@ -51,6 +53,36 @@ public class CustomException {
 
     public static class UserNotFoundException extends RuntimeException{
         public UserNotFoundException (String message){
+            super(message);
+        }
+    }
+
+    public static class CannotRetrieveLastCustomerWeightInputException extends RuntimeException{
+        public CannotRetrieveLastCustomerWeightInputException(String message){
+            super(message);
+        }
+    }
+
+    public static class CannotRetrieveWeightException extends RuntimeException{
+        public CannotRetrieveWeightException(String message){
+            super(message);
+        }
+    }
+
+    public static class PaymentNotFoundException extends RuntimeException{
+        public PaymentNotFoundException(String message){
+            super(message);
+        }
+    }
+
+    public static class ScheduleConflictException extends RuntimeException{
+        public ScheduleConflictException(String message){
+            super(message);
+        }
+    }
+
+    public static class WorkoutNotFoundException extends RuntimeException{
+        public WorkoutNotFoundException(String message){
             super(message);
         }
     }

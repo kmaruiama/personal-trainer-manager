@@ -2,27 +2,28 @@ package com.example.training_manager.Service.BodyComposition;
 
 import com.example.training_manager.Repository.WeightRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WeightDeleteService {
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
     private final WeightRepository weightRepository;
+    private final ValidateToken validateToken;
 
     @Autowired
     WeightDeleteService(WeightRepository weightRepository,
-                        ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer){
+                        ValidateToken validateToken){
         this.weightRepository = weightRepository;
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+        this.validateToken = validateToken;
     }
 
-    public void execute(Long id, String authHeader) throws Exception{
+    @Transactional
+    public void execute(Long id, String authHeader){
         Long customerId = weightRepository.findCustomerIdByWeightId(id);
-        if (validateTrainerOwnershipOverCustomer.execute(customerId, ReturnTrainerIdFromJWT.execute(authHeader))){
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
+        validateToken.execute(customerId, authHeader);
         weightRepository.deleteById(id);
     }
 }

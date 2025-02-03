@@ -104,12 +104,51 @@ public class ExceptionHandlers {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(CustomException.UserNotFoundException.class)
-    public Map<String, String> userNotFoundExceptionHandler(CustomException.RoleAttributionException exception){
+    public Map<String, String> userNotFoundExceptionHandler(CustomException.UserNotFoundException exception){
         Map<String, String> errorList = new HashMap<>();
         errorList.put("error", exception.getMessage());
         errorList.put("errorCode", "USER_NOT_FOUND");
         return errorList;
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.CannotRetrieveLastCustomerWeightInputException.class)
+    public Map<String, String> CannotRetrieveLastCustomerWeightInputExceptionHandler(CustomException.CannotRetrieveLastCustomerWeightInputException exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "CANNOT_RETRIEVE_LAST_CUSTOMER_WEIGHT_INPUT");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.CannotRetrieveWeightException.class)
+    public Map<String, String> CannotRetrieveWeightExceptionHandler(CustomException.CannotRetrieveWeightException exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "CANNOT_RETRIEVE_WEIGHT");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.PaymentNotFoundException.class)
+    public Map<String, String> CannotRetrieveWeightExceptionHandler(CustomException.PaymentNotFoundException exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "CANNOT_RETRIEVE_PAYMENT");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(CustomException.ScheduleConflictException.class)
+    public Map<String, String> ScheduleConflictExceptionHandler(CustomException.ScheduleConflictException exception){
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "SCHEDULE_CONFLICT");
+        return errorList;
+    }
+
+
+
 
 
 

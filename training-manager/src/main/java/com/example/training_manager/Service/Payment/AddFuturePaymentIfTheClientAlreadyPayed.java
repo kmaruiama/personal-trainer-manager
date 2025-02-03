@@ -2,6 +2,7 @@ package com.example.training_manager.Service.Payment;
 
 import com.example.training_manager.Dto.Payment.PaymentDto;
 import com.example.training_manager.Service.Shared.ValidateToken;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class AddFuturePaymentIfTheClientAlreadyPayed {
         this.addPaymentService = addScheduleService;
     }
 
+    //nao é preciso anotar com transactional aqui por enquanto
     public void execute(PaymentDto paymentDto, String authHeader){
         if (paymentDto.getModalidade().equals("Único")){
             return;

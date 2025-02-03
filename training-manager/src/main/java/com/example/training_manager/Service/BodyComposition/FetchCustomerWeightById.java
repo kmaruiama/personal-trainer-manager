@@ -4,6 +4,7 @@ import com.example.training_manager.Dto.Weight.WeightDto;
 import com.example.training_manager.Model.WeightEntity;
 import com.example.training_manager.Repository.WeightRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,21 +15,19 @@ import java.util.List;
 
 @Service
 public class FetchCustomerWeightById {
-    WeightRepository weightRepository;
-    ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
+    private final ValidateToken validateToken;
+    private final WeightRepository weightRepository;
+
 
     @Autowired
     FetchCustomerWeightById(WeightRepository weightRepository,
-                            ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer){
+                            ValidateToken validateToken){
         this.weightRepository = weightRepository;
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+        this.validateToken = validateToken;
     }
 
-    public List<WeightDto> execute(long id, String authHeader) throws Exception{
-        if (!validateTrainerOwnershipOverCustomer.execute(
-                ReturnTrainerIdFromJWT.execute(authHeader), id)) {
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
+    public List<WeightDto> execute(long id, String authHeader){
+        validateToken.execute(id, authHeader);
         List<WeightEntity> weightEntityList = weightRepository.findWeightEntitiesByCustomerId(id);
         List<WeightDto> weightDtoList = new ArrayList<>();
         return transformEntitiesIntoDtos(weightDtoList, weightEntityList);

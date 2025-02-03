@@ -19,7 +19,7 @@ public class FetchPaymentsByTrainer {
         this.paymentRepository = paymentRepository;
     }
 
-    public List<PaymentGetDto> execute(String authHeader) throws Exception {
+    public List<PaymentGetDto> execute(String authHeader){
         List<PaymentEntity> paymentEntityList = paymentRepository.findPaymentEntitiesByTrainer(
                 (ReturnTrainerIdFromJWT.execute
                         (authHeader)));

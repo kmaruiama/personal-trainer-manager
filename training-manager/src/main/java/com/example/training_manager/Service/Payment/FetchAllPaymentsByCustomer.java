@@ -1,36 +1,38 @@
 package com.example.training_manager.Service.Payment;
 
 import com.example.training_manager.Dto.Payment.PaymentGetDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.PaymentEntity;
 import com.example.training_manager.Repository.PaymentRepository;
-import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class FetchAllPaymentsByCustomer {
     private final PaymentRepository paymentRepository;
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
+    private final ValidateToken validateToken;
 
+    @Autowired
     FetchAllPaymentsByCustomer(PaymentRepository paymentRepository,
-                            ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer) {
+                               ValidateToken validateToken) {
         this.paymentRepository = paymentRepository;
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+        this.validateToken = validateToken;
     }
 
-    public List<PaymentGetDto> execute(String authHeader, Long id) throws Exception{
-        if(!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), id)){
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
-
-        PaymentEntity paymentEntity = paymentRepository.findPaymentEntityByCustomerId(id);
-        if (paymentEntity == null){
-            throw new Exception("Pagamento do cliente ainda não cadastrado");
-        }
+    public List<PaymentGetDto> execute(String authHeader, Long id) {
+        validateToken.execute(id, authHeader);
         List<PaymentEntity> paymentEntityList = paymentRepository.findAllPaymentEntitiesByCustomer(id);
+        if (paymentEntityList.isEmpty()) {
+            throw new CustomException.PaymentNotFoundException("Nenhum pagamento encontrado");
+        }
         return transformAllEntitiesIntoDTOs(paymentEntityList);
     }
+
 
     private List<PaymentGetDto> transformAllEntitiesIntoDTOs(List<PaymentEntity> scheduleEntityList){
         List<PaymentGetDto> paymentGetDtoList = new ArrayList<>();

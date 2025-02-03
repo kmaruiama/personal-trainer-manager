@@ -1,6 +1,7 @@
 package com.example.training_manager.Service.Schedule;
 
 import com.example.training_manager.Dto.Schedule.ScheduleDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.CustomerEntity;
 import com.example.training_manager.Model.ScheduleEntity;
 import com.example.training_manager.Model.TrainerEntity;
@@ -10,6 +11,7 @@ import com.example.training_manager.Repository.ScheduleRepository;
 import com.example.training_manager.Repository.TrainerRepository;
 import com.example.training_manager.Repository.WorkoutRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,36 +20,32 @@ import java.util.Optional;
 
 @Service
 public class AddScheduleService {
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
     private final CustomerRepository customerRepository;
     private final TrainerRepository trainerRepository;
     private final ScheduleRepository scheduleRepository;
     private final WorkoutRepository workoutRepository;
     private final CheckCurrentSchedule checkCurrentSchedule;
+    private final ValidateToken validateToken;
 
     @Autowired
-    public AddScheduleService(ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
-                              CustomerRepository customerRepository,
+    public AddScheduleService(CustomerRepository customerRepository,
                               TrainerRepository trainerRepository,
                               ScheduleRepository scheduleRepository,
                               WorkoutRepository workoutRepository,
-                              CheckCurrentSchedule checkCurrentSchedule) {
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+                              CheckCurrentSchedule checkCurrentSchedule, ValidateToken validateToken) {
         this.customerRepository = customerRepository;
         this.trainerRepository = trainerRepository;
         this.scheduleRepository = scheduleRepository;
         this.workoutRepository = workoutRepository;
         this.checkCurrentSchedule = checkCurrentSchedule;
+        this.validateToken = validateToken;
     }
 
-    public void execute(String authHeader, ScheduleDto scheduleDto) throws Exception {
-        if (!checkCurrentSchedule.execute(scheduleDto, authHeader)) {
-            throw new Exception("O horário conflita com outro existente.");
-        }
+    public void execute(String authHeader, ScheduleDto scheduleDto){
+        validateToken.execute(scheduleDto.getCustomerId(), authHeader);
 
-        if (!validateTrainerOwnershipOverCustomer.execute(
-                ReturnTrainerIdFromJWT.execute(authHeader), scheduleDto.getCustomerId())) {
-            throw new Exception("O treinador não possui permissão para este cliente.");
+        if (!checkCurrentSchedule.execute(scheduleDto, authHeader)) {
+            throw new CustomException.ScheduleConflictException("Esse horário já foi ocupado");
         }
 
         ScheduleEntity scheduleEntity = new ScheduleEntity();
@@ -66,14 +64,16 @@ public class AddScheduleService {
             CustomerEntity customerEntity = optionalCustomerEntity.get();
             scheduleEntity.setCustomerEntity(customerEntity);
         }
+        else throw new CustomException.CustomerNotFound("Cliente não encontrado");
     }
 
-    private void setTrainer(ScheduleEntity scheduleEntity, String authHeader) throws Exception {
+    private void setTrainer(ScheduleEntity scheduleEntity, String authHeader) {
         Optional<TrainerEntity> optionalTrainerEntity = trainerRepository.findById(ReturnTrainerIdFromJWT.execute(authHeader));
         if (optionalTrainerEntity.isPresent()) {
             TrainerEntity trainerEntity = optionalTrainerEntity.get();
             scheduleEntity.setTrainerEntity(trainerEntity);
         }
+        else throw new CustomException.TrainerNotFound("Treinador não encontrado");
     }
 
     private void setWorkoutBlueprint(ScheduleEntity scheduleEntity, ScheduleDto scheduleDto) {
@@ -82,5 +82,6 @@ public class AddScheduleService {
             WorkoutEntity workoutEntity = optionalWorkoutBlueprintEntity.get();
             scheduleEntity.setWorkoutEntity(workoutEntity);
         }
+        else throw new CustomException.WorkoutNotFoundException("Treino não encontrado");
     }
 }

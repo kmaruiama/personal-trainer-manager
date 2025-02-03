@@ -31,7 +31,8 @@ public class AddPaymentService {
     private final AddFuturePaymentIfTheClientAlreadyPayed addFuturePaymentIfTheClientAlreadyPayed;
 
     @Autowired
-    AddPaymentService(@Lazy AddFuturePaymentIfTheClientAlreadyPayed addFuturePaymentIfTheClientAlreadyPayed,
+    AddPaymentService(@Lazy //nao remover essa notacao ou o spring vai detectar dependencia circular
+                      AddFuturePaymentIfTheClientAlreadyPayed addFuturePaymentIfTheClientAlreadyPayed,
                       PaymentRepository paymentRepository,
                       CustomerRepository customerRepository,
                       TrainerRepository trainerRepository,
