@@ -42,7 +42,7 @@ public class WorkoutCustomerProfile {
         this.workoutRepository = workoutRepository;
     }
 
-    public List<String> execute(String authHeader, Long id) throws Exception{
+    public List<String> execute(String authHeader, Long id){
         //vai na pagina do cliente
         List<String> workoutNames = new ArrayList<>();
         //pega toda a agenda do treinador

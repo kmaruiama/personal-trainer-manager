@@ -3,10 +3,13 @@ package com.example.training_manager.Service.Workout;
 import com.example.training_manager.Dto.Workout.ExerciseDto;
 import com.example.training_manager.Dto.Workout.SetDto;
 import com.example.training_manager.Dto.Workout.WorkoutDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.*;
 import com.example.training_manager.Repository.*;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,40 +26,40 @@ public class AddWorkoutService{
     private final WorkoutRepository workoutRepository;
     private final ExerciseRepository exerciseRepository;
     private final SetRepository setRepository;
+    private final ValidateToken validateToken;
+
     @Autowired
     AddWorkoutService(CustomerRepository customerRepository,
                       ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
                       ProgramRepository programRepository,
                       WorkoutRepository workoutRepository,
                       ExerciseRepository exerciseRepository,
-                      SetRepository setRepository){
+                      SetRepository setRepository, ValidateToken validateToken){
         this.customerRepository = customerRepository;
         this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
         this.programRepository = programRepository;
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
         this.setRepository = setRepository;
+        this.validateToken = validateToken;
     }
 
-    public void execute (WorkoutDto workoutDto, String authHeader) throws Exception {
+    @Transactional
+    public void execute (WorkoutDto workoutDto, String authHeader){
+        validateToken.execute(workoutDto.getCustomerId(), authHeader);
         CustomerEntity customerEntity;
 
-        //verificando se o cliente ao qual o treino pertence existe
         Optional<CustomerEntity> optionalCustomerEntity = customerRepository.findById(workoutDto.getCustomerId());
         if (optionalCustomerEntity.isPresent()) {
             customerEntity = optionalCustomerEntity.get();
         } else {
-            throw new Exception("Erro ao encontrar o cliente");
+            throw new CustomException.CustomerNotFound("Cliente não encontrado.");
         }
 
-        //validacao de segurança
-        if (!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), customerEntity.getId())) {
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
         addWorkout(workoutDto, customerEntity);
     }
 
-    private void addWorkout(WorkoutDto workoutDto, CustomerEntity customerEntity) throws Exception{
+    private void addWorkout(WorkoutDto workoutDto, CustomerEntity customerEntity){
 
         //inicializando a entidade do planejamento de apenas um treino
         WorkoutEntity workoutEntity = new WorkoutEntity();
@@ -69,7 +72,7 @@ public class AddWorkoutService{
             workoutEntity.setProgramEntity(programEntityOptional.get());
         }
         else {
-            throw new Exception("Erro ao encontrar o programa de treinos");
+            throw new CustomException.ProgramNotFoundException("Programa não encontrado");
         }
         //salvando
         workoutRepository.save(workoutEntity);

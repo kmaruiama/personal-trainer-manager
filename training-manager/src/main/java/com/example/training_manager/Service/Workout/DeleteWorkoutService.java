@@ -1,6 +1,7 @@
 package com.example.training_manager.Service.Workout;
 
 import com.example.training_manager.Dto.Workout.DeleteWorkoutDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.CustomerEntity;
 import com.example.training_manager.Model.ExerciseEntity;
 import com.example.training_manager.Model.SetEntity;
@@ -10,6 +11,7 @@ import com.example.training_manager.Repository.ExerciseRepository;
 import com.example.training_manager.Repository.SetRepository;
 import com.example.training_manager.Repository.WorkoutRepository;
 import com.example.training_manager.Service.Shared.ValidateToken;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,8 @@ public class DeleteWorkoutService {
         this.customerRepository = customerRepository;
     }
 
-    public void execute (DeleteWorkoutDto deleteWorkoutDto, String authHeader) throws Exception{
+    @Transactional
+    public void execute (DeleteWorkoutDto deleteWorkoutDto, String authHeader){
         validateToken.execute(deleteWorkoutDto.getCustomerId(), authHeader);
         switch (deleteWorkoutDto.getTreeDeletionLevel()) {
             case 1 -> deleteWorkout(deleteWorkoutDto);
@@ -50,7 +53,7 @@ public class DeleteWorkoutService {
         }
     }
 
-    private void deleteSet(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
+    private void deleteSet(DeleteWorkoutDto deleteWorkoutDto){
         initializeCustomer(deleteWorkoutDto);
         initializeWorkout(deleteWorkoutDto);
         initializeExercise(deleteWorkoutDto);
@@ -60,7 +63,7 @@ public class DeleteWorkoutService {
         }
     }
 
-    private void deleteExercise(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
+    private void deleteExercise(DeleteWorkoutDto deleteWorkoutDto){
         initializeCustomer(deleteWorkoutDto);
         initializeWorkout(deleteWorkoutDto);
         initializeExercise(deleteWorkoutDto);
@@ -69,7 +72,7 @@ public class DeleteWorkoutService {
         }
     }
 
-    private void deleteWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception{
+    private void deleteWorkout(DeleteWorkoutDto deleteWorkoutDto){
         initializeCustomer(deleteWorkoutDto);
         initializeWorkout(deleteWorkoutDto);
         if(checkWorkoutDeleteCondition()){
@@ -77,39 +80,39 @@ public class DeleteWorkoutService {
         }
     }
 
-    private void initializeCustomer(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
+    private void initializeCustomer(DeleteWorkoutDto deleteWorkoutDto){
         Optional<CustomerEntity> customerEntityOptional = customerRepository.findById(deleteWorkoutDto.getCustomerId());
         if (customerEntityOptional.isPresent()) {
             this.customerEntity = customerEntityOptional.get();
         } else {
-            throw new Exception("Erro ao encontrar cliente na base de dados");
+            throw new CustomException.CustomerNotFound("Cliente não encontrado.");
         }
     }
 
-    private void initializeWorkout(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
+    private void initializeWorkout(DeleteWorkoutDto deleteWorkoutDto){
         Optional<WorkoutEntity> workoutEntityOptional = workoutRepository.findById(deleteWorkoutDto.getWorkoutId());
         if (workoutEntityOptional.isPresent()) {
             this.workoutEntity = workoutEntityOptional.get();
         } else {
-            throw new Exception("Erro ao encontrar treino");
+            throw new CustomException.WorkoutNotFoundException("Treino não encontrado");
         }
     }
 
-    private void initializeExercise(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
+    private void initializeExercise(DeleteWorkoutDto deleteWorkoutDto){
         Optional<ExerciseEntity> exerciseEntityOptional = exerciseRepository.findById(deleteWorkoutDto.getExerciseId());
         if (exerciseEntityOptional.isPresent()) {
             this.exerciseEntity = exerciseEntityOptional.get();
         } else {
-            throw new Exception("Erro ao encontrar exercício");
+            throw new CustomException.ExerciseNotFoundException("Erro ao encontrar exercício");
         }
     }
 
-    private void initializeSet(DeleteWorkoutDto deleteWorkoutDto) throws Exception {
+    private void initializeSet(DeleteWorkoutDto deleteWorkoutDto){
         Optional<SetEntity> setEntityOptional = setRepository.findById(deleteWorkoutDto.getSetId());
         if (setEntityOptional.isPresent()) {
             this.setEntity = setEntityOptional.get();
         } else {
-            throw new Exception("Erro ao encontrar série");
+            throw new CustomException.SetNotFoundException("Erro ao encontrar série");
         }
     }
 

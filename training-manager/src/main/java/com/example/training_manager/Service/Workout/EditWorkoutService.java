@@ -12,12 +12,15 @@ import com.example.training_manager.Repository.ExerciseRepository;
 import com.example.training_manager.Repository.SetRepository;
 import com.example.training_manager.Repository.WorkoutRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 //provavelmente tem um jeito mais performatico de fazer isso passando especificamente quais
@@ -30,25 +33,25 @@ public class EditWorkoutService {
     private final ExerciseRepository exerciseRepository;
     private final CustomerRepository customerRepository;
     private final SetRepository setRepository;
+    private final ValidateToken validateToken;
     private CustomerEntity customerEntity;
 
     @Autowired
     EditWorkoutService(ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
                        WorkoutRepository workoutRepository,
-                       AddWorkoutService addWorkoutService, ExerciseRepository exerciseRepository, CustomerRepository customerRepository, SetRepository setRepository){
+                       AddWorkoutService addWorkoutService, ExerciseRepository exerciseRepository, CustomerRepository customerRepository, SetRepository setRepository, ValidateToken validateToken){
         this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
         this.workoutRepository = workoutRepository;
         this.addWorkoutService = addWorkoutService;
         this.exerciseRepository = exerciseRepository;
         this.customerRepository = customerRepository;
         this.setRepository = setRepository;
+        this.validateToken = validateToken;
     }
 
-    public void execute (WorkoutDto workoutDto, String authHeader) throws Exception{
-        //validacao de segurança
-        if (!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), workoutDto.getCustomerId())) {
-            throw new Exception("O treinador não possui permissão para este cliente.");
-        }
+    @Transactional
+    public void execute (WorkoutDto workoutDto, String authHeader) {
+        validateToken.execute(workoutDto.getCustomerId(), authHeader);
         initializeClassCustomerEntity(workoutDto.getCustomerId());
         editWorkout(workoutDto);
     }
@@ -76,7 +79,7 @@ public class EditWorkoutService {
         }
 
         //verificação de segurança
-        if (this.customerEntity.getId() != workoutEntity.getCustomerEntity().getId()){
+        if (!Objects.equals(this.customerEntity.getId(), workoutEntity.getCustomerEntity().getId())){
             throw new Exception("Esse cliente não possui permissão para este treino");
         }
 

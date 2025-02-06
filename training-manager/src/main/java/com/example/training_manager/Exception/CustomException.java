@@ -87,4 +87,36 @@ public class CustomException {
         }
     }
 
+    public static class ScheduleNotRegisteredYetException extends RuntimeException{
+        public ScheduleNotRegisteredYetException(String message){
+            super(message);
+        }
+    }
+
+    public static class ScheduleNotFoundException extends RuntimeException{
+        public ScheduleNotFoundException(String message){
+            super(message);
+        }
+    }
+
+    public static class ProgramNotFoundException extends RuntimeException{
+        public ProgramNotFoundException(String message){
+            super(message);
+        }
+    }
+
+    public static class ExerciseNotFoundException extends RuntimeException{
+        public ExerciseNotFoundException(String message){
+            super(message);
+        }
+    }
+
+    public static class SetNotFoundException extends RuntimeException{
+        public SetNotFoundException(String message){
+            super(message);
+        }
+    }
+
+
+
 }

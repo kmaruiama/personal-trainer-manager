@@ -12,8 +12,8 @@ criar validação dos dados antes de salvar na db no backend também
 finanças trocar float por bigdecimal
 categorias fixas usar enum
 implementar serializable nas entidades
-implementar o @transactional nos serviços
 trocar a modalidade dos pagamentos de string para enum
+adicionar um layer em criptografia nos IDs
 }
 
 {

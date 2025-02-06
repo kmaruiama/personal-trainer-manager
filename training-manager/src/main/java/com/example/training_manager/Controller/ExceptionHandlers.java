@@ -147,6 +147,56 @@ public class ExceptionHandlers {
         return errorList;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.WorkoutNotFoundException.class)
+    public Map<String, String> WorkoutNotFoundExceptionHandler(CustomException.WorkoutNotFoundException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "WORKOUT_NOT_FOUND");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.ScheduleNotFoundException.class)
+    public Map<String, String> ScheduleNotFoundExceptionHandler(CustomException.ScheduleNotFoundException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "SCHEDULE_NOT_FOUND");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.ProgramNotFoundException.class)
+    public Map<String, String> ProgramNotFoundExceptionHandler(CustomException.ProgramNotFoundException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "PROGRAM_NOT_FOUND");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.ExerciseNotFoundException.class)
+    public Map<String, String> ExerciseNotFoundExceptionHandler(CustomException.ExerciseNotFoundException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "EXERCISE_NOT_FOUND");
+        return errorList;
+    }
+
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomException.SetNotFoundException.class)
+    public Map<String, String> SetNotFoundExceptionHandler(CustomException.SetNotFoundException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "SET_NOT_FOUND");
+        return errorList;
+    }
 
 
 

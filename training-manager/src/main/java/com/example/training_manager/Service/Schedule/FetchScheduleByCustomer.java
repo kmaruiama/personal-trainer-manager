@@ -1,6 +1,7 @@
 package com.example.training_manager.Service.Schedule;
 
 import com.example.training_manager.Dto.Schedule.ScheduleGetDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.ScheduleEntity;
 import com.example.training_manager.Repository.ScheduleRepository;
 import com.example.training_manager.Service.Shared.ValidateToken;
@@ -22,11 +23,11 @@ public class FetchScheduleByCustomer {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public List<ScheduleGetDto> execute(Long customerId, String authHeader) throws Exception{
+    public List<ScheduleGetDto> execute(Long customerId, String authHeader){
         validateToken.execute(customerId, authHeader);
         List<ScheduleEntity> scheduleEntityList = scheduleRepository.findScheduleEntitiesByCustomerEntityId(customerId);
         if (scheduleEntityList.isEmpty()){
-            throw new Exception("Não há horários para esse cliente");
+            throw new CustomException.ScheduleNotRegisteredYetException("Agenda ainda não registrada");
         }
         return convertToDto(scheduleEntityList);
     }

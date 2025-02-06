@@ -1,6 +1,7 @@
 package com.example.training_manager.Service.Schedule;
 
 import com.example.training_manager.Dto.Schedule.ScheduleGetDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.ScheduleEntity;
 import com.example.training_manager.Model.TrainerEntity;
 import com.example.training_manager.Repository.ScheduleRepository;
@@ -25,7 +26,7 @@ public class FetchScheduleByTrainer {
         this.trainerRepository = trainerRepository;
     }
 
-    public List<ScheduleGetDto> execute(String authHeader) throws Exception {
+    public List<ScheduleGetDto> execute(String authHeader){
         TrainerEntity trainerEntity = getTrainer(authHeader);
         List<ScheduleEntity> scheduleEntities = scheduleRepository.findScheduleEntitiesByTrainer(trainerEntity);
         return transformAllEntitiesIntoDTOs(scheduleEntities);
@@ -48,12 +49,12 @@ public class FetchScheduleByTrainer {
     }
 
     //dps mergear esse metodo com outros iguais sla returnTrainerEntityService
-    private TrainerEntity getTrainer(String authHeader) throws Exception{
+    private TrainerEntity getTrainer(String authHeader){
         Optional<TrainerEntity> optionalTrainerEntity = trainerRepository
                 .findById((ReturnTrainerIdFromJWT.execute(authHeader)));
         if (optionalTrainerEntity.isPresent()) {
             return optionalTrainerEntity.get();
         }
-        return null;
+        else throw new CustomException.TrainerNotFound("Treinador não encontrado.");
     }
 }

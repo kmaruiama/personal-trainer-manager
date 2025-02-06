@@ -13,6 +13,7 @@ import com.example.training_manager.Repository.WorkoutRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
 import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class AddScheduleService {
         this.validateToken = validateToken;
     }
 
+    @Transactional
     public void execute(String authHeader, ScheduleDto scheduleDto){
         validateToken.execute(scheduleDto.getCustomerId(), authHeader);
 
