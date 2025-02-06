@@ -3,6 +3,7 @@ package com.example.training_manager.Service.Workout;
 import com.example.training_manager.Dto.Workout.ExerciseDto;
 import com.example.training_manager.Dto.Workout.SetDto;
 import com.example.training_manager.Dto.Workout.WorkoutDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.CustomerEntity;
 import com.example.training_manager.Model.ExerciseEntity;
 import com.example.training_manager.Model.SetEntity;
@@ -27,7 +28,6 @@ import java.util.Optional;
 //partes foram editadas, mas ¯\_(ツ)_/¯ preciso terminar esse projeto rapido
 @Service
 public class EditWorkoutService {
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
     private final WorkoutRepository workoutRepository;
     private final AddWorkoutService addWorkoutService;
     private final ExerciseRepository exerciseRepository;
@@ -37,10 +37,12 @@ public class EditWorkoutService {
     private CustomerEntity customerEntity;
 
     @Autowired
-    EditWorkoutService(ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
-                       WorkoutRepository workoutRepository,
-                       AddWorkoutService addWorkoutService, ExerciseRepository exerciseRepository, CustomerRepository customerRepository, SetRepository setRepository, ValidateToken validateToken){
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+    EditWorkoutService(WorkoutRepository workoutRepository,
+                       AddWorkoutService addWorkoutService,
+                       ExerciseRepository exerciseRepository,
+                       CustomerRepository customerRepository,
+                       SetRepository setRepository,
+                       ValidateToken validateToken){
         this.workoutRepository = workoutRepository;
         this.addWorkoutService = addWorkoutService;
         this.exerciseRepository = exerciseRepository;
@@ -50,24 +52,24 @@ public class EditWorkoutService {
     }
 
     @Transactional
-    public void execute (WorkoutDto workoutDto, String authHeader) {
+    public void execute (WorkoutDto workoutDto, String authHeader){
         validateToken.execute(workoutDto.getCustomerId(), authHeader);
         initializeClassCustomerEntity(workoutDto.getCustomerId());
         editWorkout(workoutDto);
     }
 
     //criado pra 'economizar' passagens de referencia entre os metodos
-    private void initializeClassCustomerEntity(Long id) throws Exception{
+    private void initializeClassCustomerEntity(Long id){
         Optional <CustomerEntity> customerEntityOptional = customerRepository.findById(id);
         if (customerEntityOptional.isPresent()){
             this.customerEntity = customerEntityOptional.get();
         }
         else {
-            throw new Exception("Erro ao encontrar cliente");
+            throw new CustomException.CustomerNotFound("Cliente não encontrado.");
         }
     }
 
-    private void editWorkout(WorkoutDto workoutDto) throws Exception{
+    private void editWorkout(WorkoutDto workoutDto){
         WorkoutEntity workoutEntity;
 
         Optional<WorkoutEntity> workoutEntityOptional = workoutRepository.findById(workoutDto.getId());
@@ -75,12 +77,12 @@ public class EditWorkoutService {
             workoutEntity = workoutEntityOptional.get();
         }
         else {
-            throw new Exception("Erro ao encontrar treino");
+            throw new CustomException.WorkoutNotFoundException("Treino não encontrado.");
         }
 
         //verificação de segurança
         if (!Objects.equals(this.customerEntity.getId(), workoutEntity.getCustomerEntity().getId())){
-            throw new Exception("Esse cliente não possui permissão para este treino");
+            throw new CustomException.CustomerTriedToAccessUnauthorizedWorkoutException("Esse cliente não possui permissão para este treino");
         }
 
         workoutEntity.setName(workoutDto.getName());
@@ -92,7 +94,7 @@ public class EditWorkoutService {
         editExercise(workoutDto.getExerciseDtoList(), workoutEntity);
     }
 
-    private void editExercise(List<ExerciseDto> exerciseDtoList, WorkoutEntity workoutEntity) throws Exception{
+    private void editExercise(List<ExerciseDto> exerciseDtoList, WorkoutEntity workoutEntity){
         ExerciseEntity exerciseEntity;
         //iterando sobre a lista de exercicios
         for (int i = 0; i<exerciseDtoList.size(); i++) {
@@ -108,11 +110,11 @@ public class EditWorkoutService {
                 if (exerciseEntityOptional.isPresent()) {
                     exerciseEntity = exerciseEntityOptional.get();
                 } else {
-                    throw new Exception("Erro ao encontrar exercício");
+                    throw new CustomException.ExerciseNotFoundException("Exercício não encontrado");
                 }
                 //verificação de segurança
                 if (workoutEntity.getId() != exerciseEntity.getWorkoutEntity().getId()){
-                    throw new Exception("Esse cliente não possui permissão para este exercício");
+                    throw new CustomException.CustomerTriedToAccessUnauthorizedExerciseException("Esse cliente não possui permissão para este exercício");
                 }
                 exerciseEntity.setName(exerciseDtoList.get(i).getName());
                 exerciseRepository.save(exerciseEntity);
@@ -122,7 +124,7 @@ public class EditWorkoutService {
         }
     }
 
-    private void editSet(List<SetDto> setDtoList, ExerciseEntity exerciseEntity) throws Exception{
+    private void editSet(List<SetDto> setDtoList, ExerciseEntity exerciseEntity){
         SetEntity setEntity;
         //iterando sobre a lista de sets
         for (int i = 0; i< setDtoList.size(); i++){
@@ -139,11 +141,10 @@ public class EditWorkoutService {
                     setEntity = setEntityOptional.get();
                 }
                 else {
-                    throw new Exception("Erro ao editar série");
-                }
+                    throw new CustomException.SetNotFoundException("Série não encontrada");                }
                 //verificacao de segurança
                 if (exerciseEntity.getId() != setEntity.getExerciseEntity().getId()){
-                    throw new Exception("Esse cliente não possui permissão para esta série");
+                    throw new CustomException.CustomerTriedToAccessUnauthorizedSetException("Esse cliente não possui permissão para esta série");
                 }
                 setEntity.setWeight(setDtoList.get(i).getWeight());
                 setEntity.setRepetitions(setDtoList.get(i).getRepetitions());

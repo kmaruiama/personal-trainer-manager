@@ -3,6 +3,7 @@ package com.example.training_manager.Service.Workout;
 import com.example.training_manager.Dto.Workout.ExerciseDto;
 import com.example.training_manager.Dto.Workout.SetDto;
 import com.example.training_manager.Dto.Workout.WorkoutDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.ExerciseEntity;
 import com.example.training_manager.Model.SetEntity;
 import com.example.training_manager.Model.WorkoutEntity;
@@ -10,6 +11,7 @@ import com.example.training_manager.Repository.ExerciseRepository;
 import com.example.training_manager.Repository.SetRepository;
 import com.example.training_manager.Repository.WorkoutRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
+import com.example.training_manager.Service.Shared.ValidateToken;
 import com.example.training_manager.Service.Shared.ValidateTrainerOwnershipOverCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,35 +22,25 @@ import java.util.Optional;
 
 @Service
 public class GetWorkoutService {
-    private final SetRepository setRepository;
-    private final ExerciseRepository exerciseRepository;
     private final WorkoutRepository workoutRepository;
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
+    private final ValidateToken validateToken;
 
     @Autowired
-    GetWorkoutService(SetRepository setRepository,
-                      ExerciseRepository exerciseRepository,
-                      WorkoutRepository workoutRepository,
-                      ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer) {
-        this.setRepository = setRepository;
-        this.exerciseRepository = exerciseRepository;
+    GetWorkoutService(WorkoutRepository workoutRepository, ValidateToken validateToken) {
         this.workoutRepository = workoutRepository;
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
+        this.validateToken = validateToken;
     }
 
-    public WorkoutDto execute(Long id, String authHeader) throws Exception{
+    public WorkoutDto execute(Long id, String authHeader){
         WorkoutEntity workoutEntity;
         Optional<WorkoutEntity> workoutEntityOptional = workoutRepository.findById(id);
         if (workoutEntityOptional.isPresent()){
             workoutEntity = workoutEntityOptional.get();
         }
         else {
-            throw new Exception("Erro ao encontrar treino");
+            throw new CustomException.WorkoutNotFoundException("Não foi possível encontrar o treino");
         }
-        if(!validateTrainerOwnershipOverCustomer.execute(ReturnTrainerIdFromJWT.execute(authHeader), workoutEntity.getCustomerEntity().getId()))
-        {
-            throw new Exception("O treinador não possui permissão para este cliente");
-        }
+        validateToken.execute(workoutEntity.getCustomerEntity().getId(), authHeader);
         return transformWorkoutEntityIntoWorkoutDto(workoutEntity);
     }
 

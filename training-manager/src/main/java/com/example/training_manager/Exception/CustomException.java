@@ -117,6 +117,25 @@ public class CustomException {
         }
     }
 
+    public static class CustomerTriedToAccessUnauthorizedWorkoutException extends RuntimeException{
+        public CustomerTriedToAccessUnauthorizedWorkoutException(String message){
+            super(message);
+        }
+    }
+
+    public static class CustomerTriedToAccessUnauthorizedExerciseException extends RuntimeException{
+        public CustomerTriedToAccessUnauthorizedExerciseException(String message){
+            super(message);
+        }
+    }
+
+    public static class CustomerTriedToAccessUnauthorizedSetException extends RuntimeException{
+        public CustomerTriedToAccessUnauthorizedSetException(String message){
+            super(message);
+        }
+    }
+
+
 
 
 }

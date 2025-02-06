@@ -198,6 +198,37 @@ public class ExceptionHandlers {
         return errorList;
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(CustomException.CustomerTriedToAccessUnauthorizedWorkoutException.class)
+    public Map<String, String> CustomerTriedToAccessUnauthorizedWorkoutExceptionHandler(CustomException.CustomerTriedToAccessUnauthorizedWorkoutException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "UNAUTHORIZED_WORKOUT_REQUEST");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(CustomException.CustomerTriedToAccessUnauthorizedExerciseException.class)
+    public Map<String, String> CustomerTriedToAccessUnauthorizedExerciseExceptionHandler(CustomException.CustomerTriedToAccessUnauthorizedExerciseException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "UNAUTHORIZED_EXERCISE_REQUEST");
+        return errorList;
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(CustomException.CustomerTriedToAccessUnauthorizedSetException.class)
+    public Map<String, String> CustomerTriedToAccessUnauthorizedSetExceptionHandler(CustomException.CustomerTriedToAccessUnauthorizedSetException exception)
+    {
+        Map<String, String> errorList = new HashMap<>();
+        errorList.put("error", exception.getMessage());
+        errorList.put("errorCode", "UNAUTHORIZED_SET_REQUEST");
+        return errorList;
+    }
+
+
 
 
 

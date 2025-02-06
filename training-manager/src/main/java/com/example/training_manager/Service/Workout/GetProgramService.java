@@ -2,6 +2,7 @@ package com.example.training_manager.Service.Workout;
 
 import com.example.training_manager.Dto.Workout.ProgramDto;
 import com.example.training_manager.Dto.Workout.WorkoutDto;
+import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.ProgramEntity;
 import com.example.training_manager.Repository.ProgramRepository;
 import com.example.training_manager.Service.Shared.ValidateToken;
@@ -28,7 +29,7 @@ public class GetProgramService {
         this.getWorkoutService = getWorkoutService;
     }
 
-    public ProgramDto execute (Long customerId, String authHeader) throws Exception {
+    public ProgramDto execute (Long customerId, String authHeader){
         validateToken.execute(customerId, authHeader);
         ProgramEntity programEntity;
         Optional<ProgramEntity> programEntityOptional = programRepository.ReturnProgramFromCustomerId(customerId);
@@ -36,9 +37,8 @@ public class GetProgramService {
             programEntity = programEntityOptional.get();
         }
         else {
-            throw new Exception("Erro ao encontrar programa de treinos");
+            throw new CustomException.ProgramNotFoundException("Programa não encontrado.");
         }
-
         ProgramDto programDto = new ProgramDto();
         programDto.setName(programEntity.getName());
         programDto.setId(programEntity.getId());
