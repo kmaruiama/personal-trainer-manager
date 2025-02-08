@@ -2,6 +2,7 @@ package com.example.training_manager.Service.Customer;
 
 import com.example.training_manager.Dto.Customer.CustomerInfoDto;
 import com.example.training_manager.Model.CustomerEntity;
+import com.example.training_manager.Model.ScheduleMode;
 import com.example.training_manager.Repository.CustomerRepository;
 import com.example.training_manager.Service.Shared.ReturnTrainerIdFromJWT;
 import com.example.training_manager.Service.Shared.ValidateToken;
@@ -49,6 +50,9 @@ public class CustomerEditService {
         }
         if(customerInfoDto.getCpf()!=null){
             customerEntity.setCpf(customerInfoDto.getCpf());
+        }
+        if(customerInfoDto.getScheduleMode()!= null){
+            customerEntity.setScheduleMode(ScheduleMode.valueOf(customerInfoDto.getScheduleMode()));
         }
     }
 }

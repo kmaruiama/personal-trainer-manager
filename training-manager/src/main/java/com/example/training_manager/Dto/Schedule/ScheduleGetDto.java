@@ -14,4 +14,5 @@ public class ScheduleGetDto {
     private LocalTime hourEnd;
     private Long scheduleId;
     private Long customerId;
+    private Long workoutId;
 }

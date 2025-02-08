@@ -36,5 +36,7 @@ public class CustomerPricingRawDto {
     @NotNull(message="O tipo de pagamento é obrigatório")
     @NotBlank(message="O tipo de pagamento é obrigatório")
     private String typeOfPayment;
+
+    private String scheduleMode;
 }
 

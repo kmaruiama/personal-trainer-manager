@@ -134,6 +134,11 @@ public class CustomException {
             super(message);
         }
     }
+    public static class NoScheduleFoundException extends RuntimeException{
+        public NoScheduleFoundException(String message){
+            super(message);
+        }
+    }
 
 
 

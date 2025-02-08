@@ -4,6 +4,7 @@ import com.example.training_manager.Dto.Customer.CustomerPricingRawDto;
 import com.example.training_manager.Dto.Payment.PaymentDto;
 import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.CustomerEntity;
+import com.example.training_manager.Model.ScheduleMode;
 import com.example.training_manager.Model.TrainerEntity;
 import com.example.training_manager.Repository.CustomerRepository;
 import com.example.training_manager.Repository.TrainerRepository;
@@ -48,7 +49,7 @@ public class CustomerRegisterService {
         customerEntity.setEndereco(customerPricingRawDto.getAddress());
         customerEntity.setDataNascimento(customerPricingRawDto.getBirth());
         customerEntity.setTrainerEntity(linkCustomerToTrainerAndReturnTrainerToBeLinked(authHeader, customerEntity));
-
+        customerEntity.setScheduleMode(ScheduleMode.valueOf(customerPricingRawDto.getScheduleMode()));
         customerRepository.save(customerEntity);
 
         PaymentDto paymentDto = new PaymentDto();

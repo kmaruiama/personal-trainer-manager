@@ -39,6 +39,7 @@ public class FetchScheduleByCustomer {
             scheduleGetDto.setScheduleId(scheduleEntityList.get(i).getId());
             scheduleGetDto.setCustomerId(scheduleEntityList.get(i).getCustomerEntity().getId());
             scheduleGetDto.setWorkoutName(scheduleEntityList.get(i).getWorkoutEntity().getName());
+            scheduleGetDto.setWorkoutId(scheduleEntityList.get(i).getWorkoutEntity().getId());
             scheduleGetDto.setCustomerName(scheduleEntityList.get(i).getCustomerEntity().getNome());
             scheduleGetDto.setHourStart(scheduleEntityList.get(i).getHourStart());
             scheduleGetDto.setHourEnd(scheduleEntityList.get(i).getHourEnd());

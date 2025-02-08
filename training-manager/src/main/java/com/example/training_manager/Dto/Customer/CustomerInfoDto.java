@@ -34,4 +34,6 @@ public class CustomerInfoDto {
     @NotNull(message="O cpf é obrigatório")
     @NotBlank(message="O cpf é obrigatório")
     private String cpf;
+
+    private String scheduleMode;
 }

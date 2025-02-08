@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 @Entity
@@ -58,4 +59,7 @@ public class CustomerEntity {
 
     @OneToOne(mappedBy = "customerEntity")
     private BlueprintEntity blueprintEntity;
+
+    @Enumerated(EnumType.STRING)
+    private ScheduleMode scheduleMode;
 }
