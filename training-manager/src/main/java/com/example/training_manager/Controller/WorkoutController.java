@@ -3,6 +3,7 @@ package com.example.training_manager.Controller;
 import com.example.training_manager.Dto.Workout.DeleteWorkoutDto;
 import com.example.training_manager.Dto.Workout.ProgramDto;
 import com.example.training_manager.Dto.Workout.WorkoutDto;
+import com.example.training_manager.Service.Schedule.ReturnNextWorkoutService;
 import com.example.training_manager.Service.Workout.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,18 +24,23 @@ public class WorkoutController {
     private final GetProgramService getProgramService;
     private final AddProgramService addProgramService;
     private final DeleteWorkoutService deleteWorkoutService;
+    private final ReturnNextWorkoutService returnNextWorkoutService;
 
     @Autowired
     WorkoutController (AddWorkoutService addWorkoutService,
                        GetWorkoutService getWorkoutService,
                        EditWorkoutService editWorkoutService,
-                       GetProgramService getProgramService, AddProgramService addProgramService, DeleteWorkoutService deleteWorkoutService){
+                       GetProgramService getProgramService,
+                       AddProgramService addProgramService,
+                       DeleteWorkoutService deleteWorkoutService,
+                       ReturnNextWorkoutService returnNextWorkoutService){
         this.addWorkoutService = addWorkoutService;
         this.getWorkoutService = getWorkoutService;
         this.editWorkoutService = editWorkoutService;
         this.getProgramService = getProgramService;
         this.addProgramService = addProgramService;
         this.deleteWorkoutService = deleteWorkoutService;
+        this.returnNextWorkoutService = returnNextWorkoutService;
     }
 
 
@@ -58,6 +64,7 @@ public class WorkoutController {
             addWorkoutService.execute(workoutDto, authHeader);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("success", "Novo treino adicionado com sucesso"));
         } catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Erro ao adicionar novo treino"));
         }
@@ -113,5 +120,12 @@ public class WorkoutController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Erro ao deletar"));
         }
+    }
+
+    @GetMapping("/next")
+    ResponseEntity<List<String>> returnNextWorkout(@RequestParam Long customerId,
+                                                   @RequestHeader("Authorization") String authHeader){
+        List<String> nextWorkout = returnNextWorkoutService.execute(customerId, authHeader);
+        return ResponseEntity.ok(nextWorkout);
     }
 }

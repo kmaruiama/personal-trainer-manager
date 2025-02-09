@@ -17,9 +17,9 @@ public interface ScheduleRepository extends JpaRepository<ScheduleEntity, Long> 
     //eca
     Long findCustomerIdByScheduleId(Long id);
 
-    @Query("SELECT scheduleEntity FROM ScheduleEntity scheduleEntity WHERE scheduleEntity.customerEntity.id = :id")
+    @Query("SELECT scheduleEntity FROM ScheduleEntity scheduleEntity WHERE scheduleEntity.customerEntity.id = :id ORDER BY scheduleEntity.id ASC")
     List<ScheduleEntity> findScheduleEntitiesByCustomerEntityId(Long id);
 
     @Query("SELECT scheduleEntity.workoutEntity.name FROM ScheduleEntity scheduleEntity WHERE scheduleEntity.customerEntity.id = :customerId AND scheduleEntity.dayOfTheWeek = :dayOfTheWeek")
-    String findAllWorkoutsBasedInTheDayOfTheWeek(Long customerId, int dayOfTheWeek);
+    List<String> findWorkoutBasedInTheDayOfTheWeek(Long customerId, int dayOfTheWeek);
 }

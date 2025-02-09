@@ -16,4 +16,10 @@ public interface WorkoutRepository extends JpaRepository<WorkoutEntity, Long> {
     //ver alguma coisa pra limitar
     @Query("SELECT workout FROM WorkoutEntity workout WHERE workout.customerEntity.id = :id ORDER BY workout.id DESC")
     List<WorkoutEntity> returnWorkoutsDescendant(Long id);
+
+    //tive fazer essa gambiarra com nested query pq o jpql nao suporta o TOP clause
+    @Query("SELECT workoutEntity FROM WorkoutEntity workoutEntity WHERE workoutEntity.id = (SELECT MAX(workoutEntity.id) FROM WorkoutEntity workoutEntity WHERE workoutEntity.customerEntity.id = :customerId)")
+    WorkoutEntity returnLastWorkoutDone(Long customerId);
+
+
 }
