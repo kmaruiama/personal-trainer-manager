@@ -18,19 +18,21 @@ import java.util.Optional;
 @Service
 public class ScheduleEditService {
     private final CheckCurrentSchedule checkCurrentSchedule;
-    private final ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer;
     private final ScheduleRepository scheduleRepository;
     private final ValidateToken validateToken;
     private final WorkoutRepository workoutRepository;
+    private final IntrospectScheduleService introspectScheduleService;
 
     ScheduleEditService(CheckCurrentSchedule checkCurrentSchedule,
-                        ValidateTrainerOwnershipOverCustomer validateTrainerOwnershipOverCustomer,
-                        ScheduleRepository scheduleRepository, ValidateToken validateToken, WorkoutRepository workoutRepository) {
+                        ScheduleRepository scheduleRepository,
+                        ValidateToken validateToken,
+                        WorkoutRepository workoutRepository,
+                        IntrospectScheduleService introspectScheduleService) {
         this.checkCurrentSchedule = checkCurrentSchedule;
-        this.validateTrainerOwnershipOverCustomer = validateTrainerOwnershipOverCustomer;
         this.scheduleRepository = scheduleRepository;
         this.validateToken = validateToken;
         this.workoutRepository = workoutRepository;
+        this.introspectScheduleService = introspectScheduleService;
     }
 
     @Transactional
@@ -53,6 +55,7 @@ public class ScheduleEditService {
             scheduleEntity.setHourEnd(scheduleGetDto.getHourStart());
             scheduleEntity.setHourEnd(scheduleGetDto.getHourEnd());
             scheduleEntity.setWorkoutEntity(setWorkoutBlueprint(scheduleGetDto.getWorkoutId()));
+            introspectScheduleService.execute(scheduleGetDto.getCustomerId(), authHeader);
         } else {
             throw new CustomException.ScheduleNotFoundException("Agendamento não encontrado");
         }

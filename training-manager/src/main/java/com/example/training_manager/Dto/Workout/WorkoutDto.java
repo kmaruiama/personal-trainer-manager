@@ -11,4 +11,5 @@ public class WorkoutDto {
     private String name;
     private Long customerId;
     private List<ExerciseDto> exerciseDtoList;
+    private boolean blueprint;
 }

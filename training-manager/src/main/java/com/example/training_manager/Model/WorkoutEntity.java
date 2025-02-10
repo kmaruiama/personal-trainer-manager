@@ -25,7 +25,6 @@ public class WorkoutEntity {
     @OneToMany(mappedBy = "workoutEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExerciseEntity> exerciseEntityList = new ArrayList<>();
 
-    //???????????
     @OneToMany(mappedBy = "id", cascade = CascadeType.REMOVE)
     private List<ScheduleEntity> schedule = new ArrayList<>();
 

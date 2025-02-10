@@ -66,13 +66,14 @@ public class AddWorkoutService{
         workoutEntity.setName(workoutDto.getName());
         workoutEntity.setCustomerEntity(customerEntity);
 
-        //buscando o id de qual programa o treino pertence
-        Optional <ProgramEntity> programEntityOptional = programRepository.findById(workoutDto.getProgramId());
-        if (programEntityOptional.isPresent()){
-            workoutEntity.setProgramEntity(programEntityOptional.get());
-        }
-        else {
-            throw new CustomException.ProgramNotFoundException("Programa não encontrado");
+        if (workoutDto.isBlueprint()) {
+            //buscando o id de qual programa o treino pertence
+            Optional<ProgramEntity> programEntityOptional = programRepository.findById(workoutDto.getProgramId());
+            if (programEntityOptional.isPresent()) {
+                workoutEntity.setProgramEntity(programEntityOptional.get());
+            } else {
+                throw new CustomException.ProgramNotFoundException("Programa não encontrado");
+            }
         }
         //salvando
         workoutRepository.save(workoutEntity);

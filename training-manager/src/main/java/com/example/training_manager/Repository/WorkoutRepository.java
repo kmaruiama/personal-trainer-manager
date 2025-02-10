@@ -1,6 +1,7 @@
 package com.example.training_manager.Repository;
 
 import com.example.training_manager.Model.WorkoutEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,12 +15,6 @@ public interface WorkoutRepository extends JpaRepository<WorkoutEntity, Long> {
 
     //ruim e vai deixar o pedido muito lento conforme mais treinos forem inseridos
     //ver alguma coisa pra limitar
-    @Query("SELECT workout FROM WorkoutEntity workout WHERE workout.customerEntity.id = :id ORDER BY workout.id DESC")
-    List<WorkoutEntity> returnWorkoutsDescendant(Long id);
-
-    //tive fazer essa gambiarra com nested query pq o jpql nao suporta o TOP clause
-    @Query("SELECT workoutEntity FROM WorkoutEntity workoutEntity WHERE workoutEntity.id = (SELECT MAX(workoutEntity.id) FROM WorkoutEntity workoutEntity WHERE workoutEntity.customerEntity.id = :customerId)")
-    WorkoutEntity returnLastWorkoutDone(Long customerId);
-
-
+    @Query("SELECT workout FROM WorkoutEntity workout WHERE workout.customerEntity.id = :id AND workout.programEntity IS NULL ORDER BY workout.id DESC")
+    List<WorkoutEntity> returnWorkoutsDescendant(Long id, Pageable pageable);
 }

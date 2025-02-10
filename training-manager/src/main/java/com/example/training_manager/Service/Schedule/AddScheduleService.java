@@ -27,19 +27,21 @@ public class AddScheduleService {
     private final WorkoutRepository workoutRepository;
     private final CheckCurrentSchedule checkCurrentSchedule;
     private final ValidateToken validateToken;
+    private final IntrospectScheduleService introspectScheduleService;
 
     @Autowired
     public AddScheduleService(CustomerRepository customerRepository,
                               TrainerRepository trainerRepository,
                               ScheduleRepository scheduleRepository,
                               WorkoutRepository workoutRepository,
-                              CheckCurrentSchedule checkCurrentSchedule, ValidateToken validateToken) {
+                              CheckCurrentSchedule checkCurrentSchedule, ValidateToken validateToken, IntrospectScheduleService introspectScheduleService) {
         this.customerRepository = customerRepository;
         this.trainerRepository = trainerRepository;
         this.scheduleRepository = scheduleRepository;
         this.workoutRepository = workoutRepository;
         this.checkCurrentSchedule = checkCurrentSchedule;
         this.validateToken = validateToken;
+        this.introspectScheduleService = introspectScheduleService;
     }
 
     @Transactional
@@ -57,7 +59,9 @@ public class AddScheduleService {
         scheduleEntity.setDayOfTheWeek(scheduleDto.getDayOfTheWeek());
         scheduleEntity.setHourStart(scheduleDto.getHourStart());
         scheduleEntity.setHourEnd(scheduleDto.getHourEnd());
+        scheduleEntity.setDone(false);
         scheduleRepository.save(scheduleEntity);
+        introspectScheduleService.execute(scheduleDto.getCustomerId(), authHeader);
     }
 
     private void setCustomer(ScheduleEntity scheduleEntity, ScheduleDto scheduleDto) {

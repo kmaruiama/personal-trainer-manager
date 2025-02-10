@@ -140,6 +140,12 @@ public class CustomException {
         }
     }
 
+    public static class IrregularSchedulingEnumException extends RuntimeException{
+        public IrregularSchedulingEnumException(String message){
+            super(message);
+        }
+    }
+
 
 
 

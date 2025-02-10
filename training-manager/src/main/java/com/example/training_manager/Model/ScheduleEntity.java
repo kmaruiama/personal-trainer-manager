@@ -29,4 +29,6 @@ public class ScheduleEntity {
 
     private LocalTime hourEnd;
 
+    private Boolean done;
+
 }
