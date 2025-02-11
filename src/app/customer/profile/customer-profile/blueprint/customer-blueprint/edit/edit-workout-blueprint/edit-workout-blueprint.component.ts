@@ -20,7 +20,6 @@ import {
   imports: [
     IonButton,
     IonInput,
-    IonTitle,
     IonContent,
     IonLabel,
     IonCard,
@@ -65,7 +64,6 @@ export class EditWorkoutBlueprintComponent implements OnInit {
       })
       .subscribe(
         (workoutDto) => {
-          console.log(workoutDto);
           localStorage.removeItem('workoutIdReloadParameter');
           this.convertServerResponseIntoProgramData(workoutDto);
         },

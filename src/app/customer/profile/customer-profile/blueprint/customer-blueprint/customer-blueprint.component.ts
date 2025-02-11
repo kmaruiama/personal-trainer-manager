@@ -31,8 +31,7 @@ export class CustomerBlueprintComponent implements OnInit {
     if (this.customerId) {
       if (this.authToken) {
         this.getCurrentProgramBlueprint(this.customerId, this.authToken).subscribe(
-          (data) => this.convertServerResponseIntoProgramData(data),
-          () => this.router.navigate(['/customer/profile'])
+          (data) => this.convertServerResponseIntoProgramData(data)
         );
       }
     }

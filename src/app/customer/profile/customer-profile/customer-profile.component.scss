@@ -25,7 +25,13 @@ ion-content {
   margin-top: 10%;
   margin-bottom: 6%;
 }
-#last-workouts{
+
+.noWorkoutsMargin{
+  margin-top: 15%;
+  margin-bottom: 15%;
+}
+
+.previousWorkoutsMargin{
   margin-bottom: 5%;
 }
 
@@ -109,4 +115,14 @@ ion-content {
 #pencil {
   width: 65%;
   height: 65%;
+}
+
+#no-workout-found{
+  display: flex;
+  justify-content: center;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  font-family: Arial, sans-serif;
+  font-size: 120%;
+  color:white;
 }

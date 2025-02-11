@@ -1,24 +1,24 @@
-import { IonCard, IonImg, IonCardSubtitle, IonContent, IonCardContent } from '@ionic/angular/standalone';
+import { IonCard, IonImg, IonCardSubtitle, IonContent, IonCardContent, IonTitle } from '@ionic/angular/standalone';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AlertController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-customer-profile',
   templateUrl: './customer-profile.component.html',
   styleUrls: ['./customer-profile.component.scss'],
   standalone: true,
-  imports: [IonCardContent, IonContent, IonImg, IonCard, IonCardSubtitle]
+  imports: [IonTitle, IonCardContent, IonContent, IonImg, IonCard, IonCardSubtitle, CommonModule]
 })
 export class CustomerProfileComponent implements OnInit {
   authToken: string = localStorage.getItem('authToken') || '';
   customerId: number = 0;
   customerName: string = "";
   nextWorkout: string = "";
-  lastWorkout1: string = "";
-  lastWorkout2: string = "";
-  lastWorkout3: string = "";
+  lastWorkout: string [] = [];
+  noPreviousWorkoutsFound: boolean = true;
 
   constructor(private router: Router, private http: HttpClient, private alertController: AlertController) {}
 
@@ -56,7 +56,9 @@ export class CustomerProfileComponent implements OnInit {
       state: { id: customerId },
     });
   }
+  goToWorkout(workoutId: number){
 
+  }
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     this.customerId = navigation?.extras.state?.['id'] || null;
@@ -67,10 +69,8 @@ export class CustomerProfileComponent implements OnInit {
       if (authToken) {
         this.getScheduleProfile(this.customerId, authToken).subscribe(
           (data) => {
-            this.nextWorkout = data[0];
-            this.lastWorkout1 = data[1];
-            this.lastWorkout2 = data[2];
-            this.lastWorkout3 = data[3];
+            this.lastWorkout = data;
+
           },
           (error) => {
             this.router.navigate(['/customer/']);
@@ -121,6 +121,16 @@ export class CustomerProfileComponent implements OnInit {
           this.showErrorAlert("Erro ao deletar o cliente");
         }
       );
+  }
+
+  checkLastWorkoutsEmpty() : boolean {
+    if(this.lastWorkout.length === 0){
+      return true;
+    }
+    else{
+      this.noPreviousWorkoutsFound = false;
+      return false;
+    }
   }
 
   async showErrorAlert(message: string) {
