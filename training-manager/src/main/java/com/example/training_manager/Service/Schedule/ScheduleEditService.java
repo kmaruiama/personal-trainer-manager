@@ -4,6 +4,7 @@ import com.example.training_manager.Dto.Schedule.ScheduleDto;
 import com.example.training_manager.Dto.Schedule.ScheduleGetDto;
 import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.ScheduleEntity;
+import com.example.training_manager.Model.ScheduleMode;
 import com.example.training_manager.Model.WorkoutEntity;
 import com.example.training_manager.Repository.ScheduleRepository;
 import com.example.training_manager.Repository.WorkoutRepository;
@@ -48,16 +49,21 @@ public class ScheduleEditService {
             throw new CustomException.ScheduleConflictException("O horário conflita com outro existente.");
         }
 
+        ScheduleEntity scheduleEntity;
+
         Optional<ScheduleEntity> scheduleEntityOptional = scheduleRepository.findById(scheduleGetDto.getScheduleId());
         if (scheduleEntityOptional.isPresent()) {
-            ScheduleEntity scheduleEntity = scheduleEntityOptional.get();
+            scheduleEntity = scheduleEntityOptional.get();
             scheduleEntity.setDayOfTheWeek(scheduleGetDto.getDayOfTheWeek());
             scheduleEntity.setHourEnd(scheduleGetDto.getHourStart());
             scheduleEntity.setHourEnd(scheduleGetDto.getHourEnd());
             scheduleEntity.setWorkoutEntity(setWorkoutBlueprint(scheduleGetDto.getWorkoutId()));
-            introspectScheduleService.execute(scheduleGetDto.getCustomerId(), authHeader);
         } else {
             throw new CustomException.ScheduleNotFoundException("Agendamento não encontrado");
+        }
+
+        if(scheduleEntity.getCustomerEntity().getScheduleMode() == ScheduleMode.BY_ORDER) {
+            introspectScheduleService.execute(scheduleDto.getCustomerId(), authHeader);
         }
     }
 

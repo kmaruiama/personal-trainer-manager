@@ -2,10 +2,7 @@ package com.example.training_manager.Service.Schedule;
 
 import com.example.training_manager.Dto.Schedule.ScheduleDto;
 import com.example.training_manager.Exception.CustomException;
-import com.example.training_manager.Model.CustomerEntity;
-import com.example.training_manager.Model.ScheduleEntity;
-import com.example.training_manager.Model.TrainerEntity;
-import com.example.training_manager.Model.WorkoutEntity;
+import com.example.training_manager.Model.*;
 import com.example.training_manager.Repository.CustomerRepository;
 import com.example.training_manager.Repository.ScheduleRepository;
 import com.example.training_manager.Repository.TrainerRepository;
@@ -61,7 +58,9 @@ public class AddScheduleService {
         scheduleEntity.setHourEnd(scheduleDto.getHourEnd());
         scheduleEntity.setDone(false);
         scheduleRepository.save(scheduleEntity);
-        introspectScheduleService.execute(scheduleDto.getCustomerId(), authHeader);
+        if(scheduleEntity.getCustomerEntity().getScheduleMode() == ScheduleMode.BY_ORDER) {
+            introspectScheduleService.execute(scheduleDto.getCustomerId(), authHeader);
+        }
     }
 
     private void setCustomer(ScheduleEntity scheduleEntity, ScheduleDto scheduleDto) {

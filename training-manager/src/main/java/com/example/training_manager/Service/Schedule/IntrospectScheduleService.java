@@ -35,36 +35,42 @@ public class IntrospectScheduleService {
         introspectSchedule(scheduleEntityList);
     }
 
+
+    //nova implementacao usando pivos pra ficar mais simples de entender
+
+    //caso 1: pivô falso
+    // D D D N D D N N
+    // nesse caso, i[3] é o pivô falso e i[6] é o pivô real
+
     private void introspectSchedule(List<ScheduleEntity> scheduleEntityList){
-        //caso 1: só há um treino na agenda e ele já foi concluido
-        if(scheduleEntityList.size() == 1){
-            if (scheduleEntityList.getFirst().getDone()){
-                scheduleEntityList.getFirst().setDone(false);
+        boolean pivotFound = false;
+        int pivotPosition = 0;
+
+        for (int i = 0; i<scheduleEntityList.size(); i++) {
+            //achamos o pivo                             //está aqui pro caso 1
+            if (!scheduleEntityList.get(i).getDone() && (i+1 == scheduleEntityList.size() || !scheduleEntityList.get(i).getDone()))
+            {
+                pivotFound = true;
+                pivotPosition = i;
+                break;
             }
         }
-        //caso 2: um treino novo foi adicionado na agenda
-        for (int i = 0; i<scheduleEntityList.size() - 1; i++){
-            //size()-1 pq vai causar um indexoutofbounds quando tratando o ultimo caso
-            //caso 2.1: um treino novo foi adicionado antes do proximo treino
-            //ex: estou no treino da quarta, adicionei um novo treino no programa pra segunda
-            if(!scheduleEntityList.get(i).getDone() && scheduleEntityList.get(i+1).getDone()){
-                //se for essa a situacao, entao você só vai realizar esse novo treino semana que vem
-                scheduleEntityList.get(i).setDone(true);
+        if(pivotFound) {
+            //limpando a lista, tudo o que vem antes do pivo foi treinado e tudo o que vem depois é falso
+            for (int i = 0; i < scheduleEntityList.size(); i++) {
+                if (i < pivotPosition) {
+                    scheduleEntityList.get(i).setDone(true);
+                } else {
+                    scheduleEntityList.get(i).setDone(false);
+                }
             }
         }
-        //caso 3: há mais de um treino na agenda e todos foram concluidos
-        boolean weekIsDone = true;
-        for (int i = 0; i<scheduleEntityList.size(); i++){
-            if (!scheduleEntityList.get(i).getDone()){
-                weekIsDone = false;
-            }
-        }
-        if (weekIsDone){
-            for (int i = 0; i<scheduleEntityList.size(); i++){
+        //lista cheia
+        else{
+            for (int i = 0; i < scheduleEntityList.size(); i++){
                 scheduleEntityList.get(i).setDone(false);
             }
         }
-        scheduleRepository.saveAll(scheduleEntityList);
     }
 
     private void sortByDayAndHour(List<ScheduleEntity> scheduleEntityList){
