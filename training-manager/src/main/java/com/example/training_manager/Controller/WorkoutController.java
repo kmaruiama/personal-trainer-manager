@@ -1,5 +1,6 @@
 package com.example.training_manager.Controller;
 
+import com.example.training_manager.Dto.Schedule.NextWorkoutDto;
 import com.example.training_manager.Dto.Workout.DeleteWorkoutDto;
 import com.example.training_manager.Dto.Workout.ProgramDto;
 import com.example.training_manager.Dto.Workout.WorkoutDto;
@@ -123,9 +124,9 @@ public class WorkoutController {
     }
 
     @GetMapping("/next")
-    ResponseEntity<List<String>> returnNextWorkout(@RequestParam Long customerId,
-                                                   @RequestHeader("Authorization") String authHeader){
-        List<String> nextWorkout = returnNextWorkoutService.execute(customerId, authHeader);
-        return ResponseEntity.ok(nextWorkout);
+    ResponseEntity<List<NextWorkoutDto>> returnNextWorkout(@RequestParam Long customerId,
+                                                           @RequestHeader("Authorization") String authHeader){
+        List<NextWorkoutDto> nextWorkoutDtoList = returnNextWorkoutService.execute(customerId, authHeader);
+        return ResponseEntity.ok(nextWorkoutDtoList);
     }
 }

@@ -1,7 +1,6 @@
 package com.example.training_manager.Service.Schedule;
 
 
-import com.example.training_manager.Exception.CustomException;
 import com.example.training_manager.Model.WorkoutEntity;
 import com.example.training_manager.Repository.CustomerRepository;
 import com.example.training_manager.Repository.WorkoutRepository;
@@ -14,16 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class WorkoutCustomerProfile {
+public class FetchLastWorkoutsService {
     private final ValidateToken validateToken;
     FetchScheduleByTrainer fetchScheduleByTrainer;
     CustomerRepository customerRepository;
     WorkoutRepository workoutRepository;
 
     @Autowired
-    WorkoutCustomerProfile(FetchScheduleByTrainer fetchScheduleByTrainer,
-                           CustomerRepository customerRepository,
-                           WorkoutRepository workoutRepository, ValidateToken validateToken){
+    FetchLastWorkoutsService(FetchScheduleByTrainer fetchScheduleByTrainer,
+                             CustomerRepository customerRepository,
+                             WorkoutRepository workoutRepository, ValidateToken validateToken){
         this.fetchScheduleByTrainer = fetchScheduleByTrainer;
         this.customerRepository = customerRepository;
         this.workoutRepository = workoutRepository;
@@ -40,20 +39,12 @@ public class WorkoutCustomerProfile {
     //(portanto, se ta no programa é um blueprint e nao um treino q aconteceu de fato)
     private List<String> getLastThreeWorkoutsIfTheyExist(Long id, List<String> workoutNames) {
         List<WorkoutEntity> workoutEntityList = workoutRepository.returnWorkoutsDescendant(id, Pageable.ofSize(3));
-        for (int i = 0; i<workoutEntityList.size(); i++){
-            if (workoutEntityList.get(i).getName().isBlank()){
-                workoutNames.add("Nulo");
-            }
-            else {
+        for (int i = 0; i<workoutEntityList.size(); i++) {
+            if (!workoutEntityList.get(i).getName().isBlank()) {
                 String workoutName = workoutEntityList.get(i).getName();
                 workoutNames.add(workoutName);
             }
         }
-        while (workoutNames.size()<3){
-            workoutNames.add("Nulo");
-        }
         return workoutNames;
     }
-
-
 }

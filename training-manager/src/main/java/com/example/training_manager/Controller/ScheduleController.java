@@ -4,7 +4,6 @@ package com.example.training_manager.Controller;
 import com.example.training_manager.Dto.Schedule.ScheduleDto;
 import com.example.training_manager.Dto.Schedule.ScheduleGetDto;
 import com.example.training_manager.Service.Schedule.*;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class ScheduleController {
     private final FetchScheduleByTrainer fetchScheduleByTrainer;
     private final ScheduleEditService scheduleEditService;
     private final ScheduleDeleteService scheduleDeleteService;
-    private final WorkoutCustomerProfile workoutCustomerProfile;
+    private final FetchLastWorkoutsService fetchLastWorkoutsService;
     private final FetchScheduleByCustomer fetchScheduleByCustomer;
 
     @Autowired
@@ -28,13 +27,13 @@ public class ScheduleController {
                               FetchScheduleByTrainer fetchScheduleByTrainer,
                               ScheduleEditService editScheduleService,
                               ScheduleDeleteService scheduleDeleteService,
-                              WorkoutCustomerProfile workoutCustomerProfile,
+                              FetchLastWorkoutsService fetchLastWorkoutsService,
                               FetchScheduleByCustomer fetchScheduleByCustomer){
         this.addScheduleService = addScheduleService;
         this.fetchScheduleByTrainer = fetchScheduleByTrainer;
         this.scheduleEditService = editScheduleService;
         this.scheduleDeleteService = scheduleDeleteService;
-        this.workoutCustomerProfile = workoutCustomerProfile;
+        this.fetchLastWorkoutsService = fetchLastWorkoutsService;
         this.fetchScheduleByCustomer = fetchScheduleByCustomer;
     }
 
@@ -77,7 +76,7 @@ public class ScheduleController {
     public ResponseEntity<List<String>> getWorkoutListThatGoesInTheCustomerProfile(@RequestParam("id") Long id,
                                                                                    @RequestHeader("Authorization") String authHeader) {
         try {
-            return ResponseEntity.ok(workoutCustomerProfile.execute(authHeader, id));
+            return ResponseEntity.ok(fetchLastWorkoutsService.execute(authHeader, id));
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

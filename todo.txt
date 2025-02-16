@@ -2,8 +2,8 @@ todo
 
 {
 +++
-down ver postgres pra v 9.5
-down ver java pra v11
+down ver postgres pra v ??
+down ver java pra v17
 pra versionar a db com o flyway
 ++
 botar os roles corretamente, e adicionar a autorização dos roles no controller
@@ -11,7 +11,6 @@ criar validação dos dados antes de salvar na db no backend também
 +
 finanças trocar float por bigdecimal
 categorias fixas usar enum
-implementar serializable nas entidades
 trocar a modalidade dos pagamentos de string para enum
 adicionar um layer em criptografia nos IDs
 }
@@ -28,3 +27,12 @@ trocar os alertcontrollers feios pelo ion alert
 +
 trocar os png por svg
 }
+
+agora pra criar um treino de fato vou precisar fazer um esquema de escolha de ids, se o treinador quer usar o treino anteriormente feito como base pro treino atual ou o blueprint, se blueprint mandar o id do blueprint como base, se o ultimo treino mandar o id do ultimo treino
+pra fazer isso vou implementar um enum com os modos BY_ORDER ou BY_DAY, e transformar o WorkoutCustomerProfile em 2 serviços diferentes, um que retorna os 3 últimos treinos e um que 
+retorna o proximo treino a ser feito com base no enum
+
+
+
+
+
