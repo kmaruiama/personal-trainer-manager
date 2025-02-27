@@ -6,7 +6,7 @@
   <ion-card-subtitle id="username">{{ customerName }}</ion-card-subtitle>
 
   <div id="next-workout">
-    <ion-card class="workout">
+    <ion-card class="workout" (click)="nextWorkoutClicker(true)">
       <ion-card-subtitle class="workout-list-title"
         >Próximo Treino</ion-card-subtitle>
       <ion-card class="workout-node">
@@ -45,7 +45,7 @@
   <div class="row-buttons">
     <ion-card
       class="text-button"
-      (click)="goToCustomerProgramBluePrint(this.customerId)"
+      (click)="goTo(this.customerId, 'blueprint')"
     >
       <ion-card-content class="text-button-text">
         Programa de treino
@@ -55,7 +55,7 @@
       ion-button
       fill="clear"
       class="icon-button"
-      (click)="goToCustomerReport(this.customerId)"
+      (click)="goTo(this.customerId, 'report')"
     >
       <ion-img src="assets/fita-metrica.png" class="icon"></ion-img>
     </button>
@@ -63,7 +63,7 @@
       ion-button
       fill="clear"
       class="icon-button"
-      (click)="goToCustomerInfo(this.customerId)"
+      (click)="goTo(this.customerId, 'info')"
     >
       <ion-img src="assets/info.png" class="icon"></ion-img>
     </button>
@@ -71,7 +71,7 @@
   <div class="row-buttons">
     <ion-card
       class="text-button"
-      (click)="goToCustomerSchedule(this.customerId)"
+      (click)="goTo(this.customerId, 'schedule')"
     >
       <ion-card-content class="text-button-text"> Horário </ion-card-content>
     </ion-card>
@@ -87,9 +87,23 @@
       ion-button
       fill="clear"
       class="icon-button"
-      (click)="goToEditCustomer(this.customerId)"
+      (click)="goTo(this.customerId, 'edit')"
     >
       <ion-img src="assets/lapis.png" class="icon" id="pencil"></ion-img>
     </button>
   </div>
+
+
+
+ <!--caixas de seleção e alerta-->
+  <!--seleção do(s) próximo(s) treino(s)-->
+    <ion-alert
+    [isOpen]="nextWorkoutClicked"
+    header="A Short Title Is Best"
+    subHeader="A Sub Header Is Optional"
+    message="A message should be a short, complete sentence."
+    [buttons]=""
+    (didDismiss)="nextWorkoutClicker(false)"
+  ></ion-alert>
+
 </ion-content>

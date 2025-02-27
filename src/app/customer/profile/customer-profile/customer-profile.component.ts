@@ -1,4 +1,5 @@
-import { IonCard, IonImg, IonCardSubtitle, IonContent, IonCardContent, IonTitle } from '@ionic/angular/standalone';
+import { map } from 'rxjs';
+import { IonCard, IonImg, IonCardSubtitle, IonContent, IonCardContent, IonTitle, IonAlert } from '@ionic/angular/standalone';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -10,55 +11,20 @@ import { CommonModule } from '@angular/common';
   templateUrl: './customer-profile.component.html',
   styleUrls: ['./customer-profile.component.scss'],
   standalone: true,
-  imports: [IonTitle, IonCardContent, IonContent, IonImg, IonCard, IonCardSubtitle, CommonModule]
+  imports: [IonAlert, IonCardContent, IonContent, IonImg, IonCard, IonCardSubtitle, CommonModule]
 })
 export class CustomerProfileComponent implements OnInit {
+
   authToken: string = localStorage.getItem('authToken') || '';
   customerId: number = 0;
   customerName: string = "";
-  nextWorkout: string = "";
   lastWorkout: string [] = [];
+  nextWorkout: NextWorkoutDto [] = [];
+  choosenWorkout: string = "";
   noPreviousWorkoutsFound: boolean = true;
 
-  constructor(private router: Router, private http: HttpClient, private alertController: AlertController) {}
+  nextWorkoutClicked : boolean = false;
 
-  goToEditCustomer(customerId: number) {
-    this.router.navigate(['/customer/edit'], {
-      state: { id: customerId }
-    });
-  }
-
-
-  showDeleteCustomer(){
-    this.showConfirmationDeleteAlert();
-  }
-
-  goToCustomerProgramBluePrint(customerId: number){
-    this.router.navigate(['/customer/blueprint'],{
-      state: { id: customerId },
-    });
-  }
-
-  goToCustomerReport(customerId: number){
-    this.router.navigate(['/customer/report'],{
-      state: { id: customerId },
-    });
-  }
-
-  goToCustomerInfo(customerId: number){
-    this.router.navigate(['/customer/info'], {
-      state: { id: customerId },
-    });
-  }
-
-  goToCustomerSchedule(customerId: number){
-    this.router.navigate(['/customer/schedule'], {
-      state: { id: customerId },
-    });
-  }
-  goToWorkout(workoutId: number){
-
-  }
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
     this.customerId = navigation?.extras.state?.['id'] || null;
@@ -78,6 +44,26 @@ export class CustomerProfileComponent implements OnInit {
         );
       }
     }
+
+    this.fetchNextWorkout(this.authToken, this.customerId);
+  }
+
+  constructor(private router: Router, private http: HttpClient, private alertController: AlertController) {}
+
+  showDeleteCustomer(){
+    this.showConfirmationDeleteAlert();
+  }
+
+  goTo(customerId: number, url: string){
+    this.router.navigate(['/customer/report'],{
+      state: { id: customerId },
+    });
+  }
+
+  goToWorkout(workoutId: number){
+    this.router.navigate(['workout'], {
+      state: { id: workoutId},
+    });
   }
 
   getScheduleProfile(customerId: number, authToken: string) {
@@ -103,7 +89,6 @@ export class CustomerProfileComponent implements OnInit {
         },
       ],
     });
-
     await alert.present();
   }
 
@@ -133,15 +118,35 @@ export class CustomerProfileComponent implements OnInit {
     }
   }
 
+  fetchNextWorkout(authToken: string, customerId: number) {
+    const headers = { Authorization: `Bearer ${authToken}` };
+    this.http.get<[NextWorkoutDto]>(`http://localhost:8080/api/workout/next?id=${customerId}`, { headers }).subscribe({
+      next: (data) => {
+        this.nextWorkout = data;
+        console.log(this.nextWorkout);
+      },
+      error: (error) => {
+        console.error("Erro", error);
+      }
+    });
+  }
+
+  nextWorkoutClicker (choice : boolean) : void{
+    this.nextWorkoutClicked = choice;
+  }
+
   async showErrorAlert(message: string) {
     const alert = await this.alertController.create({
       header: 'Erro',
       message: message,
       buttons: ['OK'],
     });
-
     await alert.present();
   }
 
+}
 
+type NextWorkoutDto = {
+  id: number,
+  name: string
 }
