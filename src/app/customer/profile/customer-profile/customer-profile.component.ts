@@ -20,6 +20,7 @@ export class CustomerProfileComponent implements OnInit {
   customerName: string = "";
   lastWorkout: string [] = [];
   nextWorkout: NextWorkoutDto [] = [];
+  nextWorkoutNames: { text: string; handler: () => void }[] = [];
   choosenWorkout: string = "";
   noPreviousWorkoutsFound: boolean = true;
 
@@ -55,7 +56,7 @@ export class CustomerProfileComponent implements OnInit {
   }
 
   goTo(customerId: number, url: string){
-    this.router.navigate(['/customer/report'],{
+    this.router.navigate([`/customer/${url}`], {
       state: { id: customerId },
     });
   }
@@ -120,15 +121,27 @@ export class CustomerProfileComponent implements OnInit {
 
   fetchNextWorkout(authToken: string, customerId: number) {
     const headers = { Authorization: `Bearer ${authToken}` };
-    this.http.get<[NextWorkoutDto]>(`http://localhost:8080/api/workout/next?id=${customerId}`, { headers }).subscribe({
+    this.http.get<[NextWorkoutDto]>(`http://localhost:8080/api/workout/next?customerId=${customerId}`, { headers }).subscribe({
       next: (data) => {
         this.nextWorkout = data;
-        console.log(this.nextWorkout);
+        if (this.nextWorkout.length > 0) {
+          this.initializeNextWorkoutButtonNames();
+        }
       },
       error: (error) => {
         console.error("Erro", error);
       }
     });
+  }
+
+  initializeNextWorkoutButtonNames() {
+    this.nextWorkoutNames = this.nextWorkout.map((workout) => ({
+      text: workout.name,
+      handler: () => {
+        this.choosenWorkout = workout.name;
+        console.log(`Workout selected: ${workout.name}`);
+      },
+    }));
   }
 
   nextWorkoutClicker (choice : boolean) : void{
