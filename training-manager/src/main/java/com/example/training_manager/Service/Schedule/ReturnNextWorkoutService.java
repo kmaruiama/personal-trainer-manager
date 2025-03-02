@@ -76,10 +76,12 @@ public class ReturnNextWorkoutService {
                 NextWorkoutDto nextWorkoutDtoUsingBlueprintAsReference = new NextWorkoutDto();
                 nextWorkoutDtoUsingBlueprintAsReference.setName(scheduleEntityList.get(i).getWorkoutEntity().getName());
                 nextWorkoutDtoUsingBlueprintAsReference.setId(scheduleEntityList.get(i).getWorkoutEntity().getId());
+                nextWorkoutDtoUsingBlueprintAsReference.setBlueprint(true);
                 nextWorkoutDtoList.add(nextWorkoutDtoUsingBlueprintAsReference);
                 NextWorkoutDto nextWorkoutDtoUsingLastWorkoutAsReference = new NextWorkoutDto();
                 nextWorkoutDtoUsingLastWorkoutAsReference.setId(findWorkoutIdFromLastWorkoutWithThisName(customerId, nextWorkoutDtoList.getFirst().getName(), scheduleEntityList.size()));
                 nextWorkoutDtoUsingLastWorkoutAsReference.setName(scheduleEntityList.get(i).getWorkoutEntity().getName());
+                nextWorkoutDtoUsingBlueprintAsReference.setBlueprint(false);
                 if (nextWorkoutDtoUsingLastWorkoutAsReference.getId() != null){
                     nextWorkoutDtoList.add(nextWorkoutDtoUsingLastWorkoutAsReference);
                 }
@@ -113,10 +115,12 @@ public class ReturnNextWorkoutService {
             NextWorkoutDto nextWorkoutDtoUsingBlueprintAsReference = new NextWorkoutDto();
             nextWorkoutDtoUsingBlueprintAsReference.setName(scheduleEntityList.get(i).getWorkoutEntity().getName());
             nextWorkoutDtoUsingBlueprintAsReference.setId(scheduleEntityList.get(i).getWorkoutEntity().getId());
+            nextWorkoutDtoUsingBlueprintAsReference.setBlueprint(true);
             nextWorkoutDtoList.add(nextWorkoutDtoUsingBlueprintAsReference);
             NextWorkoutDto nextWorkoutDtoUsingLastWorkoutAsReference = new NextWorkoutDto();
             nextWorkoutDtoUsingLastWorkoutAsReference.setName(scheduleEntityList.get(i).getWorkoutEntity().getName());
             nextWorkoutDtoUsingLastWorkoutAsReference.setId(findWorkoutIdFromLastWorkoutWithThisName(customerId, nextWorkoutDtoList.getFirst().getName(), scheduleEntityList.size()));
+            nextWorkoutDtoUsingLastWorkoutAsReference.setBlueprint(false);
             if (nextWorkoutDtoUsingLastWorkoutAsReference.getId() != null) {
                 nextWorkoutDtoList.add(nextWorkoutDtoUsingLastWorkoutAsReference);
             }

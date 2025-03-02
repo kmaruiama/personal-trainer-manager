@@ -6,7 +6,7 @@
   <ion-card-subtitle id="username">{{ customerName }}</ion-card-subtitle>
 
   <div id="next-workout">
-    <ion-card class="workout" (click)="nextWorkoutClicker(true)">
+    <ion-card class="workout" (click)="nextWorkoutClicker()">
       <ion-card-subtitle class="workout-list-title"
         >Próximo Treino</ion-card-subtitle>
       <ion-card class="workout-node">
@@ -97,13 +97,21 @@
 
  <!--caixas de seleção e alerta-->
   <!--seleção do(s) próximo(s) treino(s)-->
+
+    <!--múltiplos treinos encontrados no mesmo dia-->
     <ion-alert
-    [isOpen]="nextWorkoutClicked"
-    header="A Short Title Is Best"
-    subHeader="A Sub Header Is Optional"
-    message="A message should be a short, complete sentence."
-    [buttons]="nextWorkoutNames"
-    (didDismiss)="nextWorkoutClicker(false)"
+    [isOpen]="nextWorkoutButtonClicked && multipleWorkoutMode"
+    header="Próximo treino"
+    [buttons]=""
+    (didDismiss)="closeNextWorkoutSelection()"
+  ></ion-alert>
+
+  <!--apenas um treino encontrado-->
+    <ion-alert
+    [isOpen]="nextWorkoutButtonClicked && singleWorkoutMode"
+    header="Usar o último treino como referência?"
+    [buttons]="nextWorkoutButtons"
+    (didDismiss)="closeNextWorkoutSelection()"
   ></ion-alert>
 
 </ion-content>

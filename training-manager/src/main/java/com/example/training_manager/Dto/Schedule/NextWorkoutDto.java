@@ -6,4 +6,5 @@ import lombok.Data;
 public class NextWorkoutDto {
     String name;
     Long id;
+    boolean isBlueprint;
 }
