@@ -1,10 +1,12 @@
 package com.example.training_manager.Controller;
 
 import com.example.training_manager.Dto.Schedule.NextWorkoutDto;
+import com.example.training_manager.Dto.Schedule.NextWorkoutFilteredDto;
 import com.example.training_manager.Dto.Workout.DeleteWorkoutDto;
 import com.example.training_manager.Dto.Workout.ProgramDto;
 import com.example.training_manager.Dto.Workout.WorkoutDto;
-import com.example.training_manager.Service.Schedule.ReturnNextWorkoutService;
+import com.example.training_manager.Service.Schedule.ReturnNextWorkoutFilteredService;
+import com.example.training_manager.Service.Schedule.ReturnNextWorkoutUnfilteredService;
 import com.example.training_manager.Service.Workout.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,7 @@ public class WorkoutController {
     private final GetProgramService getProgramService;
     private final AddProgramService addProgramService;
     private final DeleteWorkoutService deleteWorkoutService;
-    private final ReturnNextWorkoutService returnNextWorkoutService;
+    private final ReturnNextWorkoutFilteredService returnNextWorkoutFilteredService;
 
     @Autowired
     WorkoutController (AddWorkoutService addWorkoutService,
@@ -34,14 +36,14 @@ public class WorkoutController {
                        GetProgramService getProgramService,
                        AddProgramService addProgramService,
                        DeleteWorkoutService deleteWorkoutService,
-                       ReturnNextWorkoutService returnNextWorkoutService){
+                       ReturnNextWorkoutFilteredService returnNextWorkoutFilteredService){
         this.addWorkoutService = addWorkoutService;
         this.getWorkoutService = getWorkoutService;
         this.editWorkoutService = editWorkoutService;
         this.getProgramService = getProgramService;
         this.addProgramService = addProgramService;
         this.deleteWorkoutService = deleteWorkoutService;
-        this.returnNextWorkoutService = returnNextWorkoutService;
+        this.returnNextWorkoutFilteredService = returnNextWorkoutFilteredService;
     }
 
 
@@ -124,9 +126,9 @@ public class WorkoutController {
     }
 
     @GetMapping("/next")
-    ResponseEntity<List<NextWorkoutDto>> returnNextWorkout(@RequestParam Long customerId,
+    ResponseEntity<List<NextWorkoutFilteredDto>> returnNextWorkout(@RequestParam Long customerId,
                                                            @RequestHeader("Authorization") String authHeader){
-        List<NextWorkoutDto> nextWorkoutDtoList = returnNextWorkoutService.execute(customerId, authHeader);
+        List<NextWorkoutFilteredDto> nextWorkoutDtoList = returnNextWorkoutFilteredService.execute(customerId, authHeader);
         return ResponseEntity.ok(nextWorkoutDtoList);
     }
 }

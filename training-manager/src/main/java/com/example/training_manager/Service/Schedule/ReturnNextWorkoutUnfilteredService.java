@@ -21,17 +21,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReturnNextWorkoutService {
+public class ReturnNextWorkoutUnfilteredService {
     private final ValidateToken validateToken;
     private final CustomerRepository customerRepository;
     private final ScheduleRepository scheduleRepository;
     private final WorkoutRepository workoutRepository;
 
     @Autowired
-    ReturnNextWorkoutService(ValidateToken validateToken,
-                             CustomerRepository customerRepository,
-                             ScheduleRepository scheduleRepository,
-                             WorkoutRepository workoutRepository) {
+    ReturnNextWorkoutUnfilteredService(ValidateToken validateToken,
+                                       CustomerRepository customerRepository,
+                                       ScheduleRepository scheduleRepository,
+                                       WorkoutRepository workoutRepository) {
         this.validateToken = validateToken;
         this.customerRepository = customerRepository;
         this.scheduleRepository = scheduleRepository;
@@ -81,7 +81,7 @@ public class ReturnNextWorkoutService {
                 NextWorkoutDto nextWorkoutDtoUsingLastWorkoutAsReference = new NextWorkoutDto();
                 nextWorkoutDtoUsingLastWorkoutAsReference.setId(findWorkoutIdFromLastWorkoutWithThisName(customerId, nextWorkoutDtoList.getFirst().getName(), scheduleEntityList.size()));
                 nextWorkoutDtoUsingLastWorkoutAsReference.setName(scheduleEntityList.get(i).getWorkoutEntity().getName());
-                nextWorkoutDtoUsingBlueprintAsReference.setBlueprint(false);
+                nextWorkoutDtoUsingLastWorkoutAsReference.setBlueprint(false);
                 if (nextWorkoutDtoUsingLastWorkoutAsReference.getId() != null){
                     nextWorkoutDtoList.add(nextWorkoutDtoUsingLastWorkoutAsReference);
                 }

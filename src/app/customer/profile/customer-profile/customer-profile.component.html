@@ -106,9 +106,9 @@
     (didDismiss)="closeNextWorkoutSelection()"
   ></ion-alert>
 
-  <!--apenas um treino encontrado-->
+  <!--selecionar referências-->
     <ion-alert
-    [isOpen]="nextWorkoutButtonClicked && singleWorkoutMode"
+    [isOpen]="nextWorkoutButtonClicked && referenceChoiceTrigger"
     header="Usar o último treino como referência?"
     [buttons]="nextWorkoutButtons"
     (didDismiss)="closeNextWorkoutSelection()"

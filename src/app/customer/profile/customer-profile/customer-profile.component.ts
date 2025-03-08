@@ -26,29 +26,25 @@ export class CustomerProfileComponent implements OnInit {
   //relacionados ao proximo treino
   nextWorkoutButtonClicked : boolean = false;
 
-  selectedWorkout: NextWorkoutDto = {name: "", id: 0};
   nextWorkouts: NextWorkoutDto [] = [];
+  selectedWorkout: NextWorkoutDto = {name: "", blueprintId: 0, noBlueprintId: 0}
 
   nextWorkoutButton: Array<{ text: string; handler: () => void }> = [];
 
-  singleWorkoutMode : boolean = false;
+  referenceChoiceTrigger : boolean = false;
   multipleWorkoutMode : boolean = false;
+
   blueprintAsReference : boolean = false;
 
   public nextWorkoutButtons = [
     {
-      text: "Sim",
-      handler: () => {
-        this.blueprintAsReference = true
-      },
-    },
-    {
       text: "Não",
       handler: () => {
-        this.blueprintAsReference = false;
+        this.goToWorkout(this.selectedWorkout.blueprintId);
       }
     }
   ]
+
 
   constructor(private router: Router, private http: HttpClient, private alertController: AlertController) {}
 
@@ -109,7 +105,7 @@ export class CustomerProfileComponent implements OnInit {
   //buscar proximo treino
   fetchNextWorkout(authToken: string, customerId: number) {
     const headers = { Authorization: `Bearer ${authToken}` };
-    this.http.get<[NextWorkoutDto]>(`http://localhost:8080/api/workout/next?customerId=${customerId}`, { headers }).subscribe({
+    this.http.get<NextWorkoutDto[]>(`http://localhost:8080/api/workout/next?customerId=${customerId}`, { headers }).subscribe({
       next: (data) => {
         this.nextWorkouts = data;
         this.selectNextWorkoutMode();
@@ -120,29 +116,39 @@ export class CustomerProfileComponent implements OnInit {
     });
   }
 
+  selectNextWorkoutMode() : void {
+    if (this.nextWorkouts.length > 1) {
+      this.multipleWorkoutMode = true;
+    }
+    else {
+      this.selectedWorkout = this.nextWorkouts[0];
+      this.pushesYesSelectionIfPreviousWorkoutExists();
+      this.referenceChoiceTrigger = true;
+    }
+  }
+
+  pushesYesSelectionIfPreviousWorkoutExists(){
+    if (this.selectedWorkout.noBlueprintId != null){
+      this.nextWorkoutButton.push({
+        text: "Sim",
+        handler: () => {
+        this.goToWorkout(this.selectedWorkout.noBlueprintId);
+      }
+      })
+    }
+  }
+
   initializeNextWorkoutButtonNames(): void {
     this.nextWorkoutButton = this.nextWorkouts.map((workout) => ({
       text: workout.name,
       handler: () => {
         this.selectedWorkout = workout;
+        this.pushesYesSelectionIfPreviousWorkoutExists();
+        this.referenceChoiceTrigger = true;
       }
     }));
   }
 
-  selectNextWorkoutMode() : void {
-    console.log(this.nextWorkouts);
-    console.log(this.nextWorkouts.length);
-    if (this.nextWorkouts.length > 1) {
-      this.multipleWorkoutMode = true;
-      console.log("dois");
-    }
-    else {
-      this.singleWorkoutMode = true;
-      this.selectedWorkout = this.nextWorkouts[0];
-      console.log("um");
-
-    }
-  }
 
   nextWorkoutClicker () : void {
     this.nextWorkoutButtonClicked = true;
@@ -199,7 +205,7 @@ export class CustomerProfileComponent implements OnInit {
 }
 
 type NextWorkoutDto = {
-  id: number,
-  name: string
-  isBlueprint: boolean
+  name : string;
+  noBlueprintId : number;
+  blueprintId : number;
 }
