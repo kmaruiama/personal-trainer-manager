@@ -24,6 +24,7 @@ export class CustomerProfileComponent implements OnInit {
   noPreviousWorkoutsFound: boolean = true;
 
   //relacionados ao proximo treino
+  nextWorkoutButtonText : string = "";
   nextWorkoutButtonClicked : boolean = false;
 
   nextWorkouts: NextWorkoutDto [] = [];
@@ -35,6 +36,7 @@ export class CustomerProfileComponent implements OnInit {
   multipleWorkoutMode : boolean = false;
 
   blueprintAsReference : boolean = false;
+
 
   public nextWorkoutButtons = [
     {
@@ -119,11 +121,18 @@ export class CustomerProfileComponent implements OnInit {
   selectNextWorkoutMode() : void {
     if (this.nextWorkouts.length > 1) {
       this.multipleWorkoutMode = true;
+      this.pushesYesSelectionIfPreviousWorkoutExists();
+      this.referenceChoiceTrigger = true;
+      this.nextWorkoutButtonText = "Escolha o próximo treino";
     }
-    else {
+    else if (this.nextWorkouts.length === 1) {
       this.selectedWorkout = this.nextWorkouts[0];
       this.pushesYesSelectionIfPreviousWorkoutExists();
       this.referenceChoiceTrigger = true;
+      this.nextWorkoutButtonText = this.nextWorkouts[0].name;
+    }
+    else if (this.nextWorkouts.length === 0){
+      this.nextWorkoutButtonText = "Esse cliente não possui treinos hoje";
     }
   }
 

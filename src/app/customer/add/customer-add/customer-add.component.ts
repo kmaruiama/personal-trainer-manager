@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
+import {
+  IonButton,
+  IonContent,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonRadio,
+  IonRadioGroup,
+  IonTitle,
+} from '@ionic/angular/standalone';
 import { catchError, map, throwError } from 'rxjs';
-import { IonContent, IonButton, IonLabel, IonItem, IonInput, IonRadio, IonRadioGroup, IonTitle } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-customer-add',
@@ -47,7 +56,6 @@ export class CustomerAddComponent {
 
   postCustomer() {
     if (this.form.valid) {
-      console.log(this.form);
       this.concatenateAddress();
       const customerData = this.preparePayload();
 
