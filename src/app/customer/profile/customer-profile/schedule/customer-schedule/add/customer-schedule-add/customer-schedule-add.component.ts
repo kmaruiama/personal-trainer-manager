@@ -1,27 +1,56 @@
 import { Router } from '@angular/router';
-import { IonContent, IonRadioGroup, IonItem, IonLabel, IonRadio, IonButton, IonDatetime, IonTitle, IonText, IonInput } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonRadioGroup,
+  IonItem,
+  IonLabel,
+  IonRadio,
+  IonButton,
+  IonDatetime,
+  IonTitle,
+  IonText,
+  IonInput,
+  IonCard,
+} from '@ionic/angular/standalone';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AlertController } from '@ionic/angular';
-
-
 
 @Component({
   selector: 'app-customer-schedule-add',
   templateUrl: './customer-schedule-add.component.html',
   styleUrls: ['./customer-schedule-add.component.scss'],
-  imports: [IonInput, IonText, IonTitle, IonRadio, IonContent, IonRadioGroup, IonItem, IonLabel, FormsModule, IonRadio, ReactiveFormsModule, IonButton, CommonModule],
-  standalone: true
+  imports: [
+    IonCard,
+    IonDatetime,
+    IonTitle,
+    IonRadio,
+    IonContent,
+    IonRadioGroup,
+    IonItem,
+    IonLabel,
+    FormsModule,
+    IonRadio,
+    ReactiveFormsModule,
+    IonButton,
+    CommonModule,
+  ],
+  standalone: true,
 })
 
 // nao vou usar o "time" do ion-datetime pq achei a interface feia
 // a schedule só processa treinos feitos em um dia:
 // se a pessoa começou o treino 23:30 e finalizou as 00:30, um erro vai ser causado.
 // vou tratar disso na v2
-
-export class CustomerScheduleAddComponent implements OnInit{
+export class CustomerScheduleAddComponent implements OnInit {
   form: FormGroup;
   workouts: workout[] = [];
   authToken: null | string = '';
@@ -29,7 +58,12 @@ export class CustomerScheduleAddComponent implements OnInit{
   timeInput: string = '';
   timeError: string = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient, private alertController: AlertController) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private http: HttpClient,
+    private alertController: AlertController
+  ) {
     this.form = this.formBuilder.group({
       dayOfTheWeek: [0, Validators.required],
       workoutId: [0, Validators.required],
@@ -38,60 +72,64 @@ export class CustomerScheduleAddComponent implements OnInit{
     });
   }
 
-  validateSchedule(){
+  validateSchedule() {
     const hourStart = this.form.get('hourStart')?.value;
     const hourEnd = this.form.get('hourEnd')?.value;
     const workoutId = this.form.get('workoutId')?.value;
     const dayOfTheWeek = this.form.get('dayOfTheWeek')?.value;
-    if(!this.validateHours(hourStart) || !this.validateHours(hourEnd)){
+    if (!this.validateHours(hourStart) || !this.validateHours(hourEnd)) {
       return;
     }
     //ok, os horários são válidos, mas se o horario de inicio for
     //7:00 e o horário de fim for 6:00 a schedule vai processar -1 horas de treino?
-    if(!this.validateTime(hourStart, hourEnd)){
+    if (!this.validateTime(hourStart, hourEnd)) {
       return;
     }
 
-    if (this.customerId === 0){
+    if (this.customerId === 0) {
       return;
     }
-    if (workoutId === 0){
+    if (workoutId === 0) {
       return;
     }
-    if(dayOfTheWeek === 0){
+    if (dayOfTheWeek === 0) {
       return;
     }
-    this.postSchedule(hourStart, hourEnd, workoutId, dayOfTheWeek)
-
+    this.postSchedule(hourStart, hourEnd, workoutId, dayOfTheWeek);
   }
 
-  postSchedule(hourStart: number, hourEnd: number, workoutId: number, dayOfTheWeek: number){
+  postSchedule(
+    hourStart: number,
+    hourEnd: number,
+    workoutId: number,
+    dayOfTheWeek: number
+  ) {
     const payload = {
-      workoutId : workoutId,
+      workoutId: workoutId,
       customerId: this.customerId,
       dayOfTheWeek: dayOfTheWeek,
       hourStart: hourStart,
-      hourEnd: hourEnd
-    }
+      hourEnd: hourEnd,
+    };
 
     console.log(payload);
 
     const headers = { Authorization: `Bearer ${this.authToken}` };
 
     this.http
-      .post(`http://localhost:8080/api/schedule/new`, payload, {headers})
+      .post(`http://localhost:8080/api/schedule/new`, payload, { headers })
       .subscribe(
         (response) => {
           console.log('Agendamento realizado com sucesso', response);
         },
         (error) => {
-          this.showErrorAlert("Erro ao inserir novo agendamento");
+          this.showErrorAlert('Erro ao inserir novo agendamento');
           console.error('Erro ao inserir novo agendamento:', error);
         }
       );
   }
 
-//tive que improvisar isso pq nao tinha nenhuma biblioteca simples pra fazer a validacao de horario
+  //tive que improvisar isso pq nao tinha nenhuma biblioteca simples pra fazer a validacao de horario
   validateHours(time: string): boolean {
     if (time.length !== 5) {
       return false;
@@ -118,7 +156,7 @@ export class CustomerScheduleAddComponent implements OnInit{
     return true;
   }
 
-  validateTime(hourStart: string, hourEnd: string) : boolean {
+  validateTime(hourStart: string, hourEnd: string): boolean {
     let hoursStart: string = hourStart.substring(0, 2);
     let minutesStart: string = hourStart.substring(3, 5);
 
@@ -132,31 +170,37 @@ export class CustomerScheduleAddComponent implements OnInit{
     let minutesNumberEnd: number = parseInt(minutesEnd);
 
     //da pra condensar tudo em um if só mas fica ruim pra outra pessoa ler, assim é mais rápido para entender a lógica
-    if (hoursNumberStart === hoursNumberEnd){
-      if (minutesNumberStart > minutesNumberEnd){
+    if (hoursNumberStart === hoursNumberEnd) {
+      if (minutesNumberStart > minutesNumberEnd) {
         return false;
       }
     }
 
-    if (hoursNumberStart > hoursNumberEnd){
+    if (hoursNumberStart > hoursNumberEnd) {
       return false;
     }
 
-    if (hoursNumberEnd === hoursNumberStart && minutesNumberEnd === hoursNumberStart){
+    if (
+      hoursNumberEnd === hoursNumberStart &&
+      minutesNumberEnd === hoursNumberStart
+    ) {
       return false;
     }
 
     return true;
   }
 
-
-  ngOnInit(){
+  ngOnInit() {
     this.authToken = localStorage.getItem('authToken');
     const navigation = this.router.getCurrentNavigation();
     this.customerId = navigation?.extras.state?.['customerId'] || null;
+
     if (this.customerId !== 0) {
       if (this.authToken !== null) {
-        this.getCurrentProgramBlueprint(this.customerId, this.authToken).subscribe(
+        this.getCurrentProgramBlueprint(
+          this.customerId,
+          this.authToken
+        ).subscribe(
           (data) => this.convertServerResponseIntoProgramData(data),
           () => this.router.navigate(['/customer/profile'])
         );
@@ -165,40 +209,46 @@ export class CustomerScheduleAddComponent implements OnInit{
   }
 
   getCurrentProgramBlueprint(customerId: number, authToken: string) {
-      const url = `http://localhost:8080/api/workout/program`;
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${authToken}`);
-      return this.http.get<ProgramDto>(url, { headers, params: { id: customerId.toString() } });
-    }
+    const url = `http://localhost:8080/api/workout/program`;
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${authToken}`
+    );
+    return this.http.get<ProgramDto>(url, {
+      headers,
+      params: { id: customerId.toString() },
+    });
+  }
 
-    convertServerResponseIntoProgramData(data: ProgramDto) {
-      this.workouts = data.workoutDtoList.map((workout) => ({
-        customerId: this.customerId,
-        workoutId: workout.id,
-        workoutName: workout.name,
-      }));
-    }
+  convertServerResponseIntoProgramData(data: ProgramDto) {
+    this.workouts = data.workoutDtoList.map((workout) => ({
+      customerId: this.customerId,
+      workoutId: workout.id,
+      workoutName: workout.name,
+    }));
+  }
 
-    async showErrorAlert(message: string) {
-      const alert = await this.alertController.create({
-        header: 'Erro',
-        message: message,
-        buttons: ['OK'],
-      });
-    }
+  async showErrorAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Erro',
+      message: message,
+      buttons: ['OK'],
+    });
+  }
 }
 
-interface newSchedule{
-  workoutId: number,
-  customerId: number,
-  dayOfTheWeek: number,
-  hourStart: string,
-  hourEnd: string,
+interface newSchedule {
+  workoutId: number;
+  customerId: number;
+  dayOfTheWeek: number;
+  hourStart: string;
+  hourEnd: string;
 }
 
-interface workout{
-  customerId: number,
-  workoutId: number,
-  workoutName: string
+interface workout {
+  customerId: number;
+  workoutId: number;
+  workoutName: string;
 }
 
 interface ProgramDto {

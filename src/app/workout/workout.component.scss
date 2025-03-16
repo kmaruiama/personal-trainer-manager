@@ -64,4 +64,19 @@ ion-content{
     display: flex;
     flex-direction: row;
   }
+
+  #button{
+    display: flex;
+    flex-direction: column;
+    margin-right: 20%;
+    margin-left: 20%;
+    ion-button{
+      --background: transparent;
+      --color: white;
+      --border-width: 2px;
+      --border-color: white;
+      --border-radius: 26px;
+      --border-style:solid;
+    }
+  }
 }

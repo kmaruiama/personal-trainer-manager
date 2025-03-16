@@ -64,7 +64,34 @@ export class WorkoutComponent  implements OnInit {
   }
 
   postWorkout(){
-    console.log(this.workout);
+    const payload = {
+      programId: null,
+      id: null,
+      name: this.workout.name,
+      customerId: this.workout.customerId,
+      exerciseDtoList: this.workout.exerciseDtoList.map((exercise) => ({
+        id: null,
+        name: exercise.name,
+        setDtoList: exercise.setDtoList.map((set) => ({
+          id: null,
+          repetitions: set.repetitions,
+          weight: set.weight !== undefined ? set.weight : 0,
+        })),
+      })),
+      blueprint: false,
+    };
+
+    const headers = { Authorization: `Bearer ${this.authToken}` };
+    this.http
+        .post(`http://localhost:8080/api/workout`, payload, { headers })
+        .subscribe(
+          (response) => {
+            console.log('Treino adicionado com sucesso', response);
+          },
+          (error) => {
+            console.error('Erro ao adicionar novo treino', error);
+          }
+    );
   }
 
   onWeightChange(event: any, set: any) {

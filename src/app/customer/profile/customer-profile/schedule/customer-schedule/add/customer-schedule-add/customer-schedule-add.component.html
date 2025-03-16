@@ -2,48 +2,60 @@
   <ion-title>Inserir novo horário</ion-title>
   <form [formGroup]="form" (ngSubmit)="validateSchedule()">
 
-    <ion-radio-group formControlName="dayOfTheWeek">
-      <ion-item>
-        <ion-label>Segunda-feira</ion-label>
-        <ion-radio slot="start" value="1"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Terça-feira</ion-label>
-        <ion-radio slot="start" value="2"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Quarta-feira</ion-label>
-        <ion-radio slot="start" value="3"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Quinta-feira</ion-label>
-        <ion-radio slot="start" value="4"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Sexta-feira</ion-label>
-        <ion-radio slot="start" value="5"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Sábado</ion-label>
-        <ion-radio slot="start" value="6"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Domingo</ion-label>
-        <ion-radio slot="start" value="7"></ion-radio>
-      </ion-item>
-    </ion-radio-group>
-
-    <ion-radio-group formControlName="workoutId">
-      <div *ngFor="let workout of workouts">
-        <ion-item>
-          <ion-label>{{ workout.workoutName }}</ion-label>
-          <ion-radio slot="start" [value]="workout.workoutId"></ion-radio>
+    <div id = "days">
+    <ion-title class=>Escolha o dia da semana</ion-title>
+      <ion-radio-group formControlName="dayOfTheWeek">
+        <ion-item lines="none">
+          <ion-label>Segunda-feira</ion-label>
+          <ion-radio slot="start" value="1"></ion-radio>
         </ion-item>
-      </div>
-    </ion-radio-group>
-    <ion-title>digite o horário no formato hh:mm</ion-title>
-    <ion-input placeholder="Horário de início" formControlName="hourStart"></ion-input>
-    <ion-input placeholder="Horário de fim" formControlName="hourEnd"></ion-input>
+        <ion-item lines="none">
+          <ion-label>Terça-feira</ion-label>
+          <ion-radio slot="start" value="2"></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>Quarta-feira</ion-label>
+          <ion-radio slot="start" value="3"></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>Quinta-feira</ion-label>
+          <ion-radio slot="start" value="4"></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>Sexta-feira</ion-label>
+          <ion-radio slot="start" value="5"></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>Sábado</ion-label>
+          <ion-radio slot="start" value="6"></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>Domingo</ion-label>
+          <ion-radio slot="start" value="7"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </div>
+
+    <div id="hours">
+      <ion-title>Escolha o horário</ion-title>
+      <ion-card>
+        <ion-label class ="hourTitle">Hora de início</ion-label>
+        <ion-datetime presentation="time"></ion-datetime>
+        <ion-label class ="hourTitle">Hora de término</ion-label>
+        <ion-datetime presentation="time"></ion-datetime>
+      </ion-card>
+    </div>
+
+    <div>
+      <ion-radio-group formControlName="workoutId">
+        <div *ngFor="let workout of workouts">
+          <ion-item>
+            <ion-label>{{ workout.workoutName }}</ion-label>
+            <ion-radio slot="start" [value]="workout.workoutId"></ion-radio>
+          </ion-item>
+        </div>
+      </ion-radio-group>
+    </div>
     <ion-button type="submit" expand="block" fill="clear">Enviar</ion-button>
   </form>
 </ion-content>
