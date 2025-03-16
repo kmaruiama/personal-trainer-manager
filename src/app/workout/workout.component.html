@@ -1,24 +1,31 @@
 <ion-content>
-  <div id = workoutHeader>
-    <ion-title>
+  <div id = "workoutHeader">
+    <ion-title id = "workoutTitle">
       {{workout.name}}
     </ion-title>
   </div>
-  <div *ngFor="let exercise of workout.exerciseDtoList">
+
+  <div *ngFor="let exercise of workout.exerciseDtoList" id = "exerciseCard">
     <div id = exerciseHeader>
-
       <ion-title>Exercício {{exercise.index}}/{{workout.exerciseDtoList.length}}: {{exercise.name}}</ion-title>
+      <ion-img src="./assets/mais.png" id="plus"></ion-img>
     </div>
-    <div id = exerciseParameters>
-      <ion-label>Série</ion-label>
-      <ion-label>Peso</ion-label>
-      <ion-label>Repetições</ion-label>
-    </div>
-    <div *ngFor="let set of exercise.setDtoList" id = set>
-      <ion-title>{{set.index}}</ion-title>
-      <ion-input placeholder={{set.weight}}></ion-input>
-      <ion-input placeholder={{set.repetitions}}></ion-input>
-    </div>
-  </div>
 
+    <ion-card>
+    <div id = exerciseParameters>
+      <ion-label id = "setNumberText">Série</ion-label>
+      <ion-label id = "setWeightText">Peso</ion-label>
+      <ion-label id = "setRepetitionsText">Repetições</ion-label>
+    </div>
+
+    <div *ngFor="let set of exercise.setDtoList" id = set>
+      <ion-title id = "setNumber">{{set.index}}</ion-title>
+      <ion-input id = "setWeight"  (ionChange)="onWeightChange($event, set)" placeholder={{set.weight}}></ion-input>
+      <ion-input id = "setRepetitions" (ionChange)="onRepetitionsChange($event, set)" placeholder={{set.repetitions}}></ion-input>
+    </div>
+  </ion-card>
+  </div>
+  <ion-button (click)="postWorkout()">
+    Enviar
+  </ion-button>
 </ion-content>

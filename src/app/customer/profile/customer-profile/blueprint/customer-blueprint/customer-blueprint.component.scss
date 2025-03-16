@@ -1,80 +1,90 @@
-ion-content{
+ion-content {
   --background: linear-gradient(#000000, #3533CD);
-}
 
-ion-card{
-  border-radius: 26px;
-  border-width: 2px;
-  border-style: solid;
-  border-color:white !important;
-  background-color: transparent;
-  color: white;
-  padding: 3%;
-}
+  .programHeader {
+    display: flex;
+    margin-right: 3%;
+  }
 
-.columnHeader{
-  font-size: 120%;
-  margin-bottom: 5%
-}
+  .workoutContainer {
+    margin-bottom: 3%;
 
-.exerciseRow{
-  margin-bottom: 3%;
-}
+    ion-card {
+      border-radius: 26px;
+      border-width: 2px;
+      border-style: solid;
+      border-color: white !important;
+      background-color: transparent;
+      color: white;
+      padding: 3%;
 
-.workoutTitle {
-  margin-right: 65%;
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 10px;
-  text-align: center;
-  margin-top: 2%;
-}
+      #workoutHeader {
+        display: flex;
+        flex-direction: row;
 
-.headerRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
+        ion-label.workoutTitle {
+          margin-right: 65%;
+          font-weight: bold;
+          font-size: 18px;
+          margin-bottom: 10px;
+          text-align: center;
+          margin-top: 2%;
+        }
 
-.exerciseRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  text-align: center;
-}
+        ion-img {
+          width: 7%;
+          height: auto;
+          margin-bottom: 3%;
 
-.programHeader{
-  display: flex;
-  margin-right: 3%;
-}
+          &.lapis {
+            width: 7%;
+            height: auto;
+          }
 
-#lata,
-#lapis {
-  width: 7%;
-  height: auto;
-  margin-bottom: 3%;
-}
+          &.lata {
+            width: 7%;
+            height: auto;
+          }
+        }
+      }
 
-#mais{
-  width: 7%;
-  height: auto;
-}
+      .headerRow {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
 
-#workoutHeader{
-  display: flex;
-  flex-direction: row;
-}
+        ion-label.columnHeader {
+          font-size: 120%;
+          margin-bottom: 5%;
+        }
+      }
 
-ion-title{
-  font-size: 150%;
-  font-weight: bold;
-  margin-top: 5%;
-  margin-bottom: 3%;
-}
+      .exerciseRow {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        text-align: center;
+        margin-bottom: 3%;
 
-ion-label{
-  font-size: 120%;
+        ion-label {
+          font-size: 120%;
+        }
+      }
+    }
+  }
+
+  #mais {
+    width: 7%;
+    height: auto;
+  }
+
+  ion-title {
+    font-size: 150%;
+    font-weight: bold;
+    margin-top: 5%;
+    margin-bottom: 3%;
+  }
 }

@@ -1,4 +1,67 @@
-#set{
-  display: flex;
-  flex-direction: row;
+ion-content{
+  --background: linear-gradient(#000000, #3533CD);
+
+  ion-input{
+    text-align: center;
+  }
+
+  #workoutHeader{
+    margin-top: 3%;
+  }
+
+  #workoutTitle{
+    font-size: 150%;
+    font-weight: bold;
+  }
+
+  #exerciseHeader{
+    margin-top: 4%;
+    display: flex;
+    #plus{
+      width: 7%;
+      height: auto;
+      margin-right: 3.5%;
+    }
+  }
+
+  #exerciseParameters{
+    display: flex;
+    font-size: 120%;
+    //nao sabia que dava pra fazer nesting, tudo fica mais organizado :))
+    #setNumberText{
+      margin-left: 7%;
+    }
+    #setWeightText, #setRepetitionsText{
+      margin-left: 23%;
+    }
+  }
+
+  #set{
+    display: flex;
+    font-size: 140%;
+    #setNumber{
+      margin-left: 5.5%;
+    }
+    #setWeight{
+      margin-left: 14%;
+    }
+    #setRepetitions{
+      margin-left: 14.5%
+    }
+  }
+
+  ion-card{
+    border-radius: 26px;
+    border-width: 2px;
+    border-style: solid;
+    border-color:white !important;
+    background-color: transparent;
+    color: white;
+    padding: 3%;
+  }
+
+  #set{
+    display: flex;
+    flex-direction: row;
+  }
 }

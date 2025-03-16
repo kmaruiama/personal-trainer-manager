@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonContent, IonTitle, IonLabel, IonInput } from "@ionic/angular/standalone";
+import { IonContent, IonTitle, IonLabel, IonInput, IonCard, IonImg, IonButton} from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-workout',
   templateUrl: './workout.component.html',
   styleUrls: ['./workout.component.scss'],
-  imports: [IonInput, IonLabel, IonTitle, IonContent, CommonModule],
+  imports: [IonButton, IonImg, IonCard, IonInput, IonLabel, IonTitle, IonContent, CommonModule, FormsModule],
   standalone: true
 })
 
@@ -46,7 +47,6 @@ export class WorkoutComponent  implements OnInit {
       next: (data) => {
         this.workout = data;
         this.initializeIndexes();
-
       },
       error: (error) => {
         console.error("Erro", error);
@@ -61,6 +61,20 @@ export class WorkoutComponent  implements OnInit {
         this.workout.exerciseDtoList[i].setDtoList[j].index = j+1;
       }
     }
+  }
+
+  postWorkout(){
+    console.log(this.workout);
+  }
+
+  onWeightChange(event: any, set: any) {
+    const newValue = event.detail.value;
+    set.weight = newValue === '' ? null : newValue;
+  }
+
+  onRepetitionsChange(event: any, set: any) {
+    const newValue = event.detail.value;
+    set.repetitions = newValue === '' ? null : newValue;
   }
 
 }
