@@ -14,7 +14,7 @@ Este projeto é um sistema de gerenciamento para personal trainers, projetado pa
     * Ferramentas financeiras mais complexas para rastreamento avançado de receitas e despesas.
     * Análise de desempenho de treinamento baseada em dados para otimizar os resultados dos clientes.
     * Integração e configuração simplificadas para novos personal trainers.
-    * Melhorias na UI/UX.
+    * UI/UX 
 
 ## TODO
 
